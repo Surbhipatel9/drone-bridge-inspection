@@ -18,6 +18,7 @@
   "homepage": "https://github.com/aksel501/Drone-Bridge#readme",
   "dependencies": {
     "async": "^2.6.0",
+    "ejs": "^1.0.0",
     "express": "^4.16.2",
     "http": "0.0.0",
     "tedious": "^2.3.1"
