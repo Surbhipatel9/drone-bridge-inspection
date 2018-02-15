@@ -11,12 +11,23 @@ Home
 <style>
  #search{
    margin-left: 15px;
+   margin-top: 5px;
  }
  #homeTable{
    			border: 1px dashed black;
    			padding: .2em .5em .2em .5em;
    			vertical-align: top;
    			text-align: left;
+ }
+
+ #footer{
+   position: fixed;
+       left: 0;
+       bottom: 0;
+       width: 100%;
+       background-color: red;
+       color: white;
+       text-align: center;
  }
 </style>
 <center>
@@ -39,7 +50,10 @@ Blurb about site, goals, etc....
     <th>Date:</th>
     </tr>
 </table>
+<label for="numbers" id="search">Page...</label>
+<button type="button" id="search">Go!</button>
 </center>
+<p id="footer">West Virginia Department of Transportation</p>
 </form>
 </body>
 </html>
