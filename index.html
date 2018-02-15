@@ -7,7 +7,6 @@ Home
 </head>
 <body>
 <form>
-  <script src="ejs.js"></script>
   <script>src="DB.js"</script>
 <style>
  #search{
@@ -35,7 +34,7 @@ Home
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color: blue;
 }
 
 li {
@@ -51,16 +50,19 @@ li a {
 }
 
 li a:hover:not(.active) {
-    background-color: #111;
+    background-color: black;
 }
 
 .active {
-    background-color: blue;
+    background-color: grey;
+}
+
+#searchbar{
+  margin-left: 22em;
 }
 </style>
 <ul>
   <li><a class="active" href="#home">Home</a></li>
-  <li><a href="#news">News</a></li>
   <li><a href="#contact">Contact</a></li>
   <li><a href="#about">About</a></li>
 </ul>
@@ -72,7 +74,7 @@ West Virginia DoT
 West Virgina Department of Transportation Bridge Inspection Report Home Page
 </p>
 </center>
-<input type="text" size="35" id="search" placeholder="Search..">
+<input type="text" size="35" id="searchbar" placeholder="Search..">
 <label for="numbers" id="search">Page...</label>
 <button type="button" id="search">Go!</button>
 <center>
