@@ -1,9 +1,30 @@
 var http = require('http');
-const db = require('./DB.js');
-
+var fs = require('fs');
 http.createServer(function (req, res) {
+  fs.readFile('index.ejs', function(err, data) {
     res.writeHead(200, {'Content-Type': 'text/html'});
-    res.end('Hello World!');
-    db.init();
-    console.log("done");
-}).listen(process.env.PORT || 5000);
+    res.write(data);
+    res.end();
+  });
+}).listen(8080);
+
+
+/*
+express = require('express');
+bodyParser = require('body-parser');
+app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', function(req, res){
+  res.send('Hello World');
+});
+
+app.listen(8080, function(){
+  console.log('Server started on port 8080');
+})
+
+*/
