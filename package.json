@@ -4,9 +4,9 @@
   "description": "drone application",
   "main": "index.js",
   "dependencies": {
-    "express": "^4.16.2",
+    "body-parser": "*",
     "ejs": "^1.0.0",
-    "body-parser": "*"
+    "express": "^4.16.2"
   },
   "devDependencies": {},
   "scripts": {

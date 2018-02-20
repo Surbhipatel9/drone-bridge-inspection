@@ -4,11 +4,14 @@
 <title>
 Home
 </title>
+<!--<link rel="stylesheet" type="text/css" href="style.css"> -->
 </head>
 <body>
+  <% include navbar %>
 <form>
   <script>src="DB.js"</script>
 <style>
+
  #search{
    margin-left: 15px;
    margin-top: 5px;
@@ -57,14 +60,6 @@ li a:hover:not(.active) {
     background-color: grey;
 }
 </style>
-<% include navbar.ejs %>
-<!--<ul>
-  <li><a class="active" href="index.js">Home</a></li>
-  <li><a href="#reports">Reports</a></li>
-  <li><a href="#contact">Contact</a></li>
-  <li><a href="#about">About</a></li>
-</ul>
--->
 <center>
 <h1>
 West Virginia DoT
@@ -73,6 +68,7 @@ West Virginia DoT
 <p>
 West Virgina Department of Transportation Bridge Inspection Report Home Page
 </p>
+
 <div>
 <input type="text" size="35" id="searchbar" placeholder="Search..">
 <label for="numbers" id="search">Page...</label>
@@ -99,8 +95,7 @@ West Virgina Department of Transportation Bridge Inspection Report Home Page
 /20
 <button type="button" id="search">Go!</button>
 </center>
-<!--<% include footer.html %> -->
-<p id="footer">West Virginia Department of Transportation</p>
+<% include footer.html %> 
 </form>
 </body>
 </html>

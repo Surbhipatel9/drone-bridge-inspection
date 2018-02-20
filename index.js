@@ -1,12 +1,23 @@
 var http = require('http');
 var fs = require('fs');
-http.createServer(function (req, res) {
-  fs.readFile('index.ejs', function(err, data) {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write(data);
-    res.end();
-  });
-}).listen(8080);
+var express = require('express');
+var app = express();
+
+app.use(express.static('public'))
+app.set('view engine', 'ejs')
+app.set('views', 'public')
+
+app.get('/', (req,res) => {
+  res.render('index.ejs')
+})
+app.listen(8080)
+// http.createServer(function (req, res) {
+//   fs.readFile('index.ejs', function(err, data) {
+//     res.writeHead(200, {'Content-Type': 'text/html'});
+//     res.write(data);
+//     res.end();
+//   });
+// }).listen(8080);
 
 
 /*
