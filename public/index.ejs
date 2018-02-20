@@ -5,6 +5,7 @@
 Home
 </title>
 <link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="fonts.css">
 </head>
 <body>
   <% include navbar %>
@@ -16,18 +17,19 @@ Home
    margin-top: 5px;
  }
  #homeTable{
-   			border: 1px dashed black;
+   			border: 1px dashed #2651a8;
    			padding: .2em .5em .2em .5em;
    			vertical-align: top;
    			text-align: left;
         margin-top: 10px;
  }
+ /*
  #footer{
    position: fixed;
        left: 0;
        bottom: 0;
        width: 100%;
-       background-color: blue;
+       background-color: #2651a8;
        color: white;
        text-align: center;
  }
@@ -36,13 +38,11 @@ Home
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: blue;
+    background-color: #2651a8;
 }
-
 li {
     float: left;
 }
-
 li a {
     display: block;
     color: white;
@@ -50,14 +50,13 @@ li a {
     padding: 14px 16px;
     text-decoration: none;
 }
-
 li a:hover:not(.active) {
-    background-color: black;
+    background-color: #181818;
 }
-
 .active {
-    background-color: grey;
+    background-color: #2651a8;
 }
+*/
 </style>
 <center>
 <h1>
@@ -73,7 +72,7 @@ West Virgina Department of Transportation Bridge Inspection Report Home Page
 <label for="numbers" id="search">Page...</label>
 <input type="text" size="1" id="search" placeholder="#">
 /20
-<button type="button" id="search">Go!</button>
+<button class="button" id="search">Go!</button>
 </center>
 <center>
 <table id="homeTable">
@@ -92,7 +91,7 @@ West Virgina Department of Transportation Bridge Inspection Report Home Page
 <label for="numbers" id="search">Page...</label>
 <input type="text" size="1" id="search" placeholder="#">
 /20
-<button type="button" id="search">Go!</button>
+<button class="button" id="search">Go!</button>
 </center>
 <% include footer.html %>
 </form>
