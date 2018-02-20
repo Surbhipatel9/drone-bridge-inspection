@@ -1,29 +1,18 @@
 {
-  "name": "drone_inspection",
-  "version": "0.0.1",
-  "description": "CS490 Team 4 bridge inspection using drone project",
-  "main": "index.js",
+  "name": "drone-bridge",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "start": "node index.js"
+    "start": "node ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/aksel501/Drone-Bridge.git"
-  },
-  "author": "A. Aksenov, D. Sloan, N. Miklas, R. Dixon",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/aksel501/Drone-Bridge/issues"
-  },
-  "homepage": "https://github.com/aksel501/Drone-Bridge#readme",
   "dependencies": {
-    "async": "^2.6.0",
-    "bcrypt": "^1.0.3",
-    "bluebird": "^3.5.1",
-    "express": "^4.16.2",
-    "http": "0.0.0",
-    "knex": "^0.14.3",
-    "mssql": "^4.1.0",
-    "tedious": "^2.3.1"
+    "body-parser": "~1.18.2",
+    "bootstrap": "^4.0.0",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.15.5",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.0",
+    "serve-favicon": "~2.4.5"
   }
 }
