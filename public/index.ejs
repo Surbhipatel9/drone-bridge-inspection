@@ -1,44 +1,47 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>
-Home
-</title>
-<link rel="stylesheet" type="text/css" href="style.css">
-<link rel="stylesheet" type="text/css" href="fonts.css">
+  <title>
+    Home
+  </title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="fonts.css">
 </head>
+
 <body>
   <% include navbar %>
-<form>
-  <script>src="DB.js"</script>
-<style>
- #search{
-   margin-left: 15px;
-   margin-top: 5px;
- }
- #homeTable{
-   			border: 1px solid #2651a8;
-   			padding: .2em .5em .2em .5em;
-   			vertical-align: top;
-   			text-align: left;
-        margin-top: 10px;
- }
+    <form>
+      <script>src = "DB.js"</script>
+      <style>
+        #search {
+          margin-left: 15px;
+          margin-top: 5px;
+        }
 
- .buttonHome
- {
-   display: inline-block;
-   padding: 1em 2em 1em 2em;
-   letter-spacing: 0.10em;
-   margin-top: 2em;
-   padding: .4em .7em;
-   background: #2651a8;
-   border-radius: 6px;
-   text-decoration: none;
-   font-weight: 700;
-   font-size: 1em;
-   color: #FFF;
- }
- /*
+        #homeTable {
+          border: 1px solid #2651a8;
+          padding: .2em .5em .2em .5em;
+          vertical-align: top;
+          text-align: left;
+          margin-top: 10px;
+        }
+
+        .buttonHome {
+          display: inline-block;
+          padding: 1em 2em 1em 2em;
+          letter-spacing: 0.10em;
+          margin-top: 2em;
+          padding: .4em .7em;
+          background: #2651a8;
+          border-radius: 6px;
+          text-decoration: none;
+          font-weight: 700;
+          font-size: 1em;
+          color: #FFF;
+        }
+
+        /*
  #footer{
    position: fixed;
        left: 0;
@@ -72,43 +75,50 @@ li a:hover:not(.active) {
     background-color: #2651a8;
 }
 */
-</style>
-<center>
-<h1>
-West Virginia DoT
-</h1>
-<img src="http://localhost:8080/photos/ok.webp" alt="WVDoT logo" style="width:200px; height:200px;">
-<p>
-West Virgina Department of Transportation Bridge Inspection Report Home Page
-</p>
 
-<div>
-<input type="text" size="35" id="searchbar" placeholder="Search..">
-<label for="numbers" id="search">Page...</label>
-<input type="text" size="1" id="search" placeholder="#">
-/20
-<button class="buttonHome" id="search">Go!</button>
-</center>
-<center>
-<table id="homeTable">
-  <col width="300"></col>
-  <col width="150"></col>
-  <col width="150"></col>
-  <col width="150"></col>
-  <tr>
-    <th>Name:</th>
-    <th>County:</th>
-    <th>District:</th>
-    <th>Date:</th>
-    </tr>
-</table>
-</div>
-<label for="numbers" id="search">Page...</label>
-<input type="text" size="1" id="search" placeholder="#">
-/20
-<button class="buttonHome" id="search">Go!</button>
-</center>
-<% include footer.html %>
-</form>
+        #homeHeader {
+          margin-top: .5em;
+        }
+
+        #homeImage {
+          margin-top: .5em;
+        }
+      </style>
+      <center>
+        <h1 id="homeHeader">
+          West Virginia DoT
+        </h1>
+        <img src="http://localhost:8080/photos/wvdotlogo.webp" id="homeImage" alt="WVDoT logo" style="width:200px; height:200px;">
+        <p>
+          West Virgina Department of Transportation Bridge Inspection Report Home Page
+        </p>
+
+        <div>
+          <input type="text" size="35" id="searchbar" placeholder="Search..">
+          <label for="numbers" id="search">Page...</label>
+          <input type="text" size="1" id="search" placeholder="#"> /20
+          <button class="buttonHome" id="search">Go!</button>
+      </center>
+      <center>
+        <table id="homeTable">
+          <col width="300"></col>
+          <col width="150"></col>
+          <col width="150"></col>
+          <col width="150"></col>
+          <tr>
+            <th>BridgeID</th>
+            <th>County:</th>
+            <th>District:</th>
+            <th>Date:</th>
+          </tr>
+        </table>
+        </div>
+        <label for="numbers" id="search">Page...</label>
+        <input type="text" size="1" id="search" placeholder="#"> /20
+        <button class="buttonHome" id="search">Go!</button>
+      </center>
+      <% include footer.html %>
+    </form>
 </body>
+
 </html>
