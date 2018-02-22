@@ -112,25 +112,36 @@ li a:hover:not(.active) {
           </tr>
         </table>
         <script>
-          var mysql = require('mysql');
-          var connection = mysql.createConnection({
-            host: 'localhost',
-            user: 'aksenov',
-            password: 'Datapass123',
-            database: 'DroneInspDB'
-          });
+          function createJSON() {
+            var mysql = require('mysql');
 
-          connection.connect();
+            // http://nodejs.org/docs/v0.6.5/api/fs.html#fs.writeFile
+            var fs = require('fs');
 
-          var resultSet = connection.query('SELECT name, county, district, date from bridges FOR JSON PATH', function (err, rows, fields) {
-            if (!err)
-              console.log('The solution is: ', rows);
-            else
-              console.log('Error while performing Query.');
-          });
+            var connection = mysql.createConnection({
+              host: 'localhost',
+              user: 'aksenov',
+              password: 'Datapass123',
+              database: 'DroneInspDB'
+            });
 
-          connection.end();
+            connection.connect();
+            var bridgeJSON = [];
+            bridgeJSON = connection.query('select * from DroneInspDB.bridges for JSON PATH;', function (err, results, fields) {
+              if (err) throw err;
+              fs.writeFile('table.json', JSON.stringify(results), function (err) {
+                if (err) throw err;
+                console.log('Saved!');
+              });
+
+              connection.end();
+            });
+
+            var  output = document.getElementById('output');
+            output.innerHTML = jcontent.name;
+          }
         </script>
+        <p id="ouput"></p>
         </div>
         <label for="numbers" id="search">Page...</label>
         <input type="text" size="1" id="search" placeholder="#"> /20

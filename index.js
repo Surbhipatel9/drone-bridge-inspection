@@ -2,6 +2,7 @@ var http = require('http');
 var fs = require('fs');
 var express = require('express');
 var app = express();
+var db = require('./DB.js');
 app.use(express.static('public'))
 app.set('view engine', 'ejs')
 app.set('views', 'public')
