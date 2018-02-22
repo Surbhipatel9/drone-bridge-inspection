@@ -105,10 +105,10 @@ li a:hover:not(.active) {
           <col width="150"></col>
           <col width="150"></col>
           <tr>
-            <th>BridgeID</th>
-            <th>County:</th>
-            <th>District:</th>
-            <th>Date:</th>
+            <th>Bridge Name: </th>
+            <th>County: </th>
+            <th>District: </th>
+            <th>Date: </th>
           </tr>
         </table>
         <script>
@@ -122,7 +122,7 @@ li a:hover:not(.active) {
 
           connection.connect();
 
-          var resultSet = connection.query('SELECT * from < table name >', function (err, rows, fields) {
+          var resultSet = connection.query('SELECT bridgeID, county, location, date from bridges FOR JSON PATH', function (err, rows, fields) {
             if (!err)
               console.log('The solution is: ', rows);
             else

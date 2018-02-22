@@ -20,42 +20,6 @@ a {
 		color: #FFF;
 	}
 
-	#footer{
-				position: fixed;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        background-color: #2651a8;
-        color: white;
-        text-align: center;
-  }
-	/** for the navbar added by nate *****/
-ul {
-     list-style-type: none;
-     margin: 0;
-     padding: 0;
-     overflow: hidden;
-     background-color: #2651a8;
- }
- li {
-     float: left;
- }
- li a {
-     display: block;
-     color: white;
-     text-align: center;
-     padding: 14px 16px;
-     text-decoration: none;
- }
- li a:hover:not(.active) {
-     background-color: #181818;
- }
- .active {
-     background-color: #2651a8;
- }
-
-
-
 	h1, h2, h3
 	{
 		margin: 0;
