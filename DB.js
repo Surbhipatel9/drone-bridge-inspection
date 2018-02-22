@@ -55,8 +55,57 @@ exports.init = function () {
                     table.unique(['roleID', 'userID']);
                 })
 
-                .then(() => { return exports.populateCounties() }).then(() => { return exports.populateRoles() }).then(() => { return exports.populateUsers() }).then(() => { return exports.addUsersToRoles() });
+                .createTable('bridge', function (table) {
+                    table.integer('bridgeID').unique();
+                    table.string('name').notNullable();
+                    table.string('spanOver').notNullable();
+                    //Add reference
+                    table.integer('countyID').notNullable();
+                    table.string('coordinates').notNullable();
+                    table.string('location').notNullable();
+                    table.string('description');
+                })
+                .createTable('reort', function (table) {
+                    table.integer('reportID').unique();
+                    //Don't use .date format, inconvinient
+                    table.string('date').notNullable();
+                    //Add reference to bridge bridgeID
+                    table.integer('bridgeID').notNullable();
+                    //Add reference
+                    table.integer('BARSno').notNullable();
+                    table.string('inspectionType').notNullable();
+                    table.string('inspectionPerformed').notNullable();
+                    //Add reference to user userID
+                    table.string('inspectedBy').notNullable();
+                    table.string('structuralEvalBy').notNullable();
+                    table.string('reviewApprovedBy').notNullable();
 
+                    table.boolean('fractureCritical').notNullable();
+                    table.boolean('underwater').notNullable();
+                    table.boolean('otherSpecial').notNullable();
+                    table.boolean('inventory').notNullable();
+                    table.boolean('interim').notNullable();
+                    table.boolean('damageSpecial').notNullable();
+                    table.boolean('closure').notNullable();
+                    table.boolean('procedure').notNullable();
+                })
+                .createTable('reortItem', function (table) {
+                    table.integer('itemID').unique();
+                    table.string('title').notNullable();
+                    table.string('description').notNullable();
+                    //Add reference to photo photoID
+                    table.integer('photoID');
+                    //Add reference to report reportID
+                    table.integer('reportID');
+                })
+                .createTable('photo', function (table) {
+                    table.integer('photoID').unique();
+                    table.string('title').notNullable();
+                    table.string('description').notNullable();
+                    table.string('location').notNullable();
+                })
+
+                .then(() => { return exports.populateCounties() }).then(() => { return exports.populateRoles() }).then(() => { return exports.populateUsers() }).then(() => { return exports.addUsersToRoles() });
         }
     })
 };

@@ -35,14 +35,14 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 require('./passport')(passport);
 
 app.get('/', (req,res) => {
-  res.render('index.ejs')
+  res.render('./views/index.ejs')
   //if(req.session.passport)
     //console.log(req.session.passport.user)  //GET SESSION INFO FOR CURRENTLY LOGGED IN USER
 })
 
 // LOCAL LOGIN ROUTE
 app.get('/login', (req, res, passport) => {
-	res.render('login.ejs', {message: req.flash('loginMessage')});
+	res.render('./views/login.ejs', {message: req.flash('loginMessage')});
 });
 
 //LOCAL LOGIN POST ROUTE
