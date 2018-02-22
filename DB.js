@@ -400,3 +400,19 @@ exports.addUsersToRoles = function () {
         }*/
     ])
 }
+
+exports.getUserInfo = function (userName, cb) {
+    knex.select().from('users').where({
+        userName: userName
+    }).then(function (grabbedUser){
+        cb(grabbedUser[0])
+    })
+}
+
+exports.checkLogin = function (userName, cb) {
+    knex.select().from('users').where({
+        userName: userName
+    }).then(function (grabbedUser){
+        cb(grabbedUser[0])
+    })
+}
