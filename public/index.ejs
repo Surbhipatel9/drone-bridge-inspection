@@ -12,7 +12,6 @@
 <body>
   <% include navbar %>
     <form>
-      <script>src = "DB.js"</script>
       <style>
         #search {
           margin-left: 15px;
@@ -112,6 +111,26 @@ li a:hover:not(.active) {
             <th>Date:</th>
           </tr>
         </table>
+        <script>
+          var mysql = require('mysql');
+          var connection = mysql.createConnection({
+            host: 'localhost',
+            user: 'aksenov',
+            password: 'Datapass123',
+            database: 'DroneInspDB'
+          });
+
+          connection.connect();
+
+          var resultSet = connection.query('SELECT * from < table name >', function (err, rows, fields) {
+            if (!err)
+              console.log('The solution is: ', rows);
+            else
+              console.log('Error while performing Query.');
+          });
+
+          connection.end();
+        </script>
         </div>
         <label for="numbers" id="search">Page...</label>
         <input type="text" size="1" id="search" placeholder="#"> /20
