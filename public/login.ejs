@@ -1,0 +1,101 @@
+<!-- views/login.ejs -->
+<!doctype html>
+<html>
+
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="fonts.css">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* Full-width input fields */
+
+        input[type=text],
+        input[type=password] {
+            width: 60%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        /* Set a style for all buttons */
+
+        button {
+            background-color: #2651a8;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0px;
+            border: none;
+            cursor: pointer;
+            width: 40%;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        #homeHeader {
+          margin-top: .5em;
+        }
+        
+        #homeImage {
+          margin-top: .5em;
+        }
+    </style>
+</head>
+
+<body>
+    <% include navbar %>
+        <div class="container">
+            <div class="col-sm-6 col-sm-offset-3">
+                <center>
+                    <!-- LOGIN FORM -->
+                    <form action="/login" method="post">
+                        <h1 id=homeHeader>
+                            Login
+                        </h1>
+                        <div class="imgcontainer">
+                            <img src="http://localhost:8080/photos/wvdotlogo.webp" id="homeImage" alt="WVDoT logo" style="width:200px; height:200px;">
+                        </div>
+                        <div>
+                            <!-- show any messages that come back with authentication -->
+                            <% if (message.length > 0) { %>
+                                <div class="alert alert-danger">
+                                    <%= message %>
+                                </div>
+                            <% } %>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <b>Username</b>
+                            </label>
+                            <input type="text" placeholder="Enter Username" class="form-control" name="userName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <b>Password</b>
+                            </label>
+                            <input type="password" placeholder="Enter Password" class="form-control" name="password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-warning btn-lg">Login</button>
+                    </form>
+                    <hr>
+                    <div>Need an account?
+                        <a href="/registration">Signup</a>
+                    </div>
+                    <div>Or go
+                        <a href="/">home</a>.</div>
+                </center>
+            </div>
+
+        </div>
+        <% include footer.html %>
+</body>
+
+</html>
