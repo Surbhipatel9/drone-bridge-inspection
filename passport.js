@@ -3,6 +3,7 @@ var db = require('./DB.js');
 var bcrypt = require('bcrypt');
 
 module.exports = function(passport){
+  
 
   passport.serializeUser(function(user, done){
     done(null, user);

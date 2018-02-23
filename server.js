@@ -1,75 +1,109 @@
 var http = require('http');
-var fs = require('fs');
 var express = require('express');
-var app = express();
-var db = require('./DB.js');
-
 var passport = require('passport');
+var flash = require('connect-flash');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var flash = require('connect-flash');
+
 var db = require('./DB.js');
+require('./passport')(passport);
+
 const path = require('path');
 const LocalStrategy = require('passport-local').Strategy;
+
+var app = express();
+
+app.set('view engine', 'ejs')
+app.set('views', 'public/views')
+
 app.use(express.static('public'))
 
 // Passport middleware.
 app.use(require('express-session')({
-	secret: 'dryooisacoolguy',
-	resave: false,
-	saveUninitialized: false
+  secret: 'dryooisacoolguy',
+  resave: false,
+  saveUninitialized: false
 }));
-app.set('view engine', 'ejs')
-app.set('views', 'public/views')
+
 app.use(cookieParser());
 // Body parser middleware.
 app.use(bodyParser.json());			// to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-	extended: true
-})); 
+  extended: true
+}));
 
 // required for passport
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash()); // use connect-flash for flash messages stored in session
-require('./passport')(passport);
 
-app.get('/', (req,res) => {
+
+app.get('/', (req, res) => {
   res.render('index.ejs')
   //if(req.session.passport)
-    //console.log(req.session.passport.user)  //GET SESSION INFO FOR CURRENTLY LOGGED IN USER
+  //console.log(req.session.passport.user)  //GET SESSION INFO FOR CURRENTLY LOGGED IN USER
 })
 
 // LOCAL LOGIN ROUTE
 app.get('/login', (req, res, passport) => {
-	res.render('login.ejs', {message: req.flash('loginMessage')});
+  res.render('login.ejs', { message: req.flash('loginMessage') });
 });
 
 //LOCAL LOGIN POST ROUTE
 //authenticate the login and redirect on success/failure and send failure message if needed
 app.post('/login', passport.authenticate('local-login', {
-	successRedirect: '/',
-	failureRedirect: '/login',
-	failureFlash: true
+  successRedirect: '/',
+  failureRedirect: '/login',
+  failureFlash: true
 }), (res, req) => {
 });
 
-app.get('/registration', (req,res,passport) => {
-  res.render('registration.ejs', {message:req.flash('loginMessage')})
+app.get('/registration', (req, res, passport) => {
+  res.render('registration.ejs', { message: req.flash('loginMessage') })
 })
 
 app.post('/registration', passport.authenticate('local-signup', {
-  successRedirect:'/',
-  failureRedirect:'/registration',
-  failureFlash:true }), (req,res) => {})
+  successRedirect: '/',
+  failureRedirect: '/registration',
+  failureFlash: true
+}), (req, res) => { })
 
-app.get('/logout', (req,res) => {
+app.get('/logout', (req, res) => {
   req.logout()
   req.session.passport.user = false;
   res.redirect('/');
 })
 
+app.get('/user'/*, isLoggedIn*/, function (req, res) {
+  res.render('user.ejs', {
+    user: req.user // get the user out of session and pass to template
+  });
+});
+
+function isLoggedIn(req, res, next) {
+
+  // if user is authenticated in the session, carry on 
+  if (req.isAuthenticated())
+      return next();
+
+  // if they aren't redirect them to the home page
+  res.redirect('/');
+}
+
 app.listen(8080)
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 var http = require('http');
 var fs = require('fs');
