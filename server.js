@@ -20,7 +20,7 @@ app.use(require('express-session')({
 	saveUninitialized: false
 }));
 app.set('view engine', 'ejs')
-app.set('views', 'views')
+app.set('views', 'public/views')
 app.use(cookieParser());
 // Body parser middleware.
 app.use(bodyParser.json());			// to support JSON-encoded bodies
