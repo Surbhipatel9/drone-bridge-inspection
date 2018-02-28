@@ -20,6 +20,42 @@ var knex = require('knex')({
     }
 });
 
+
+/***********FUNCTIONS FOR HOMEPAGE***********/
+
+//get bridge ID
+exports.getBridgeID = function (cb) {
+    var bridges = [];
+    knex('bridge').select('bridgeID').then(function (bridgeID) {
+        for (var i = 0; i < bridgeID.length; i++) {
+            bridges.push(bridgeID[i]);
+        }
+        cb(bridges);
+    });
+}
+
+exports.bridgeIDGet = function(){
+    var bridges = [];
+    knex('bridge').select('bridgeID').then(function (bridgeID) {
+        for (var i = 0; i < bridgeID.length; i++) {
+            bridges.push(bridgeID[i]);
+        }
+        return bridges;
+    });
+}
+
+//gets names of bridges
+exports.getBridgeNames = function (cb) {
+    var bridges = [];
+    knex('bridge').select('name').then(function (bridgesNames) {
+        for (var i = 0; i < bridgeNames.length; i++) {
+            bridges.push(bridgeNames[i]);
+        }
+        cb(bridges);
+    });
+}
+
+
 exports.init = function () {
     knex.schema.hasTable('counties').then(function (exists) {
         if (!exists) {
@@ -453,7 +489,7 @@ exports.addUsersToRoles = function () {
 exports.getUserInfo = function (userName, cb) {
     knex.select().from('users').where({
         userName: userName
-    }).then(function (grabbedUser){
+    }).then(function (grabbedUser) {
         cb(grabbedUser[0])
     })
 }
@@ -461,7 +497,7 @@ exports.getUserInfo = function (userName, cb) {
 exports.checkLogin = function (userName, cb) {
     knex.select().from('users').where({
         userName: userName
-    }).then(function (grabbedUser){
+    }).then(function (grabbedUser) {
         cb(grabbedUser[0])
     })
 }

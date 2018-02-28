@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <title>
     Home
@@ -40,41 +39,6 @@
           color: #FFF;
         }
 
-        /*
- #footer{
-   position: fixed;
-       left: 0;
-       bottom: 0;
-       width: 100%;
-       background-color: #2651a8;
-       color: white;
-       text-align: center;
- }
- ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #2651a8;
-}
-li {
-    float: left;
-}
-li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-}
-li a:hover:not(.active) {
-    background-color: #181818;
-}
-.active {
-    background-color: #2651a8;
-}
-*/
-
         #homeHeader {
           margin-top: .5em;
         }
@@ -99,48 +63,20 @@ li a:hover:not(.active) {
           <button class="buttonHome" id="search">Go!</button>
       </center>
       <center>
-        <table id="homeTable">
+        <table>
           <col width="300"></col>
           <col width="150"></col>
           <col width="150"></col>
           <col width="150"></col>
           <tr>
-            <th>Bridge Name: </th>
-            <th>County: </th>
+            <th>Bridge ID: </th>
+            <th>Name: </th>
             <th>District: </th>
             <th>Date: </th>
           </tr>
+         
+          
         </table>
-        <script>
-          function createJSON() {
-            var mysql = require('mysql');
-
-            // http://nodejs.org/docs/v0.6.5/api/fs.html#fs.writeFile
-            var fs = require('fs');
-
-            var connection = mysql.createConnection({
-              host: 'localhost',
-              user: 'aksenov',
-              password: 'Datapass123',
-              database: 'DroneInspDB'
-            });
-
-            connection.connect();
-            var bridgeJSON = [];
-            bridgeJSON = connection.query('select * from DroneInspDB.bridges for JSON PATH;', function (err, results, fields) {
-              if (err) throw err;
-              fs.writeFile('table.json', JSON.stringify(results), function (err) {
-                if (err) throw err;
-                console.log('Saved!');
-              });
-
-              connection.end();
-            });
-
-            var  output = document.getElementById('output');
-            output.innerHTML = jcontent.name;
-          }
-        </script>
         <p id="ouput"></p>
         </div>
         <label for="numbers" id="search">Page...</label>

@@ -40,6 +40,10 @@ app.get('/', (req,res) => {
     //console.log(req.session.passport.user)  //GET SESSION INFO FOR CURRENTLY LOGGED IN USER
 })
 
+app.get('/viewReport',(req, res) => {
+  res.render('viewReport.ejs')
+})
+
 // LOCAL LOGIN ROUTE
 app.get('/login', (req, res, passport) => {
 	res.render('login.ejs', {message: req.flash('loginMessage')});
