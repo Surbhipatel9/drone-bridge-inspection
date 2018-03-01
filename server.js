@@ -44,6 +44,10 @@ app.get('/viewReport',(req, res) => {
   res.render('viewReport.ejs')
 })
 
+app.get('/reportView',(req, res) => {
+  res.render('reportView.ejs')
+})
+
 // LOCAL LOGIN ROUTE
 app.get('/login', (req, res, passport) => {
 	res.render('login.ejs', {message: req.flash('loginMessage')});

@@ -3,42 +3,107 @@
 
 <head>
     <title>
-        Home
+        View Report
     </title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" type="text/css" href="fonts.css">
 </head>
+
 <body>
     <% include navbar %>
         <form>
             <style>
-                p.inline {
-                    display: inline;
-                    margin-left: 8em;
-                    margin-top: 2em;
+                #search {
+                    margin-left: 15px;
+                    margin-top: 5px;
                 }
 
-                p.floatRight {
-                    float: right;
-                    display: inline;
-                    margin-right: 8em;
+                #homeTable {
+                    border: 1px solid #2651a8;
+                    padding: .2em .5em .2em .5em;
+                    vertical-align: top;
+                    text-align: left;
+                    margin-top: 10px;
                 }
-                #leftMargin{
-                    margin-left: 4em;
+
+                td {
+                    border: 1px solid black;
+                    padding: .2em .5em .2em .5em;
+                    vertical-align: top;
+                    text-align: center;
+                }
+
+                th {
+                    text-align: center;
+                }
+
+                .buttonHome {
+                    display: inline-block;
+                    padding: 1em 2em 1em 2em;
+                    letter-spacing: 0.10em;
+                    margin-top: 2em;
+                    padding: .4em .7em;
+                    background: #2651a8;
+                    border-radius: 6px;
+                    text-decoration: none;
+                    font-weight: 700;
+                    font-size: 1em;
+                    color: #FFF;
+                }
+
+                #homeHeader {
+                    margin-top: .5em;
+                }
+
+                #homeImage {
+                    margin-top: .5em;
                 }
             </style>
-            <p class="inline">Bridge Id.</p>
-            <p class="floatRight">Bars No. </p>
             <center>
-                <p>Bridge Name:</p>
-                <p>Spans:</p>
-                <p>County:</p>
-                <p>District:</p>
-                <h1>Bridge Inspection Report</h1>
+                <h1 id="homeHeader">
+                    West Virginia DoT
+                </h1>
+                <img src="http://localhost:8080/photos/wvdotlogo.webp" id="homeImage" alt="WVDoT logo" style="width:200px; height:200px;">
+                <h2>
+                    Inspection Reports
+                </h2>
+                <div>
+                    <input type="text" size="35" id="searchbar" placeholder="Search..">
+                    <label for="numbers" id="search">Page...</label>
+                    <input type="text" size="1" id="search" placeholder="#"> /20
+                    <button class="buttonHome" id="search">Go!</button>
             </center>
-            <div id="leftMargin"> <p>Types of Inspections Performed: </p>
-            </div>
+            <center>
+                <table id="homeTable">
+                    <col width="200"></col>
+                    <col width="300"></col>
+                    <col width="75"></col>
+                    <col width="150"></col>
+                    <tr>
+                        <th>
+                            Bridge ID:
+                        </th>
+                        <th>Name: </th>
+                        <th>District: </th>
+                        <th>Date: </th>
+                    </tr>
+                    <tr>
+                        <td><a href="/reportView">008-4/5-2.95(01215)</a></td>
+                        <td>PFC Abraham G. Sams Memorial Bridge</td>
+                        <td>1</td>
+                        <td>07/18/2012</td>
+                    </tr>
+
+
+                </table>
+                <p id="ouput"></p>
+                </div>
+                <label for="numbers" id="search">Page...</label>
+                <input type="text" size="1" id="search" placeholder="#"> /20
+                <button class="buttonHome" id="search">Go!</button>
+            </center>
 
 
         </form>
+        <% include footer.html %>
 </body>

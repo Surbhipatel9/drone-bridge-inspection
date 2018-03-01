@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>
     Home
@@ -42,6 +43,16 @@
         #homeHeader {
           margin-top: .5em;
         }
+        th{
+          text-align: center;
+        }
+
+        td {
+          border: 1px solid black;
+          padding: .2em .5em .2em .5em;
+          vertical-align: top;
+          text-align: center;
+        }
 
         #homeImage {
           margin-top: .5em;
@@ -55,7 +66,6 @@
         <p>
           West Virgina Department of Transportation Bridge Inspection Report Home Page
         </p>
-
         <div>
           <input type="text" size="35" id="searchbar" placeholder="Search..">
           <label for="numbers" id="search">Page...</label>
@@ -63,19 +73,25 @@
           <button class="buttonHome" id="search">Go!</button>
       </center>
       <center>
-        <table>
+        <table id="homeTable">
+          <col width="200"></col>
           <col width="300"></col>
-          <col width="150"></col>
-          <col width="150"></col>
+          <col width="75"></col>
           <col width="150"></col>
           <tr>
             <th>Bridge ID: </th>
             <th>Name: </th>
             <th>District: </th>
             <th>Date: </th>
+            
           </tr>
-         
-          
+          <tr>
+            <td>008-4/5-2.95(01215)</td>
+            <td>PFC Abraham G. Sams Memorial Bridge</td>
+            <td>1</td>
+            <td>07/18/2012</td>
+          </tr>
+
         </table>
         <p id="ouput"></p>
         </div>
