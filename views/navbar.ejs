@@ -1,18 +1,4 @@
 <style>
-  .navbar {
-    overflow: hidden;
-    background-color: #333;
-    position: fixed;
-    /* Set the navbar to fixed position */
-    top: 0;
-    /* Position the navbar at the top of the page */
-    width: 100%;
-    /* Full width */
-  }
-  #marginBottom{
-    margin-bottom: 3em;
-  }
-
   ul {
     list-style-type: none;
     margin: 0;
@@ -51,25 +37,25 @@
   }
 </style>
 <div id="marginBottom">
-<nav class="navbar">
-  <ul>
-    <div id="left">
+  <nav class="navbar">
+    <ul>
+      <div id="left">
+        <li>
+          <a class="active" href="/.">Home</a>
+        </li>
+      </div>
       <li>
-        <a class="active" href="/.">Home</a>
+        <a href="/viewReport">Reports</a>
       </li>
-    </div>
-    <li>
-      <a href="/viewReport">Reports</a>
-    </li>
-    <li>
-      <a href="#contact">Contact</a>
-    </li>
-    <li>
-      <a href="#about">About</a>
-    </li>
-    <li id="loginNav">
-      <a href="/login">Login</a>
-    </li>
-  </ul>
-</nav>
+      <li>
+        <a href="#contact">Contact</a>
+      </li>
+      <li>
+        <a href="#about">About</a>
+      </li>
+      <li id="loginNav">
+        <a href="/login">Login</a>
+      </li>
+    </ul>
+  </nav>
 </div>
