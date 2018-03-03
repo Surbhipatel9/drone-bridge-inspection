@@ -43,8 +43,12 @@
         #homeHeader {
           margin-top: .5em;
         }
-        th{
+
+        th {
           text-align: center;
+        }
+        a{
+          color: white;
         }
 
         td {
@@ -57,21 +61,46 @@
         #homeImage {
           margin-top: .5em;
         }
+
+        .homeBox {
+          background-color: #2651a8;
+          border: 5px solid black;
+          padding: .5em;
+          padding-top: .1em;
+          padding-bottom: .1em;
+          margin: .25em;
+          color: white;
+          margin-right: 7.5em;
+          margin-left: 7.5em;
+        }
       </style>
       <center>
         <h1 id="homeHeader">
           West Virginia DoT
         </h1>
         <img src="http://localhost:8080/photos/wvdotlogo.webp" id="homeImage" alt="WVDoT logo" style="width:200px; height:200px;">
-        <p>
-          West Virgina Department of Transportation Bridge Inspection Report Home Page
-        </p>
+        <h3>West Virgina Department of Transportation Bridge Inspection Report Home Page</h3>
+        <div class="homeBox">
+          <h3> <a href="/viewReport">Reports</a></h3>
+        </div>
+        <div class="homeBox">
+            <h3> <a href="/login">Login</a></h3>
+        </div>
+        <div class="homeBox">
+            <h3> <a href="/contact">Contact</a></h3>
+        </div>
+        <div class="homeBox">
+            <h3> <a href="/about">About</a></h3>
+        </div>
+
+        <!---
         <div>
           <input type="text" size="35" id="searchbar" placeholder="Search..">
           <label for="numbers" id="search">Page...</label>
           <input type="text" size="1" id="search" placeholder="#"> /20
           <button class="buttonHome" id="search">Go!</button>
       </center>
+     
       <center>
         <table id="homeTable">
           <col width="200"></col>
@@ -98,6 +127,7 @@
         <label for="numbers" id="search">Page...</label>
         <input type="text" size="1" id="search" placeholder="#"> /20
         <button class="buttonHome" id="search">Go!</button>
+      -->
       </center>
       <% include footer.html %>
     </form>
