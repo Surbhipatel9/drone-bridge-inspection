@@ -464,4 +464,18 @@ exports.checkLogin = function (userName, cb) {
     }).then(function (grabbedUser){
         cb(grabbedUser[0])
     })
+
+exports.addUser = function(User, cb) {
+    knex('users').insert( {
+        userName: User.userName, 
+        password: bcrypt.hashSync(User.password,8), 
+        firstName: User.firstName,
+        lastName: User.lastName,
+        districtID: User.districtID,
+        countyID: User.countyID,
+        isActive: User.isActive
+    }).returning('userid').then(function(userid){
+        cb(userid)
+    })
+}
 }
