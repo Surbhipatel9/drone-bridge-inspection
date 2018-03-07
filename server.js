@@ -8,9 +8,9 @@ var passport = require('passport');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');
-var db = require('./DB.js');
 const path = require('path');
 const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcrypt');
 app.use(express.static('public'))
 
 // Passport middleware.
@@ -36,8 +36,8 @@ require('./passport')(passport);
 
 app.get('/', (req, res) => {
   res.render('index.ejs')
-  //if(req.session.passport)
-  //console.log(req.session.passport.user)  //GET SESSION INFO FOR CURRENTLY LOGGED IN USER
+  if(req.session.passport)
+  console.log(req.session.passport.user)  //GET SESSION INFO FOR CURRENTLY LOGGED IN USER
 })
 
 // LOCAL LOGIN ROUTE
@@ -51,18 +51,46 @@ app.post('/login', passport.authenticate('local-login', {
   successRedirect: '/',
   failureRedirect: '/login',
   failureFlash: true
-}), (res, req) => {
+}), (req, res) => {
 });
 
 app.get('/registration', (req, res, passport) => {
   res.render('registration.ejs', { message: req.flash('loginMessage') })
 })
 
-app.post('/registration', passport.authenticate('local-signup', {
-  successRedirect: '/',
-  failureRedirect: '/registration',
-  failureFlash: true
-}), (req, res) => { })
+app.post('/registration', (req,res) =>{
+  var user = {
+    _userName: req.body._userName,
+    _password: req.body._password,
+    _firstName: req.body._firstName,
+    _lastName: req.body._lastName
+  }
+  db.checkLogin(user._userName, function(user2){
+    if(user2)
+        res.render('registration.ejs', {message: 'That username is already taken'})
+    else{
+        var newUser = {
+            userName: user._userName,
+            passwordHash: bcrypt.hashSync(user._password, 8),
+            firstName: user._firstName,
+            lastName: user._lastName,
+            districtID: 0,
+            countyID: 0,
+            isActive: true
+        };
+        db.addUser(newUser, function(userid){
+          req.login(newUser, function(err) {
+            if (err) { return next(err); }
+            return res.redirect('/profile');
+          });
+        })
+    }
+})
+})
+
+app.get('/profile', (req,res) =>{
+  res.send(req.session.passport.user)
+})
 
 app.get('/logout', (req, res) => {
   req.logout()
