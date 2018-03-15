@@ -39,26 +39,26 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 
 app.get('/', (req, res) => {
-  res.render('index.ejs')
+  res.render('login2.ejs', { message: req.flash('loginMessage') });
   //if(req.session.passport)
   //console.log(req.session.passport.user)  //GET SESSION INFO FOR CURRENTLY LOGGED IN USER
 })
 
-// LOCAL LOGIN ROUTE
+/*// LOCAL LOGIN ROUTE
 app.get('/login', (req, res, passport) => {
   res.render('login.ejs', { message: req.flash('loginMessage') });
-});
+});*/
 
 //LOCAL LOGIN POST ROUTE
 //authenticate the login and redirect on success/failure and send failure message if needed
 app.post('/login', passport.authenticate('local-login', {
-  successRedirect: '/',
+  successRedirect: '/user',
   failureRedirect: '/login',
   failureFlash: true
 }), (res, req) => {
 });
 
-app.get('/registration', (req, res, passport) => {
+/*app.get('/registration', (req, res, passport) => {
   res.render('registration.ejs', { message: req.flash('loginMessage') })
 })
 
@@ -66,7 +66,7 @@ app.post('/registration', passport.authenticate('local-signup', {
   successRedirect: '/',
   failureRedirect: '/registration',
   failureFlash: true
-}), (req, res) => { })
+}), (req, res) => { })*/
 
 app.get('/logout', (req, res) => {
   req.logout()
@@ -84,7 +84,7 @@ function isLoggedIn(req, res, next) {
 
   // if user is authenticated in the session, carry on 
   if (req.isAuthenticated())
-      return next();
+    return next();
 
   // if they aren't redirect them to the home page
   res.redirect('/');

@@ -13,11 +13,11 @@ a {
 	{
 		margin: 0px;
 		padding: 0px;
-		background: #181818;
+		background: #265077;
 		font-family: 'Didact Gothic', sans-serif;
 		font-size: 12pt;
 		font-weight: 200;
-		color: #FFF;
+		color: #265077;
 	}
 
 	h1, h2, h3
@@ -169,7 +169,7 @@ ul.contact li a.icon-rss:before { background: #F2600B; }
   letter-spacing: 0.10em;
   margin-top: 2em;
   padding: 1.40em 3em;
-  background: #2651a8;
+  background: #494B68;
   border-radius: 6px;
   text-decoration: none;
   font-weight: 700;
