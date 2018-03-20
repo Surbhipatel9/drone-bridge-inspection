@@ -1,97 +1,56 @@
-<!-- views/login.ejs -->
-<!doctype html>
+<!DOCTYPE html>
 <html>
 
 <head>
-    <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
-    <link rel="stylesheet" type="text/css" href="/fonts.css">
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        /* Full-width input fields */
-
-        input[type=text],
-        input[type=password] {
-            width: 60%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            display: inline-block;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-
-        /* Set a style for all buttons */
-
-        button {
-            background-color: #494B68;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0px;
-            border: none;
-            cursor: pointer;
-            width: 40%;
-        }
-
-        button:hover {
-            opacity: 0.8;
-        }
-
-        #homeHeader {
-          margin-top: .5em;
-        }
-        
-        #homeImage {
-          margin-top: .5em;
-        }
-    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0/materia/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" type="text/css" href="assets/css/styles.min.css">
 </head>
 
 <body>
-    <% include navbar %>
-        <div class="container">
-            <div class="col-sm-6 col-sm-offset-3">
-                <center>
-                    <!-- LOGIN FORM -->
-                    <form action="/login" method="post">
-                        <h1 id=homeHeader>
-                            Login
-                        </h1>
-                        <div class="imgcontainer">
-                            <img src="http://localhost:8080/photos/wvdotlogo.webp" id="homeImage" alt="WVDoT logo" style="width:200px; height:200px;">
-                        </div>
-                        <div>
-                            <!-- show any messages that come back with authentication -->
-                            <% if (message.length > 0) { %>
-                                <div class="alert alert-danger">
-                                    <%= message %>
-                                </div>
-                            <% } %>
-                        </div>
-                        <div class="form-group">
-                          
-                            <input type="text" style="width: 300px;" placeholder="Enter Username" class="form-control" name="userName" required>
-                        </div>
-                        <div class="form-group">
-                           
-                            <input type="password" style="width: 300px;" placeholder="Enter Password" class="form-control" name="password" required>
-                        </div>
 
-                        <button type="submit" style="width: 300px;" class="btn btn-warning btn-lg">Login</button>
-                    </form>
-                    
-                    <!-- <div>Need an account?
-                        <a href="/registration">Signup</a>
-                    </div>
-                    <div>Or go
-                        <a href="/">home</a>.</div> -->
-                </center>
+    <nav class="navbar navbar-light navbar-expand-md">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">WV Bridge Inspection Tool</a>
+            <button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" href="#" hidden>Log In</a>
+                    </li>
+                </ul>
             </div>
-
         </div>
-        <% include footer %>
+    </nav>
+    <div id="login">
+            
+        <div class="jumbotron">
+            <img src="assets/img/wvdotlogo_clear.png">
+            <br>
+            <h1>Log In</h1>
+            <hr>
+            <% if (message.length > 0) { %>
+                <div class="alert alert-danger"><%= message %></div>
+            <% } %>
+            <form action="/login" method="post">
+                <input type="text" placeholder="Username" name="userName" required>
+                <br>
+                <input type="password" placeholder="Password" name="password" required>
+                <br>
+                <button class="btn btn-primary" type="submit" role="button">Log in</button>
+                <a href="#">Forgot Password?</a>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
