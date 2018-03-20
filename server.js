@@ -39,7 +39,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 
 app.get('/', (req, res) => {
-  res.render('login.ejs', { message: req.flash('loginMessage') });
+  res.render('login.ejs', { message: req.flash('loginMessage'), userinfo: false});
   //if(req.session.passport)
   //console.log(req.session.passport.user)  //GET SESSION INFO FOR CURRENTLY LOGGED IN USER
 })
@@ -60,6 +60,19 @@ app.post('/login', passport.authenticate('local-login', {
   failureRedirect: '/login',
   failureFlash: true
 }), (res, req) => {
+});
+
+// Index route.
+app.get('/user', (req, res) => {
+	//if logged in
+	if (req.session.passport) {
+		//get userinfo and send to the web page 
+		res.render(__dirname + "/public/views/user.ejs", { userinfo: JSON.stringify(req.session.passport.user) });
+	}
+	//if not logged in send blank userinfo to web app
+	else {
+		res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, userinfo: false });
+	}
 });
 
 /*app.get('/registration', (req, res, passport) => {

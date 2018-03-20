@@ -465,3 +465,10 @@ exports.checkLogin = function (userName, cb) {
         cb(grabbedUser[0])
     })
 }
+
+exports.getUserInfo = function (username, cb) {
+    knex.raw('select users.username, roles.roleName, counties.countyName from (((users inner join userRoles on users.userID = userRoles.userID) inner join roles on userRoles.roleID = roles.roleID) inner join counties on counties.countyID = users.countyID) where users.username = ' + "'" + username + "'")
+    .then(function (userinfo) {
+		cb(userinfo);
+	});
+};
