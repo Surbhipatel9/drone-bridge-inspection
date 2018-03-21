@@ -11,7 +11,7 @@
 
 <body>
     <nav class="navbar navbar-light navbar-expand-md sticky-top">
-        <div class="container">
+        <div id="nav" class="container">
             <a class="navbar-brand" href="#">WV Bridge Inspection Tool</a>
             <button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1">
                 <span class="sr-only">Toggle navigation</span>
@@ -19,25 +19,59 @@
             </button>
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link active" href="#">Log In</a>
-                    </li>
+                    <%if (userinfo) { %>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" href="/user">Logged in as
+                                <%- JSON.parse(userinfo).userName %>
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" href="/logout">Log Out</a>
+                        </li>
+                        <% } %>
+                            <%if (!userinfo) { %>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" href="/login">Log In</a>
+                                </li>
+                                <% } %>
                 </ul>
             </div>
         </div>
     </nav>
-    <div class="container">
+    <div id="user" class="container">
         <div class="row">
             <div class="col-lg-3" id="info">
-                <img>
-                <p>User Name:</p>
-                <p>First Name:</p>
-                <p>Last Name:</p>
-                <p>Role:</p>
-                <p>County:</p>
-                <p>Email:</p>
-                <p>Address:</p>
-                <p>Phone:</p>
+                <div id="profpic" class="container">
+                    <img src="/assets/img/wvdotlogo.png" alt="Avatar" class="image">
+                    <div class="overlay">
+                        <form action="/user" enctype="multipart/form-data" method="post">
+                            <input type="file" name="upload" multiple>
+                            <br>
+                            <input type="submit" value="Upload">
+                        </form>
+                    </div>
+                </div>
+                <p>User Name:
+                    <%- JSON.parse(userinfo).userName %>
+                </p>
+                <p>First Name:
+                    <%- JSON.parse(userinfo).firstName %>
+                </p>
+                <p>Last Name:
+                    <%- JSON.parse(userinfo).lastName %>
+                </p>
+                <p>Role:
+                    <%- JSON.parse(userinfo).role %>
+                </p>
+                <p>County:
+                    <%- JSON.parse(userinfo).county %>
+                </p>
+                <p>Email:
+                    <%- JSON.parse(userinfo).email %>
+                </p>
+                <p>Phone:
+                    <%- JSON.parse(userinfo).phone %>
+                </p>
             </div>
             <div class="col-lg-8 offset-1 offset-lg-1 offset-xl-1" id="pane">
                 <div>

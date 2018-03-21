@@ -4,6 +4,7 @@ var passport = require('passport');
 var flash = require('connect-flash');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var formidable = require('formidable');
 
 var db = require('./DB.js');
 require('./passport')(passport);
@@ -38,6 +39,7 @@ app.use(passport.session());
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 
+
 app.get('/', (req, res) => {
   res.render('login.ejs', { message: req.flash('loginMessage'), userinfo: false});
   //if(req.session.passport)
@@ -62,9 +64,9 @@ app.post('/login', passport.authenticate('local-login', {
 }), (res, req) => {
 });
 
-// Index route.
+// User route.
 app.get('/user', (req, res) => {
-	//if logged in
+  //if logged in
 	if (req.session.passport) {
 		//get userinfo and send to the web page 
 		res.render(__dirname + "/public/views/user.ejs", { userinfo: JSON.stringify(req.session.passport.user) });
@@ -75,27 +77,27 @@ app.get('/user', (req, res) => {
 	}
 });
 
-/*app.get('/registration', (req, res, passport) => {
-  res.render('registration.ejs', { message: req.flash('loginMessage') })
-})
+app.post('/user', function (req, res){
+  var form = new formidable.IncomingForm();
 
-app.post('/registration', passport.authenticate('local-signup', {
-  successRedirect: '/',
-  failureRedirect: '/registration',
-  failureFlash: true
-}), (req, res) => { })*/
+  form.parse(req);
+
+  form.on('fileBegin', function (name, file){
+      file.path = __dirname + '/pictures/' + file.name;
+  });
+
+  form.on('file', function (name, file){
+      console.log('Uploaded ' + file.name);
+  });
+
+  res.sendFile(__dirname + '/index.html');
+});
 
 app.get('/logout', (req, res) => {
   req.logout()
   req.session.passport.user = false;
   res.redirect('/');
 })
-
-app.get('/user'/*, isLoggedIn*/, function (req, res) {
-  res.render('user.ejs', {
-    user: req.user // get the user out of session and pass to template
-  });
-});
 
 function isLoggedIn(req, res, next) {
 

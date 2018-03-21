@@ -2,12 +2,15 @@ p {
     margin:15px;
   }
   
-  img {
-    margin:15px;
-    height:200px;
-    width:200px;
-    border-radius:50%;
+  #profpic .image {
+    display: block;
+    width: 200px;
+    height: 200px;
+    margin: 15px;
+    margin-left: auto;
+    margin-right: auto;
   }
+  
   
   #info {
     background-color:rgba(255,255,255,0.75);
@@ -41,17 +44,29 @@ p {
     margin:0;
   }
   
-  .container {
+  #nav {
     padding:0;
     margin:0;
     min-width:100%;
-    height:92%;
+    height:94%;
   }
   
+  #user {
+    padding:0;
+    margin:0;
+    min-width:100%;
+    height:93%;
+  }
+    
   .navbar {
     background-color:rgb(255,255,255);
     height:auto;
   }
+
+  .navbar-light .navbar-brand {
+    color: rgba(0,0,0,.9);
+    margin: 0;
+}
   
   body {
     background:url(../../assets/img/loginbackground.jpg);
@@ -101,11 +116,6 @@ p {
 
 }
 
-.navbar.navbar-light.navbar-expand-md {
-    min-height: 8%;
-    height: 8%;
-}
-
 #login .btn.btn-primary, #login input {
     margin-top: 5%;
     margin-bottom: 5%;
@@ -149,7 +159,63 @@ p {
     min-height: 100%
 }
 
-a {
-    margin-top: 5%;
-    margin-bottom: 5%
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #008CBA;
+    overflow: hidden;
+    width: 100%;
+    height: 0;
+    transition: .5s ease;
+  }
+  #profpic {
+    position: relative;
+    height: 200px;
+    width: 200px;
+    margin:auto;
+    padding: 0; 
+  }
+  #profpic:hover .overlay {
+    height: 100%;
+  }
+
+  #profpic input[type=submit] {
+    color: rgb(255,255,255);
+    font-size: 15px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  #profpic input {
+    color: rgb(0, 0, 0);
+    font-size: 15px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  #profpic input[type=button] {
+    background-color: rgb(255, 255, 255); /* Green */
+    border: none;
+    color: rgb(0, 0, 0);
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    padding: 3%;
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    top: 13px;
 }
+  #my-file { visibility: hidden; }

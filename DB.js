@@ -125,6 +125,8 @@ exports.populateUsers = function () {
             userName: 'Aleks',
             firstName: 'Aleks',
             lastName: 'Aksenov',
+            phone: '3049628797',
+            email: 'aksenov@marshall.edu',
             districtID: 0,
             passwordHash: bcrypt.hashSync('AleksPass123', 8),
             countyID: 0,
@@ -450,14 +452,6 @@ exports.addUsersToRoles = function () {
     ])
 }
 
-exports.getUserInfo = function (userName, cb) {
-    knex.select().from('users').where({
-        userName: userName
-    }).then(function (grabbedUser){
-        cb(grabbedUser[0])
-    })
-}
-
 exports.checkLogin = function (userName, cb) {
     knex.select().from('users').where({
         userName: userName
@@ -467,7 +461,7 @@ exports.checkLogin = function (userName, cb) {
 }
 
 exports.getUserInfo = function (username, cb) {
-    knex.raw('select users.username, roles.roleName, counties.countyName from (((users inner join userRoles on users.userID = userRoles.userID) inner join roles on userRoles.roleID = roles.roleID) inner join counties on counties.countyID = users.countyID) where users.username = ' + "'" + username + "'")
+    knex.raw('select users.username, users.phone, users.firstName, users.lastName, users.email, roles.roleName, counties.countyName from (((users inner join userRoles on users.userID = userRoles.userID) inner join roles on userRoles.roleID = roles.roleID) inner join counties on counties.countyID = users.countyID) where users.username = ' + "'" + username + "'")
     .then(function (userinfo) {
 		cb(userinfo);
 	});
