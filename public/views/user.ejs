@@ -42,7 +42,7 @@
         <div class="row">
             <div class="col-lg-3" id="info">
                 <div id="profpic" class="container">
-                    <img src="/assets/img/wvdotlogo.png" alt="Avatar" class="image">
+                    <img src="..<%= JSON.parse(userinfo).profPic %>" alt="Avatar" class="image">
                     <div class="overlay">
                         <form action="/user" enctype="multipart/form-data" method="post">
                             <input type="file" name="upload" multiple>

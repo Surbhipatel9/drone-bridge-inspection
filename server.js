@@ -38,16 +38,16 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash()); // use connect-flash for flash messages stored in session
 
-
+db.init();
 
 app.get('/', (req, res) => {
-  res.render('login.ejs', { message: req.flash('loginMessage'), userinfo: false});
+  res.render('login.ejs', { message: req.flash('loginMessage'), userinfo: false });
   //if(req.session.passport)
   //console.log(req.session.passport.user)  //GET SESSION INFO FOR CURRENTLY LOGGED IN USER
 })
 
 app.get('/login', (req, res, passport) => {
-	res.render('login.ejs', { message: req.flash('loginMessage'), userinfo: false });
+  res.render('login.ejs', { message: req.flash('loginMessage'), userinfo: false });
 })
 
 /*// LOCAL LOGIN ROUTE
@@ -67,30 +67,44 @@ app.post('/login', passport.authenticate('local-login', {
 // User route.
 app.get('/user', (req, res) => {
   //if logged in
-	if (req.session.passport) {
-		//get userinfo and send to the web page 
-		res.render(__dirname + "/public/views/user.ejs", { userinfo: JSON.stringify(req.session.passport.user) });
-	}
-	//if not logged in send blank userinfo to web app
-	else {
-		res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, userinfo: false });
-	}
+  if (req.session.passport) {
+    //get userinfo and send to the web page 
+    res.render(__dirname + "/public/views/user.ejs", { userinfo: JSON.stringify(req.session.passport.user) });
+  }
+  //if not logged in send blank userinfo to web app
+  else {
+    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, userinfo: false });
+  }
 });
 
-app.post('/user', function (req, res){
+app.post('/user', function (req, res) {
   var form = new formidable.IncomingForm();
 
   form.parse(req);
 
-  form.on('fileBegin', function (name, file){
-      file.path = __dirname + '/pictures/' + file.name;
+  var userinfo = JSON.stringify(req.session.passport.user)
+  var userID = JSON.parse(userinfo).userID
+
+  form.on('fileBegin', function (name, file) {
+    file.path = __dirname + '/public/pictures/' + file.name;
+    db.addProfPic(userID, file.path).then(function (result) {
+      console.log(userID)
+      console.log(file.path)
+    });
   });
 
-  form.on('file', function (name, file){
-      console.log('Uploaded ' + file.name);
-  });
 
-  res.sendFile(__dirname + '/index.html');
+  form.on('file', function (name, file) {
+    console.log('Uploaded ' + file.name);
+  });
+  if (req.session.passport) {
+    //get userinfo and send to the web page 
+    res.render(__dirname + "/public/views/user.ejs", { userinfo: JSON.stringify(req.session.passport.user) });
+  }
+  //if not logged in send blank userinfo to web app
+  else {
+    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, userinfo: false });
+  }
 });
 
 app.get('/logout', (req, res) => {

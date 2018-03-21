@@ -104,6 +104,11 @@ exports.init = function () {
                     table.string('description').notNullable();
                     table.string('location').notNullable();
                 })
+                .createTable('profpics', function (table) {
+                    table.increments('picID').unique();
+                    table.integer('userID').notNullable();
+                    table.string('location').notNullable();
+                })
 
                 .then(() => { return exports.populateCounties() }).then(() => { return exports.populateRoles() }).then(() => { return exports.populateUsers() }).then(() => { return exports.addUsersToRoles() });
         }
@@ -455,14 +460,24 @@ exports.addUsersToRoles = function () {
 exports.checkLogin = function (userName, cb) {
     knex.select().from('users').where({
         userName: userName
-    }).then(function (grabbedUser){
+    }).then(function (grabbedUser) {
         cb(grabbedUser[0])
     })
 }
 
 exports.getUserInfo = function (username, cb) {
-    knex.raw('select users.username, users.phone, users.firstName, users.lastName, users.email, roles.roleName, counties.countyName from (((users inner join userRoles on users.userID = userRoles.userID) inner join roles on userRoles.roleID = roles.roleID) inner join counties on counties.countyID = users.countyID) where users.username = ' + "'" + username + "'")
-    .then(function (userinfo) {
-		cb(userinfo);
-	});
+    knex.raw('select profpics.location, users.username, users.phone, users.firstName, users.lastName, users.email, roles.roleName, counties.countyName from ((((users inner join userRoles on users.userID = userRoles.userID) inner join roles on userRoles.roleID = roles.roleID) inner join counties on counties.countyID = users.countyID) inner join profpics on users.userID = profpics.userID) where users.username = ' + "'" + username + "'")
+        .then(function (userinfo) {
+            cb(userinfo);
+        });
 };
+
+exports.addProfPic = function (userID, pic) {
+    return knex('profpics').insert([
+        {
+            userID: userID,
+            location: pic
+        }
+
+    ])
+}

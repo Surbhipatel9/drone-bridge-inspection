@@ -25,7 +25,7 @@ module.exports = function (passport) {
       db.checkLogin(username, function (user) {
         db.getUserInfo(username, function (userInf) {
           if (user) {
-            console.log(user);
+            
             var userinfo = {
               userName: userInf[0].username,
               firstName: userInf[0].firstName,
@@ -34,8 +34,10 @@ module.exports = function (passport) {
               phone: userInf[0].phone,
               role: userInf[0].roleName,
               county: userInf[0].countyName,
-              userID: user.userID
+              userID: user.userID,
+              profPic: userInf[0].location
             }
+            console.log(userinfo);
           }
           if (!user) {
             return done(null, false, req.flash('loginMessage', 'No user found.'))
