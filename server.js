@@ -66,15 +66,21 @@ app.post('/login', passport.authenticate('local-login', {
 
 // User route.
 app.get('/user', (req, res) => {
+
   //if logged in
   if (req.session.passport) {
-    //get userinfo and send to the web page 
-    res.render(__dirname + "/public/views/user.ejs", { userinfo: JSON.stringify(req.session.passport.user) });
+    db.getReports(function (reports){
+      //get userinfo and send to the web page 
+      res.render(__dirname + "/public/views/user.ejs", { userinfo: JSON.stringify(req.session.passport.user) , reports});
+    });
   }
   //if not logged in send blank userinfo to web app
   else {
-    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, userinfo: false });
+    db.getReports(function (reports){
+    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, userinfo: false,  reports});
+  });
   }
+
 });
 
 app.post('/user', function (req, res) {
@@ -87,7 +93,7 @@ app.post('/user', function (req, res) {
 
   form.on('fileBegin', function (name, file) {
     file.path = __dirname + '/public/pictures/' + file.name;
-    db.addProfPic(userID, file.path).then(function (result) {
+    db.updProfPic(userID, '/pictures/' + file.name).then(function (result) {
       console.log(userID)
       console.log(file.path)
     });

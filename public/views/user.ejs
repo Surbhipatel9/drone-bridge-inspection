@@ -42,11 +42,11 @@
         <div class="row">
             <div class="col-lg-3" id="info">
                 <div id="profpic" class="container">
-                    <img src="..<%= JSON.parse(userinfo).profPic %>" alt="Avatar" class="image">
+                    <img src="<%= JSON.parse(userinfo).profPic %>" alt="/pictures/default.png" class="image">
                     <div class="overlay">
                         <form action="/user" enctype="multipart/form-data" method="post">
-                            <input type="file" name="upload" multiple>
-                            <br>
+                            <input type="button" id="get_file" value="Select File">
+                            <input type="file" id="my_file" name="upload" multiple>
                             <input type="submit" value="Upload">
                         </form>
                     </div>
@@ -85,33 +85,110 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" role="tabpanel" id="tab-1">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="mb-0">Heading</h5>
-                                </div>
-                                <div class="card-body">
-                                    <p class="card-text">Here you will be able to see assigned reports.</p>
+                            <hr>
+                            <div class="row" style="font-size:0.75rem;">
+                                <div class="col">
+                                    <table class="table table-bordered table-hover table-responsive table-sm d-table">
+                                        <thead>
+                                            <tr class="table-primary">
+                                                <th style="width:8%;">Report ID </th>
+                                                <th style="width:15%;">Name </th>
+                                                <th style="width:35%;">Location </th>
+                                                <th style="width:10%;">Date Assigned </th>
+                                                <th> </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% for (var j = 0; j < reports.length; j++) { %>
+                                                <% if(reports[j]["status"] == "assigned" && reports[j]["assignedTo"] == JSON.parse(userinfo).userID ) {%>
+                                                    <tr>
+                                                        <td>
+                                                            <strong>
+                                                                <%-   reports[j]["reportID"] %>
+                                                            </strong>
+                                                        </td>
+                                                        <td>
+                                                            <%-   reports[j]["name"] %>
+                                                        </td>
+                                                        <td>
+                                                            <strong>
+                                                                <%-   reports[j]["location"] %>
+                                                            </strong>
+                                                        </td>
+                                                        <td>
+                                                            <strong>
+                                                                <%-   reports[j]["dateAssigned"] %>
+                                                            </strong>
+
+                                                        </td>
+                                                        <td>
+                                                            <strong>
+                                                                <input type="button" id="viewReport" value="View Report">
+                                                            </strong>
+                                                        </td>
+                                                    </tr>
+                                                    <% } %>
+                                                        <% } %>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane" role="tabpanel" id="tab-2">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="mb-0">Heading</h5>
-                                </div>
-                                <div class="card-body">
-                                    <p class="card-text">Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac facilisis
-                                        in, egestas eget quam. Donec id elit non mi porta gravida at eget metus.</p>
+                            <div class="row" style="font-size:0.75rem;">
+                                <div class="col">
+                                    <table class="table table-bordered table-hover table-responsive table-sm d-table">
+                                        <thead>
+                                            <tr class="table-primary">
+                                                <th style="width:8%;">Report ID </th>
+                                                <th style="width:15%;">Name </th>
+                                                <th style="width:35%;">Location </th>
+                                                <th style="width:10%;">Date Assigned </th>
+                                                <th> </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% for (var j = 0; j < reports.length; j++) { %>
+                                                <% if(reports[j]["status"] == "submitted") { %>
+                                                    <tr>
+                                                        <td>
+                                                            <strong>
+                                                                <%-   reports[j]["reportID"] %>
+                                                            </strong>
+                                                        </td>
+                                                        <td>
+                                                            <%-   reports[j]["name"] %>
+                                                        </td>
+                                                        <td>
+                                                            <strong>
+                                                                <%-   reports[j]["location"] %>
+                                                            </strong>
+                                                        </td>
+                                                        <td>
+                                                            <strong>
+                                                                <%-   reports[j]["dateAssigned"] %>
+                                                            </strong>
+
+                                                        </td>
+                                                        <td>
+                                                            <strong>
+                                                                <input type="button" id="viewReport" value="View Report">
+                                                            </strong>
+                                                        </td>
+                                                    </tr>
+                                                    <% } %>
+                                                        <% } %>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+            <script src="assets/js/jquery.min.js"></script>
+            <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 </body>
 
 </html>

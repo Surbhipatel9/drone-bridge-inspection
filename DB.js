@@ -65,10 +65,13 @@ exports.init = function () {
                     table.string('location').notNullable();
                     table.string('description');
                 })
-                .createTable('reort', function (table) {
+                .createTable('reports', function (table) {
                     table.integer('reportID').unique();
+                    table.string('status').notNullable();
                     //Don't use .date format, inconvinient
-                    table.string('date').notNullable();
+                    table.string('dateAssigned').notNullable();
+                    table.string('dateSubmitted');
+                    table.integer('assignedTo').notNullable();
                     //Add reference to bridge bridgeID
                     table.integer('bridgeID').notNullable();
                     //Add reference
@@ -89,7 +92,7 @@ exports.init = function () {
                     table.boolean('closure').notNullable();
                     table.boolean('procedure').notNullable();
                 })
-                .createTable('reortItem', function (table) {
+                .createTable('reortItems', function (table) {
                     table.integer('itemID').unique();
                     table.string('title').notNullable();
                     table.string('description').notNullable();
@@ -98,7 +101,7 @@ exports.init = function () {
                     //Add reference to report reportID
                     table.integer('reportID');
                 })
-                .createTable('photo', function (table) {
+                .createTable('photos', function (table) {
                     table.integer('photoID').unique();
                     table.string('title').notNullable();
                     table.string('description').notNullable();
@@ -466,18 +469,23 @@ exports.checkLogin = function (userName, cb) {
 }
 
 exports.getUserInfo = function (username, cb) {
-    knex.raw('select profpics.location, users.username, users.phone, users.firstName, users.lastName, users.email, roles.roleName, counties.countyName from ((((users inner join userRoles on users.userID = userRoles.userID) inner join roles on userRoles.roleID = roles.roleID) inner join counties on counties.countyID = users.countyID) inner join profpics on users.userID = profpics.userID) where users.username = ' + "'" + username + "'")
+    knex.raw('select profpics.location, users.userName, users.phone, users.firstName, users.lastName, users.email, roles.roleName, counties.countyName from ((((users inner join userRoles on users.userID = userRoles.userID) inner join roles on userRoles.roleID = roles.roleID) inner join counties on counties.countyID = users.countyID) inner join profpics on users.userID = profpics.userID) where users.userName = ' + "'" + username + "'")
         .then(function (userinfo) {
             cb(userinfo);
         });
 };
 
-exports.addProfPic = function (userID, pic) {
-    return knex('profpics').insert([
-        {
-            userID: userID,
-            location: pic
-        }
 
-    ])
+exports.updProfPic = function (userID, loc) {
+    return knex("profpics").where("userID", userID)
+        .update({ "location": loc })
+}
+
+exports.getReports = function (cb) {
+    knex.select('*').from('reports').join('bridge', function () {
+        this.on('reports.bridgeID', '=', 'bridge.bridgeID')
+    }).then(function (reports) {
+        console.log(reports)
+        cb(reports);
+    });
 }

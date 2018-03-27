@@ -24,10 +24,11 @@ module.exports = function (passport) {
       var pass = bcrypt.hashSync(password, 8);
       db.checkLogin(username, function (user) {
         db.getUserInfo(username, function (userInf) {
+          console.log(userInf[0])
+          console.log(username)
           if (user) {
-            
             var userinfo = {
-              userName: userInf[0].username,
+              userName: user.username,
               firstName: userInf[0].firstName,
               lastName: userInf[0].lastName,
               email: userInf[0].email,
