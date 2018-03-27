@@ -69,16 +69,16 @@ app.get('/user', (req, res) => {
 
   //if logged in
   if (req.session.passport) {
-    db.getReports(function (reports){
+    db.getReports(function (reports) {
       //get userinfo and send to the web page 
-      res.render(__dirname + "/public/views/user.ejs", { userinfo: JSON.stringify(req.session.passport.user) , reports});
+      res.render(__dirname + "/public/views/user.ejs", { userinfo: JSON.stringify(req.session.passport.user), reports });
     });
   }
   //if not logged in send blank userinfo to web app
   else {
-    db.getReports(function (reports){
-    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, userinfo: false,  reports});
-  });
+    db.getReports(function (reports) {
+      res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, userinfo: false, reports });
+    });
   }
 
 });
@@ -104,12 +104,16 @@ app.post('/user', function (req, res) {
     console.log('Uploaded ' + file.name);
   });
   if (req.session.passport) {
-    //get userinfo and send to the web page 
-    res.render(__dirname + "/public/views/user.ejs", { userinfo: JSON.stringify(req.session.passport.user) });
+    db.getReports(function (reports) {
+      //get userinfo and send to the web page 
+      res.render(__dirname + "/public/views/user.ejs", { userinfo: JSON.stringify(req.session.passport.user), reports });
+    });
   }
   //if not logged in send blank userinfo to web app
   else {
-    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, userinfo: false });
+    db.getReports(function (reports) {
+      res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, userinfo: false, reports });
+    });
   }
 });
 

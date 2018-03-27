@@ -71,6 +71,7 @@ exports.init = function () {
                     //Don't use .date format, inconvinient
                     table.string('dateAssigned').notNullable();
                     table.string('dateSubmitted');
+                    //Add reference to users.userID
                     table.integer('assignedTo').notNullable();
                     //Add reference to bridge bridgeID
                     table.integer('bridgeID').notNullable();

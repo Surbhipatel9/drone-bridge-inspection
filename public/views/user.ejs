@@ -21,8 +21,7 @@
                 <ul class="nav navbar-nav ml-auto">
                     <%if (userinfo) { %>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" href="/user">Logged in as
-                                <%- JSON.parse(userinfo).userName %>
+                            <a class="nav-link" href="/user">Logged in as <%- JSON.parse(userinfo).userName %>
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -100,7 +99,7 @@
                                         </thead>
                                         <tbody>
                                             <% for (var j = 0; j < reports.length; j++) { %>
-                                                <% if(reports[j]["status"] == "assigned" && reports[j]["assignedTo"] == JSON.parse(userinfo).userID ) {%>
+                                                <% if(reports[j]["status"] == "assigned" ) {%>
                                                     <tr>
                                                         <td>
                                                             <strong>
@@ -135,6 +134,7 @@
                             </div>
                         </div>
                         <div class="tab-pane" role="tabpanel" id="tab-2">
+                            <hr>
                             <div class="row" style="font-size:0.75rem;">
                                 <div class="col">
                                     <table class="table table-bordered table-hover table-responsive table-sm d-table">
