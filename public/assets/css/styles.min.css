@@ -102,8 +102,6 @@ html {
 }
 
 #login {
-  background: url(../../assets/img/loginbackground.jpg) no-repeat;
-  background-size: cover;
   text-align: center;
   min-height: 92%;
   min-width: 100%;
@@ -233,3 +231,148 @@ html {
 #my_file {
   display: none;
 }
+#Main {
+  width:100%;
+  height:100%;
+}
+
+html, body {
+  width:100%;
+  height:100%;
+}
+
+#Type {
+  margin-left:40%;
+  margin-right:40%;
+  width:auto;
+  height:auto;
+}
+
+#Title {
+  text-align:center;
+  width:30%;
+  height:51px;
+  margin-left:35%;
+  color:blue;
+  font-size:25px;
+  text-decoration:underline;
+  margin-right:35%;
+}
+
+#DoT_Tag {
+  text-align:center;
+  width:auto;
+  height:auto;
+  margin-left:15%;
+  color:blue;
+  font-size:25px;
+  margin-right:15%;
+  margin-bottom:0;
+}
+
+#Info p {
+  margin:0;
+}
+
+#Info {
+  margin:0px;
+  min-width:100%;
+  padding:15px;
+}
+
+#Insp_Types {
+  margin-left:40%;
+}
+
+#Insp .form-check {
+  margin-left:40%;
+}
+
+#UB_Info {
+  max-width:100%;
+  margin:0;
+  padding:15px;
+}
+
+#UB_Info .row {
+  max-width:100%;
+  margin:0;
+}
+
+#Info .row {
+  margin:0;
+  padding:0;
+  min-width:100%;
+}
+
+#Type_Check {
+  width:auto;
+  height:auto;
+  margin-left:40%;
+  margin-right:40%;
+  margin-top:15px;
+}
+
+.form-check {
+  float:left;
+}
+
+br {
+  float:right;
+}
+
+#DoT_Tag2 {
+  text-align:center;
+  width:auto;
+  height:auto;
+  margin-left:15%;
+  color:blue;
+  margin-top:0;
+  font-size:25px;
+  margin-right:15%;
+}
+
+p {
+  margin:15px;
+  /*color:blue;*/
+}
+
+#Insp {
+  overflow:hidden;
+}
+
+#No {
+  overflow:hidden;
+}
+
+#Bars_No {
+  float:right;
+  /*text-align:center;*/
+  width:20%;
+}
+
+#Freq {
+  float:right;
+  width:20%;
+  height:auto;
+}
+
+#NBI90 {
+  height:auto;
+  width:auto;
+  float:left;
+}
+
+#Bridge_Loc, #Bridge_Name {
+  text-align:center;
+  width:20%;
+  margin-right:40%;
+  margin-left:40%;
+}
+
+#Bridge_No {
+  float:left;
+  /*text-align:center;*/
+  width:20%;
+}
+
