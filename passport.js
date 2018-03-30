@@ -36,7 +36,6 @@ module.exports = function (passport) {
               userID: user.userID,
               profPic: userInf[0].location
             }
-            console.log(userinfo);
           }
           if (!user) {
             return done(null, false, req.flash('loginMessage', 'No user found.'))

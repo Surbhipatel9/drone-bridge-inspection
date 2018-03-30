@@ -21,7 +21,8 @@
                 <ul class="nav navbar-nav ml-auto">
                     <%if (userinfo) { %>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" href="/user">Logged in as <%- JSON.parse(userinfo).userName %>
+                            <a class="nav-link" href="/user">Logged in as
+                                <%- JSON.parse(userinfo).userName %>
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -85,53 +86,61 @@
                     <div class="tab-content">
                         <div class="tab-pane active" role="tabpanel" id="tab-1">
                             <hr>
-                            <div class="row" style="font-size:0.75rem;">
-                                <div class="col">
-                                    <table class="table table-bordered table-hover table-responsive table-sm d-table">
-                                        <thead>
-                                            <tr class="table-primary">
-                                                <th style="width:8%;">Report ID </th>
-                                                <th style="width:15%;">Name </th>
-                                                <th style="width:35%;">Location </th>
-                                                <th style="width:10%;">Date Assigned </th>
-                                                <th> </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <% for (var j = 0; j < reports.length; j++) { %>
-                                                <% if(reports[j]["status"] == "assigned" ) {%>
-                                                    <tr>
-                                                        <td>
-                                                            <strong>
-                                                                <%-   reports[j]["reportID"] %>
-                                                            </strong>
-                                                        </td>
-                                                        <td>
-                                                            <%-   reports[j]["name"] %>
-                                                        </td>
-                                                        <td>
-                                                            <strong>
-                                                                <%-   reports[j]["location"] %>
-                                                            </strong>
-                                                        </td>
-                                                        <td>
-                                                            <strong>
-                                                                <%-   reports[j]["dateAssigned"] %>
-                                                            </strong>
+                            <form action="/header" method="POST">
+                                <div class="row" style="font-size:0.75rem;">
+                                    <div class="col">
+                                        <table class="table table-bordered table-hover table-responsive table-sm d-table">
+                                            <thead>
+                                                <tr class="table-primary">
+                                                    <th style="width:8%;">Report ID </th>
+                                                    <th style="width:15%;">Name </th>
+                                                    <th style="width:35%;">Location </th>
+                                                    <th style="width:10%;">Date Assigned </th>
+                                                    <th> </th>
+                                                </tr>
+                                            </thead>
 
-                                                        </td>
-                                                        <td>
-                                                            <strong>
-                                                                <input type="button" id="viewReport" value="View Report">
-                                                            </strong>
-                                                        </td>
-                                                    </tr>
-                                                    <% } %>
+                                            <tbody>
+                                                <% for (var j = 0; j < reports.length; j++) { %>
+                                                    <% if(reports[j]["status"] == "assigned" ) {%>
+                                                        <tr>
+
+                                                            <td>
+                                                                <strong>
+                                                                    <p>
+                                                                        <%-   reports[j]["reportID"] %>
+                                                                    </p>
+                                                                    <input type="hidden" id="reportID" name='reportID' value="<%-reports[j]["reportID"]%>">
+                                                                </strong>
+                                                            </td>
+                                                            <td>
+                                                                <%-   reports[j]["name"] %>
+                                                            </td>
+                                                            <td>
+                                                                <strong>
+                                                                    <%-   reports[j]["location"] %>
+                                                                </strong>
+                                                            </td>
+                                                            <td>
+                                                                <strong>
+                                                                    <%-   reports[j]["dateAssigned"] %>
+                                                                </strong>
+
+                                                            </td>
+                                                            <td>
+                                                                <strong>
+                                                                    <button class="btn btn-primary" type="submit" role="button">View Report</button>
+                                                                </strong>
+                                                            </td>
+
+                                                        </tr>
                                                         <% } %>
-                                        </tbody>
-                                    </table>
+                                                            <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                         <div class="tab-pane" role="tabpanel" id="tab-2">
                             <hr>
@@ -172,7 +181,7 @@
                                                         </td>
                                                         <td>
                                                             <strong>
-                                                                <a href="/header.ejs" type="button" id="viewReport" value="View Report" >
+                                                                <a href="/header.ejs" id="viewReport" value="View Report"></a>
                                                             </strong>
                                                         </td>
                                                     </tr>

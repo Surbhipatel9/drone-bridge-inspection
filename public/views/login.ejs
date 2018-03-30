@@ -18,23 +18,25 @@
         </div>
     </nav>
     <div id="login">
-            
+
         <div class="jumbotron">
             <img src="assets/img/wvdotlogo_clear.png">
             <br>
             <h1>Log In</h1>
             <hr>
             <% if (message.length > 0) { %>
-                <div class="alert alert-danger"><%= message %></div>
-            <% } %>
-            <form action="/login" method="post">
-                <input type="text" placeholder="Username" name="userName" required>
-                <br>
-                <input type="password" placeholder="Password" name="password" required>
-                <br>
-                <button class="btn btn-primary" type="submit" role="button">Log in</button>
-                <a href="#">Forgot Password?</a>
-            </form>
+                <div class="alert alert-danger">
+                    <%= message %>
+                </div>
+                <% } %>
+                    <form action="/login" method="post">
+                        <input type="text" placeholder="Username" name="userName" required>
+                        <br>
+                        <input type="password" placeholder="Password" name="password" required>
+                        <br>
+                        <button class="btn btn-primary" type="submit" role="button">Log in</button>
+                        <a href="#">Forgot Password?</a>
+                    </form>
         </div>
     </div>
 

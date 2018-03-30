@@ -58,11 +58,13 @@ exports.init = function () {
                 .createTable('bridge', function (table) {
                     table.integer('bridgeID').unique();
                     table.string('name').notNullable();
+                    table.string('location').notNullable();
+                    table.integer('countyID').notNullable();
+                    table.string('barsNo').notNullable();
+                    table.string('bridgeNo').notNullable();
                     table.string('spanOver').notNullable();
                     //Add reference
-                    table.integer('countyID').notNullable();
                     table.string('coordinates').notNullable();
-                    table.string('location').notNullable();
                     table.string('description');
                 })
                 .createTable('reports', function (table) {
@@ -76,13 +78,19 @@ exports.init = function () {
                     //Add reference to bridge bridgeID
                     table.integer('bridgeID').notNullable();
                     //Add reference
-                    table.integer('BARSno').notNullable();
-                    table.string('inspectionType').notNullable();
+                    
+                    
                     table.string('inspectionPerformed').notNullable();
                     //Add reference to user userID
                     table.string('inspectedBy').notNullable();
                     table.string('structuralEvalBy').notNullable();
                     table.string('reviewApprovedBy').notNullable();
+
+                    table.string('NBI90Date');
+                    table.string('NBI90Freq');
+                    table.boolean('inspectionTypePeriodic').notNullable();
+                    table.boolean('inspectionTypeInDepth').notNullable();
+                    table.boolean('inspectionTypeInCond').notNullable();
 
                     table.boolean('fractureCritical').notNullable();
                     table.boolean('underwater').notNullable();
@@ -92,8 +100,33 @@ exports.init = function () {
                     table.boolean('damageSpecial').notNullable();
                     table.boolean('closure').notNullable();
                     table.boolean('procedure').notNullable();
+
+                    table.boolean('fractCritReq').notNullable();
+                    table.boolean('underwaterReq').notNullable();
+                    table.string('underWEq');
+                    table.string('specialCode');
+
+                    table.string('item93ADate');
+                    table.string('item93BDate');
+                    table.string('item93CDate');
+                    table.string('inspDate1');
+                    table.string('inspDate2');
+                    table.string('inspDate3');
+                    table.string('inspDate4');
+                    
+                    table.integer('Freq1');
+                    table.integer('Freq2');
+                    table.integer('Freq3');
+                    table.integer('Freq4');
+
+                    table.boolean('UBReq').notNullable();
+                    table.string('UBinspDate');
+                    table.string('UBFreq');
+                    table.string('UBinspVehic');
+
+
                 })
-                .createTable('reortItems', function (table) {
+                .createTable('reportItems', function (table) {
                     table.integer('itemID').unique();
                     table.string('title').notNullable();
                     table.string('description').notNullable();
@@ -469,8 +502,8 @@ exports.checkLogin = function (userName, cb) {
     })
 }
 
-exports.getUserInfo = function (username, cb) {
-    knex.raw('select profpics.location, users.userName, users.phone, users.firstName, users.lastName, users.email, roles.roleName, counties.countyName from ((((users inner join userRoles on users.userID = userRoles.userID) inner join roles on userRoles.roleID = roles.roleID) inner join counties on counties.countyID = users.countyID) inner join profpics on users.userID = profpics.userID) where users.userName = ' + "'" + username + "'")
+exports.getUserInfo = function (userName, cb) {
+    knex.raw('select profpics.location, users.userName, users.phone, users.firstName, users.lastName, users.email, roles.roleName, counties.countyName from ((((users inner join userRoles on users.userID = userRoles.userID) inner join roles on userRoles.roleID = roles.roleID) inner join counties on counties.countyID = users.countyID) inner join profpics on users.userID = profpics.userID) where users.userName = ' + "'" + userName + "'")
         .then(function (userinfo) {
             cb(userinfo);
         });
@@ -486,7 +519,13 @@ exports.getReports = function (cb) {
     knex.select('*').from('reports').join('bridge', function () {
         this.on('reports.bridgeID', '=', 'bridge.bridgeID')
     }).then(function (reports) {
-        console.log(reports)
         cb(reports);
+    });
+}
+
+exports.getReport = function (reportID, cb) {
+    knex.table('reports').where('reportID', reportID).innerJoin('bridge', 'reports.bridgeID', '=', 'bridge.bridgeID')
+    .then(function (report) {
+        cb(report);
     });
 }
