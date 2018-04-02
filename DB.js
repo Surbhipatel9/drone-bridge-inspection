@@ -147,7 +147,7 @@ exports.init = function () {
                     table.string('location').notNullable();
                 })
 
-                .then(() => { return exports.populateCounties() }).then(() => { return exports.populateRoles() }).then(() => { return exports.populateUsers() }).then(() => { return exports.addUsersToRoles() }).then(() => { return exports.addPhotos() });
+                .then(() => { return exports.populateCounties() }).then(() => { return exports.populateRoles() }).then(() => { return exports.populateUsers() }).then(() => { return exports.addUsersToRoles() });
         }
     })
 };
@@ -528,16 +528,6 @@ exports.getReport = function (reportID, cb) {
     .then(function (report) {
         cb(report);
     });
-}
-
-exports.addPhotos = function () {
-    return knex('photos').insert([
-        {
-            title: "Bridge1",
-            description: "This is a bridge",
-            location: "https://imgur.com/a/LdWml"
-        }
-    ])
 }
 
 exports.getPhoto = function (cb) {
