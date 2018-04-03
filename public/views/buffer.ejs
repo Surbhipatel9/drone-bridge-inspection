@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Images</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.10.0/css/lightbox.min.css">
+    <link rel="stylesheet" href="assets/css/Pretty-Search-Form.css">
+    <link rel="stylesheet" href="assets/css/Projects-Clean.css">
+    <link rel="stylesheet" href="assets/css/Projects-Horizontal.css">
+    <link rel="stylesheet" href="assets/css/style_buffer.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-light navbar-expand-md sticky-top">
+        <div id="nav" class="container">
+            <a class="navbar-brand" href="#">WV Bridge Inspection Tool</a>
+            <button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav ml-auto">
+                    <%if (userinfo) { %>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" href="/buffer">My Images
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" href="/user">Logged in as
+                                <%- JSON.parse(userinfo).userName %>
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" href="/logout">Log Out</a>
+                        </li>
+
+                        <% } %>
+                            <%if (!userinfo) { %>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" href="/login">Log In</a>
+                                </li>
+                                <% } %>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <form class="search-form">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="fa fa-search"></i>
+                    </span>
+                </div>
+                <input class="form-control" type="text" placeholder="I am looking for..">
+                <div class="input-group-append">
+                    <button class="btn btn-light" type="button">Search </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="projects-horizontal">
+        <div id="pics" class="image-section">
+            <div class="container site-section">
+                <div class="intro">
+                    <h2 class="text-center">My Images</h2>
+                </div>
+                <div class="row projects">
+                    <% for (var i = 0; i < photos.length; i++) { %>
+                    <div class="col-sm-6 item">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-5">
+                                <a href="<%- photos[i]["location"] %>" target="_blank" data-lightbox="bridge">
+                                    <img class="img-fluid" src="<%- photos[i]["location"] %>" data-lightbox="bridge">
+                                </a>
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-primary" type="button">Add Image</button>
+                                    <button class="btn btn-primary" type="button">Edit Image</button>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h3 class="name"><%- photos[i]["title"] %></h3>
+                                <h3 class="name">12/12/2018</h3>
+                                <p class="description"><%- photos[i]["description"] %></p>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+                   <!-- <div class="col-sm-6 item">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-5">
+                                <a href="<%- photos[0]["location"] %>" target="_blank" data-lightbox="bridge">
+                                    <img class="img-fluid" src="<%- photos[0]["location"] %>" data-lightbox="bridge">
+                                </a>
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-primary" type="button">Add Image</button>
+                                    <button class="btn btn-primary" type="button">Edit Image</button>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h3 class="name">Bridge</h3>
+                                <h3 class="name">12/12/2018</h3>
+                                <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus
+                                    eu gravida.</p>
+                            </div>
+                        </div>
+                    </div>-->
+                   <!-- <div class="col-sm-6 item">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-5">
+                                <a href="assets/img/bridge_3.jpg" target="_blank" data-lightbox="bridge">
+                                    <img class="img-fluid" src="assets/img/bridge_3.jpg" data-lightbox="bridge">
+                                </a>
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-primary" type="button">Add Image</button>
+                                    <button class="btn btn-primary" type="button">Edit Image</button>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h3 class="name">Bridge</h3>
+                                <h3 class="name">12/12/2018</h3>
+                                <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus
+                                    eu gravida.</p>
+                            </div>
+                        </div>
+                    </div>-->
+                    <!--<div class="col-sm-6 item">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-5">
+                                <a href="assets/img/building.jpg" target="_blank">
+                                    <img class="img-fluid" src="assets/img/building.jpg" data-lightbox="bridge">
+                                </a>
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-primary" type="button">Add Image</button>
+                                    <button class="btn btn-primary" type="button">Edit Image</button>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h3 class="name">Bridge?</h3>
+                                <h3 class="name">12/12/2018</h3>
+                                <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus
+                                    eu gravida.</p>
+                            </div>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.10.0/js/lightbox-plus-jquery.min.js"></script>
+</body>
+
+</html>

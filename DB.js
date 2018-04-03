@@ -540,3 +540,9 @@ exports.getReport = function (reportID, cb) {
         cb(report);
     });
 }
+
+exports.getPhoto = function (cb) {
+   knex.select('*').from('photos').then(function (photos) { 
+       cb(photos);
+    });
+}
