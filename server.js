@@ -131,6 +131,7 @@ app.post('/header', (req, res) => {
   }
 });
 
+//GET: /buffer
 app.get('/buffer', (req, res) => {
   //if logged in
   if (req.session.passport) {
