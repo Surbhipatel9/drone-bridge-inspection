@@ -542,7 +542,9 @@ exports.getReport = function (reportID, cb) {
 }
 
 exports.getPhoto = function (cb) {
-   knex.select('*').from('photos').then(function (photos) { 
+   knex.select('*').from('photos').join('users', function () {
+       this.on('photos.userID', '=', 'users.userID')
+   }).then(function (photos) { 
        cb(photos);
     });
 }
