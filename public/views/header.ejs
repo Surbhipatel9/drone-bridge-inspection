@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>header</title>
+    <title>WV DoT Bridge Inspection -  <%- rep[0]["name"] %> Report</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/styles.min.css">
 </head>
@@ -38,7 +38,7 @@
             </div>
         </div>
     </nav>
-    <div>
+    <div style="background: white; padding: 50px">
         <div id="No">
             <p id="Bridge_No">Bridge No.
                 <%- rep[0]["bridgeNo"]%>
@@ -54,7 +54,7 @@
             <%- rep[0]["location"]%>
         </p>
         <p id="Title">Bridge Inspection Report</p>
-        <p>Type of Inspection Performed:</p>
+        <p>Type of Inspection Performed: <%- rep[0]["inspectionPerformed"]%></p>
         <p>Field Inspected By:
             <%- rep[0]["inspectedBy"]%>
         </p>
@@ -266,17 +266,17 @@
                     </div>
                     <br>
                     <p id="UB_Vehic">UB Inspection Vehicle:
-                        <%- rep[0]["UBRInspVehic"] %>
+                        <%- rep[0]["UBinspVehic"] %>
                     </p>
                 </div>
                 <div class="col">
                     <p id="UB_Date">Inspection Date:
-                        <%- rep[0]["UBRInspDate"] %>
+                        <%- rep[0]["UBInspDate"] %>
                     </p>
                 </div>
                 <div class="col">
                     <p id="UB_Freq">Frequency:
-                        <%- rep[0]["UBRFreq"] %>&nbsp;</p>
+                        <%- rep[0]["UBFreq"] %>&nbsp;</p>
                 </div>
             </div>
         </section>

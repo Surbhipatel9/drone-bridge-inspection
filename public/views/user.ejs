@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>userpage</title>
+    <title>WV DoT Bridge Inspection - Userpage</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/styles.min.css">
 </head>
@@ -107,19 +107,19 @@
 
                                             <tbody>
                                                 <% for (var j = 0; j < reports.length; j++) { %>
-                                                    <% if(reports[j]["status"] == "assigned" ) {%>
+                                                    <% if((reports[j]["status"] == "assigned" || reports[j]["status"] == "started") && reports[j]["assignedTo"] == JSON.parse(userinfo).userID ) {%>
                                                         <tr>
 
                                                             <td>
                                                                 <strong>
-                                                                    <p>
-                                                                        <%-   reports[j]["reportID"] %>
-                                                                    </p>
-                                                                    <input type="hidden" id="reportID" name='reportID' value="<%-reports[j]["reportID"]%>">
+                                                                    <%-   reports[j]["reportID"] %>
+                                                                        <input type="hidden" id="reportID" name='reportID' value="<%-reports[j][" reportID "]%>">
                                                                 </strong>
                                                             </td>
                                                             <td>
-                                                                <%-   reports[j]["name"] %>
+                                                                <strong>
+                                                                    <%-   reports[j]["name"] %>
+                                                                </strong>
                                                             </td>
                                                             <td>
                                                                 <strong>
@@ -132,9 +132,9 @@
                                                                 </strong>
 
                                                             </td>
-                                                            <td>
+                                                            <td style="text-align: center">
                                                                 <strong>
-                                                                    <button class="btn btn-primary" type="submit" role="button">View Report</button>
+                                                                    <button class="btn btn-primary" type="submit" role="button" style="width: 100%">View Report</button>
                                                                 </strong>
                                                             </td>
 
@@ -163,7 +163,7 @@
                                         </thead>
                                         <tbody>
                                             <% for (var j = 0; j < reports.length; j++) { %>
-                                                <% if(reports[j]["status"] == "submitted") { %>
+                                                <% if(reports[j]["status"] == "submitted" && reports[j]["assignedTo"] == JSON.parse(userinfo).userID) { %>
                                                     <tr>
                                                         <td>
                                                             <strong>

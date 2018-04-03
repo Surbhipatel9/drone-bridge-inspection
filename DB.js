@@ -463,6 +463,15 @@ exports.populateRoles = function () {
     )
 };
 
+exports.addProfPics = function(){
+    return knex('profpics').insert([
+        {
+        userID: 2,
+        locaation: "pictures/default.png"
+        }
+    ])
+}
+
 exports.addUsersToRoles = function () {
     return knex('userRoles').insert([
         {
