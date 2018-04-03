@@ -467,7 +467,7 @@ exports.addProfPics = function(){
     return knex('profpics').insert([
         {
         userID: 2,
-        locaation: "pictures/default.png"
+        location: "pictures/default.png"
         }
     ])
 }
