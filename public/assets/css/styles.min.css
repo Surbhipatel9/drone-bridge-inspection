@@ -356,15 +356,13 @@ p {
 }
 
 #Freq {
-  float:right;
-  width:20%;
+  width:auto;
   height:auto;
 }
 
 #NBI90 {
   height:auto;
   width:auto;
-  float:left;
 }
 
 #Bridge_Loc, #Bridge_Name {
