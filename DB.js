@@ -137,6 +137,8 @@ exports.init = function () {
                 })
                 .createTable('photos', function (table) {
                     table.integer('photoID').unique();
+                    table.integer('userID').notNullable();
+                    table.string('date').notNullable();
                     table.string('title').notNullable();
                     table.string('description').notNullable();
                     table.string('location').notNullable();
