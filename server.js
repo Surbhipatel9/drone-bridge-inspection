@@ -5,7 +5,7 @@ var flash = require('connect-flash');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var formidable = require('formidable');
-
+var $ = require('jquery');
 var db = require('./DB.js');
 require('./passport')(passport);
 

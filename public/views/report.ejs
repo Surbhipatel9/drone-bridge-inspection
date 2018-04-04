@@ -89,14 +89,7 @@
         <div id="element"></div>
         <button class="btn btn-primary" id="adder" style="width: 40%; display: block; margin: auto;" />Add another element</button>
 
-        <script>
-            $(document).ready(function () {
-                $("#adder").click(function () {
-                    $("#element").append('<input type="text" placeholder="Header" name="header" style="display: block; width: 100%; margin: auto;" required>')
-                    //$("#element").append('<div id="holder"><div style="padding: 15px"><input type="text" placeholder="Header" name="header" style="display: block; width: 100%; margin: auto;" required></div><div class="container" style="padding: 0; margin: 0; margin-bottom: 15px; min-width: 100%;"><div class="row"><div class="col-lg" style="padding: 15px ;margin: 0;"><textarea placeholder="Enter your comment here" rows="4" cols="50" style="margin-top: 15px;margin-bottom: 15px;margin-right: 0px;height: 350px;width: 100%;display: inline-block;"></textarea></div><div class="col-lg" style="padding: 15px ;margin: 0;"><div class="uploader" onclick="$('#filePhoto').click()" style="margin-top: 15px;margin-left: 0;margin-bottom: 15px;display: inline-block;position: relative;overflow: hidden;width: 100%;height: 350px;background: #f3f3f3;text-align: center;vertical-align: middle;line-height: 350px;">click here or drag image for preview<img src="/pictures/Empty.png" /><input type="file" name="userprofile_picture" id="filePhoto" /></div></div></div></div></div>');
-                });
-            });
-        </script>
+       
         <br>
         <div style="text-align: center; width: 100%">
             <form action="/header">
@@ -104,10 +97,29 @@
                 />
             </form>
         </div>
+        <script>
+                $(document).ready(function(){
+                    $("p").click(function(){
+                        $(this).hide();
+                    });
+                });
+                </script>
+                </head>
+                <body>
+                
+                <p>If you click on me, I will disappear.</p>
+                <p>Click me away!</p>
+                <p>Click me too!</p>
     </div>
 
-
-
+    <script>
+            $(document).ready(function () {
+                $("#adder").click(function () {
+                    $("#element").append('<input type="text" placeholder="Header" name="header" style="display: block; width: 100%; margin: auto;" required>')
+                    //$("#element").append('<div id="holder"><div style="padding: 15px"><input type="text" placeholder="Header" name="header" style="display: block; width: 100%; margin: auto;" required></div><div class="container" style="padding: 0; margin: 0; margin-bottom: 15px; min-width: 100%;"><div class="row"><div class="col-lg" style="padding: 15px ;margin: 0;"><textarea placeholder="Enter your comment here" rows="4" cols="50" style="margin-top: 15px;margin-bottom: 15px;margin-right: 0px;height: 350px;width: 100%;display: inline-block;"></textarea></div><div class="col-lg" style="padding: 15px ;margin: 0;"><div class="uploader" onclick="$('#filePhoto').click()" style="margin-top: 15px;margin-left: 0;margin-bottom: 15px;display: inline-block;position: relative;overflow: hidden;width: 100%;height: 350px;background: #f3f3f3;text-align: center;vertical-align: middle;line-height: 350px;">click here or drag image for preview<img src="/pictures/Empty.png" /><input type="file" name="userprofile_picture" id="filePhoto" /></div></div></div></div></div>');
+                });
+            });
+        </script>
     <script>
         var imageLoader = document.getElementById('filePhoto');
         imageLoader.addEventListener('change', handleImage, false);
@@ -123,6 +135,7 @@
     </script>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-</body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+</body>
 </html>
