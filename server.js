@@ -17,6 +17,7 @@ var app = express();
 app.set('view engine', 'ejs')
 app.set('views', 'public/views')
 
+app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use(express.static('public'))
 
 // Passport middleware.
@@ -58,7 +59,7 @@ app.get('/login', (req, res, passport) => {
 //LOCAL LOGIN POST ROUTE
 //authenticate the login and redirect on success/failure and send failure message if needed
 app.post('/login', passport.authenticate('local-login', {
-  successRedirect: '/user/',
+  successRedirect: '/user',
   failureRedirect: '/login',
   failureFlash: true
 }), (res, req) => {
@@ -116,9 +117,9 @@ app.post('/user', function (req, res) {
   }
 });
 
-app.post('/header', (req, res) => {
+app.get('/header', (req, res) => {
   if (req.session.passport) {
-    var reportID = req.body.reportID;
+    var reportID =  req.query['reportID'];
     req.session.repId = reportID;
     db.getReport(reportID, function (rep) {
       //get userinfo and send to the web page 
@@ -133,7 +134,6 @@ app.post('/header', (req, res) => {
 
 app.get('/report', (req, res) => {
   if (req.session.passport) {
-
     db.getReport(req.session.repId, function (rep) {
       //get userinfo and send to the web page 
       res.render(__dirname + "/public/views/report.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
@@ -144,6 +144,7 @@ app.get('/report', (req, res) => {
     res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
   }
 });
+
 app.get('/buffer', (req, res) => {
   //if logged in
   if (req.session.passport) {
