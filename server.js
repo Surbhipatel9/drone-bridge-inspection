@@ -58,7 +58,7 @@ app.get('/login', (req, res, passport) => {
 //LOCAL LOGIN POST ROUTE
 //authenticate the login and redirect on success/failure and send failure message if needed
 app.post('/login', passport.authenticate('local-login', {
-  successRedirect: '/user',
+  successRedirect: '/user/',
   failureRedirect: '/login',
   failureFlash: true
 }), (res, req) => {
@@ -94,8 +94,7 @@ app.post('/user', function (req, res) {
   form.on('fileBegin', function (name, file) {
     file.path = __dirname + '/public/pictures/' + file.name;
     db.updProfPic(userID, '/pictures/' + file.name).then(function (result) {
-      console.log(userID)
-      console.log(file.path)
+
     });
   });
 
@@ -106,13 +105,13 @@ app.post('/user', function (req, res) {
   if (req.session.passport) {
     db.getReports(function (reports) {
       //get userinfo and send to the web page 
-      res.render(__dirname + "/public/views/user.ejs", { userinfo: JSON.stringify(req.session.passport.user), reports });
+      res.render(__dirname + "/public/views/report.ejs", { userinfo: JSON.stringify(req.session.passport.user), reports });
     });
   }
   //if not logged in send blank userinfo to web app
   else {
     db.getReports(function (reports) {
-      res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, reports });
+      res.render(__dirname + "/public/views/report.ejs", { message: req.flash('loginMessage'), userinfo: false, reports });
     });
   }
 });
@@ -120,6 +119,7 @@ app.post('/user', function (req, res) {
 app.post('/header', (req, res) => {
   if (req.session.passport) {
     var reportID = req.body.reportID;
+    req.session.repId = reportID;
     db.getReport(reportID, function (rep) {
       //get userinfo and send to the web page 
       res.render(__dirname + "/public/views/header.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
@@ -131,6 +131,19 @@ app.post('/header', (req, res) => {
   }
 });
 
+app.get('/report', (req, res) => {
+  if (req.session.passport) {
+
+    db.getReport(req.session.repId, function (rep) {
+      //get userinfo and send to the web page 
+      res.render(__dirname + "/public/views/report.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
+    });
+  }
+  //if not logged in send blank userinfo to web app
+  else {
+    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
+  }
+});
 app.get('/buffer', (req, res) => {
   //if logged in
   if (req.session.passport) {
