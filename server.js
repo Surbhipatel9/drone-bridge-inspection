@@ -5,7 +5,7 @@ var flash = require('connect-flash');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var formidable = require('formidable');
-
+var $ = require('jquery');
 var db = require('./DB.js');
 require('./passport')(passport);
 
@@ -17,6 +17,7 @@ var app = express();
 app.set('view engine', 'ejs')
 app.set('views', 'public/views')
 
+app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use(express.static('public'))
 
 // Passport middleware.
@@ -94,8 +95,7 @@ app.post('/user', function (req, res) {
   form.on('fileBegin', function (name, file) {
     file.path = __dirname + '/public/pictures/' + file.name;
     db.updProfPic(userID, '/pictures/' + file.name).then(function (result) {
-      console.log(userID)
-      console.log(file.path)
+
     });
   });
 
@@ -106,20 +106,21 @@ app.post('/user', function (req, res) {
   if (req.session.passport) {
     db.getReports(function (reports) {
       //get userinfo and send to the web page 
-      res.render(__dirname + "/public/views/user.ejs", { userinfo: JSON.stringify(req.session.passport.user), reports });
+      res.render(__dirname + "/public/views/report.ejs", { userinfo: JSON.stringify(req.session.passport.user), reports });
     });
   }
   //if not logged in send blank userinfo to web app
   else {
     db.getReports(function (reports) {
-      res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, reports });
+      res.render(__dirname + "/public/views/report.ejs", { message: req.flash('loginMessage'), userinfo: false, reports });
     });
   }
 });
 
-app.post('/header', (req, res) => {
+app.get('/header', (req, res) => {
   if (req.session.passport) {
-    var reportID = req.body.reportID;
+    var reportID =  req.query['reportID'];
+    req.session.repId = reportID;
     db.getReport(reportID, function (rep) {
       //get userinfo and send to the web page 
       res.render(__dirname + "/public/views/header.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
@@ -131,7 +132,23 @@ app.post('/header', (req, res) => {
   }
 });
 
+<<<<<<< HEAD
 //GET: /buffer
+=======
+app.get('/report', (req, res) => {
+  if (req.session.passport) {
+    db.getReport(req.session.repId, function (rep) {
+      //get userinfo and send to the web page 
+      res.render(__dirname + "/public/views/report.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
+    });
+  }
+  //if not logged in send blank userinfo to web app
+  else {
+    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
+  }
+});
+
+>>>>>>> ce3741128804db0ecf37a16eea2ed8fc70d502bd
 app.get('/buffer', (req, res) => {
   //if logged in
   if (req.session.passport) {

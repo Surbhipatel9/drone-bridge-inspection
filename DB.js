@@ -59,6 +59,7 @@ exports.init = function () {
                     table.integer('bridgeID').unique();
                     table.string('name').notNullable();
                     table.string('location').notNullable();
+                    //Add reference to counties countyID
                     table.integer('countyID').notNullable();
                     table.string('barsNo').notNullable();
                     table.string('bridgeNo').notNullable();
@@ -137,7 +138,10 @@ exports.init = function () {
                 })
                 .createTable('photos', function (table) {
                     table.integer('photoID').unique();
+                    //Add reference to users userID
                     table.integer('userID').notNullable();
+                    //Add reference to reports reportID
+                    table.integer('reportID').notNullable();
                     table.string('date').notNullable();
                     table.string('title').notNullable();
                     table.string('description').notNullable();
@@ -145,6 +149,7 @@ exports.init = function () {
                 })
                 .createTable('profpics', function (table) {
                     table.increments('picID').unique();
+                    //Add reference to users userID
                     table.integer('userID').notNullable();
                     table.string('location').notNullable();
                 })
