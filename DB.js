@@ -468,6 +468,10 @@ exports.addProfPics = function(){
         {
         userID: 2,
         location: "pictures/default.png"
+        },
+        {
+            userID: 5,
+            location: "pictures/default.png"
         }
     ])
 }
@@ -542,9 +546,8 @@ exports.getReport = function (reportID, cb) {
 }
 
 exports.getPhoto = function (cb) {
-   knex.select('*').from('photos').join('users', function () {
-       this.on('photos.userID', '=', 'users.userID')
-   }).then(function (photos) { 
+   knex.select('*').from('photos').innerJoin('users', 'photos.userID', '=', 'users.userID')
+   .then(function (photos) { 
        cb(photos);
     });
 }
