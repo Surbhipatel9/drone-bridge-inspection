@@ -67,7 +67,6 @@ app.post('/login', passport.authenticate('local-login', {
 
 // User route.
 app.get('/user', (req, res) => {
-
   //if logged in
   if (req.session.passport) {
     db.getReports(function (reports) {
@@ -120,7 +119,6 @@ app.post('/user', function (req, res) {
 app.get('/header', (req, res) => {
   if (req.session.passport) {
     var reportID =  req.query['reportID'];
-    req.session.repId = reportID;
     db.getReport(reportID, function (rep) {
       //get userinfo and send to the web page 
       res.render(__dirname + "/public/views/header.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
@@ -134,7 +132,9 @@ app.get('/header', (req, res) => {
 
 app.get('/report', (req, res) => {
   if (req.session.passport) {
-    db.getReport(req.session.repId, function (rep) {
+    var reportID =  req.query['reportID'];
+
+    db.getReport(reportID, function (rep) {
       //get userinfo and send to the web page 
       res.render(__dirname + "/public/views/report.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
     });
