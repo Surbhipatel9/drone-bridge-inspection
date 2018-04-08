@@ -132,9 +132,6 @@ app.get('/header', (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-//GET: /buffer
-=======
 app.get('/report', (req, res) => {
   if (req.session.passport) {
     db.getReport(req.session.repId, function (rep) {
@@ -148,7 +145,6 @@ app.get('/report', (req, res) => {
   }
 });
 
->>>>>>> ce3741128804db0ecf37a16eea2ed8fc70d502bd
 app.get('/buffer', (req, res) => {
   //if logged in
   if (req.session.passport) {
