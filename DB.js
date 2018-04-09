@@ -154,7 +154,7 @@ exports.init = function () {
                     table.string('location').notNullable();
                 })
 
-                .then(() => { return exports.populateCounties() }).then(() => { return exports.populateRoles() }).then(() => { return exports.populateUsers() }).then(() => { return exports.addUsersToRoles() });
+                .then(() => { return exports.populateCounties() }).then(() => { return exports.populateRoles() }).then(() => { return exports.populateUsers() }).then(() => { return exports.addUsersToRoles() }).then(() => { return exports.addPhotos() }).then(() => { return exports.addProfPics() });
         }
     })
 };
@@ -514,6 +514,46 @@ exports.addUsersToRoles = function () {
     ])
 }
 
+exports.addPhotos = function () {
+    return knex('photos').insert([
+        {
+            userID: 2,
+            date: 4/3/2018,
+            title: "Abraham G. Sams Memorial Bridge",
+            decscription: "bridge",
+            location: "https://i.imgur.com/DvWoKft.png"
+        },
+        {
+            userID: 2,
+            date: 4/4/2018,
+            title: "photo 1",
+            decscription: " FAILED WEB, STRINGER TWO PANEL FOUR, SPAN THREE",
+            location: "https://i.imgur.com/WxSNlQ4.png"
+        },
+        {
+            userID: 2,
+            date: 4/4/2018,
+            title: "photo 2",
+            decscription: "STRINGER TWO, SPAN TWO, PANEL TWO SECTION LOSS",
+            location: "https://i.imgur.com/USM0ix8.png"
+        },
+        {
+            userID: 2,
+            date: 4/4/2018,
+            title: "photo 3",
+            decscription: " DETERIORATION STRINGER THREE, PANEL TWO, SPAN ONE",
+            location: "https://i.imgur.com/zDla9d1.png"
+        },
+        {
+            userID: 2,
+            date: 4/4/2018,
+            title: "photo 4",
+            decscription: "SPALLING UNDER BEARING AREA, SPAN TWO UNDER STRINGER ONE (BEARING REMAINS SUPPORTED)",
+            location: "https://i.imgur.com/TdS84bT.png"
+        }
+    ])
+}
+
 exports.checkLogin = function (userName, cb) {
     knex.select().from('users').where({
         userName: userName
@@ -551,8 +591,15 @@ exports.getReport = function (reportID, cb) {
 }
 
 exports.getPhoto = function (cb) {
-   knex.select('*').from('photos').innerJoin('users', 'photos.userID', '=', 'users.userID')
+   knex.select('*').from('photos').where('photos.date', '=', '4/4/2018')
    .then(function (photos) { 
        cb(photos);
+    });
+}
+
+exports.getBridgePhotos = function (cb) {
+    knex.select("*").from('photos').where('photos.title', '=', 'Abraham G. Sams Memorial Bridge')
+    .then(function (photos) {
+        cb(photos);
     });
 }

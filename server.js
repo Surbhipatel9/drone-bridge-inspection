@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var formidable = require('formidable');
 var $ = require('jquery');
 var db = require('./DB.js');
+var fs = require('fs');
+var pdf = require('html-pdf');
 require('./passport')(passport);
 
 const path = require('path');
@@ -148,6 +150,7 @@ app.get('/report', (req, res) => {
 app.get('/buffer', (req, res) => {
   //if logged in
   if (req.session.passport) {
+    //var photoID = req.query['photoID'];
     db.getPhoto(function (photos) {
       //get userinfo and send to the web page 
       res.render(__dirname + "/public/views/buffer.ejs", { userinfo: JSON.stringify(req.session.passport.user), photos });
@@ -156,6 +159,24 @@ app.get('/buffer', (req, res) => {
   //if not logged in send blank userinfo to web app
   else {
     db.getPhoto(function (photos) {
+      res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, userinfo: false, photos });
+    });
+  }
+
+});
+
+app.get('/bridge_links', (req, res) => {
+  //if logged in
+  if (req.session.passport) {
+    //var photoID = req.query['photoID'];
+    db.getBridgePhotos(function (photos) {
+      //get userinfo and send to the web page 
+      res.render(__dirname + "/public/views/bridge_links.ejs", { userinfo: JSON.stringify(req.session.passport.user), photos });
+    });
+  }
+  //if not logged in send blank userinfo to web app
+  else {
+    db.getBridgePhotos(function (photos) {
       res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, userinfo: false, photos });
     });
   }
