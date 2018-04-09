@@ -150,7 +150,6 @@ app.get('/report', (req, res) => {
 app.get('/buffer', (req, res) => {
   //if logged in
   if (req.session.passport) {
-    //var photoID = req.query['photoID'];
     db.getPhoto(function (photos) {
       //get userinfo and send to the web page 
       res.render(__dirname + "/public/views/buffer.ejs", { userinfo: JSON.stringify(req.session.passport.user), photos });
@@ -168,7 +167,6 @@ app.get('/buffer', (req, res) => {
 app.get('/bridge_links', (req, res) => {
   //if logged in
   if (req.session.passport) {
-    //var photoID = req.query['photoID'];
     db.getBridgePhotos(function (photos) {
       //get userinfo and send to the web page 
       res.render(__dirname + "/public/views/bridge_links.ejs", { userinfo: JSON.stringify(req.session.passport.user), photos });
