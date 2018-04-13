@@ -164,6 +164,16 @@ app.get('/buffer', (req, res) => {
 
 });
 
+app.post('/buffer', (req, res) => {
+    //if logged in
+    if (req.session.passport) {
+      db.getPhoto(function (photos) {
+        //get userinfo and send to the web page 
+        res.render(__dirname + "/public/views/report.ejs", { userinfo: JSON.stringify(req.session.passport.user), photos });
+      });
+    }
+});
+
 app.get('/bridge_links', (req, res) => {
   //if logged in
   if (req.session.passport) {
