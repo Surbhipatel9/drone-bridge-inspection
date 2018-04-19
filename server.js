@@ -211,17 +211,18 @@ app.post('/buffer', (req, res) => {
   var photoID = req.body.photoID;
   var rowID = req.body.rowID;
   var check = req.body.check;
-
+  var id = req.query["photoID"];
 
   if (req.session.passport) {
-    if (check) {
-      db.changeToTrue(photoID, function (photos) {
+    if (check > 0) {
+      db.changeToTrue(id, function (photos) {
         res.send(photoID);
         console.log(photoID);
         res.redirect("/test_file");
       });
       console.log(check);
-      //console.log(photoID);
+      console.log(photoID);
+      console.log(id);
     }
     //else if (req.body.uncheck) {
     // db.changeToFalse(function (photos) {
