@@ -528,7 +528,7 @@ exports.addPhotos = function () {
             userID: 2,
             date: 4 / 4 / 2018,
             title: "photo 1",
-            decscription: " FAILED WEB, STRINGER TWO PANEL FOUR, SPAN THREE",
+            decscription: "FAILED WEB, STRINGER TWO PANEL FOUR, SPAN THREE",
             location: "https://i.imgur.com/WxSNlQ4.png"
         },
         {
@@ -589,6 +589,13 @@ exports.getReport = function (reportID, cb) {
         .then(function (report) {
             cb(report);
         });
+}
+
+exports.getIndPhotos = function (photoID, cb) {
+    knex.table('photos').where('photoID', photoID)
+    .then(function (photo) {
+        cb(photo);
+    });
 }
 
 exports.getPhoto = function (cb) {

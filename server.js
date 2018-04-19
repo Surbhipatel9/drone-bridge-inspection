@@ -133,30 +133,6 @@ app.get('/header', (req, res) => {
   }
 });
 
-app.post('/header', function (req, res) {
-  var htmlPath = req.body.htmlPath;
-  if (!htmlPath) {
-    res.status(400).send("Missing 'htmlPath'");
-    return;
-  }
-  var html = fs.readFileSync(htmlPath, 'utf8');
-  // you may want to change this path dynamically if you also wish to keep the generated PDFs
-  var pdfFilePath = './header.pdf';
-  var options = { format: 'Letter' };
-
-  pdf.create(html, options).toFile(pdfFilePath, function (err, res2) {
-    if (err) {
-      console.log(err);
-      res.status(500).send("Some kind of error...");
-      return;
-    }
-    fs.readFile(pdfFilePath, function (err, data) {
-      res.contentType("application/pdf");
-      res.send(data);
-    });
-  });
-});
-
 app.get('/report', (req, res) => {
   if (req.session.passport) {
     var reportID = req.query['reportID'];
@@ -164,6 +140,21 @@ app.get('/report', (req, res) => {
     db.getReport(reportID, function (rep) {
       //get userinfo and send to the web page 
       res.render(__dirname + "/public/views/report.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
+    });
+  }
+  //if not logged in send blank userinfo to web app
+  else {
+    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
+  }
+});
+
+app.get('/edit_photo', (req, res) => {
+  if (req.session.passport) {
+    var photoID = req.query['photoID'];
+
+    db.getIndPhotos(photoID, function (photos) {
+      //get userinfo and send to the web page 
+      res.render(__dirname + "/public/views/edit_photo.ejs", { userinfo: JSON.stringify(req.session.passport.user), photos });
     });
   }
   //if not logged in send blank userinfo to web app
@@ -209,20 +200,22 @@ app.get('/test_file', (req, res) => {
 app.post('/buffer', (req, res) => {
   //if logged in
   var photoID = req.body.photoID;
+  var id = req.query['photoID'];
   var rowID = req.body.rowID;
   var check = req.body.check;
-  var id = req.query["photoID"];
 
   if (req.session.passport) {
     if (check > 0) {
-      db.changeToTrue(id, function (photos) {
-        res.send(photoID);
+        db.changeToTrue(id, function (photos) {
+          //for (var i = 0; i < photos; i++) {
+          res.send(photoID);
+          console.log(photoID);
+          res.redirect("/test_file");
+          //}
+        });
+        console.log(check);
         console.log(photoID);
-        res.redirect("/test_file");
-      });
-      console.log(check);
-      console.log(photoID);
-      console.log(id);
+        //}
     }
     //else if (req.body.uncheck) {
     // db.changeToFalse(function (photos) {
