@@ -13,6 +13,7 @@ require('./passport')(passport);
 
 const path = require('path');
 const LocalStrategy = require('passport-local').Strategy;
+const qs = require('qs');
 
 var app = express();
 
@@ -120,7 +121,7 @@ app.post('/user', function (req, res) {
 
 app.get('/header', (req, res) => {
   if (req.session.passport) {
-    var reportID =  req.query['reportID'];
+    var reportID = req.query['reportID'];
     db.getReport(reportID, function (rep) {
       //get userinfo and send to the web page 
       res.render(__dirname + "/public/views/header.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
@@ -132,9 +133,33 @@ app.get('/header', (req, res) => {
   }
 });
 
+app.post('/header', function (req, res) {
+  var htmlPath = req.body.htmlPath;
+  if (!htmlPath) {
+    res.status(400).send("Missing 'htmlPath'");
+    return;
+  }
+  var html = fs.readFileSync(htmlPath, 'utf8');
+  // you may want to change this path dynamically if you also wish to keep the generated PDFs
+  var pdfFilePath = './header.pdf';
+  var options = { format: 'Letter' };
+
+  pdf.create(html, options).toFile(pdfFilePath, function (err, res2) {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Some kind of error...");
+      return;
+    }
+    fs.readFile(pdfFilePath, function (err, data) {
+      res.contentType("application/pdf");
+      res.send(data);
+    });
+  });
+});
+
 app.get('/report', (req, res) => {
   if (req.session.passport) {
-    var reportID =  req.query['reportID'];
+    var reportID = req.query['reportID'];
 
     db.getReport(reportID, function (rep) {
       //get userinfo and send to the web page 
@@ -164,14 +189,46 @@ app.get('/buffer', (req, res) => {
 
 });
 
+app.get('/test_file', (req, res) => {
+  //if logged in
+  if (req.session.passport) {
+    db.getSelectedPhotos(function (photos) {
+      //get userinfo and send to the web page 
+      res.render(__dirname + "/public/views/test_file.ejs", { userinfo: JSON.stringify(req.session.passport.user), photos });
+    });
+  }
+  //if not logged in send blank userinfo to web app
+  else {
+    db.getPhoto(function (photos) {
+      res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, userinfo: false, photos });
+    });
+  }
+
+});
+
 app.post('/buffer', (req, res) => {
-    //if logged in
-    if (req.session.passport) {
-      db.getPhoto(function (photos) {
-        //get userinfo and send to the web page 
-        res.render(__dirname + "/public/views/report.ejs", { userinfo: JSON.stringify(req.session.passport.user), photos });
+  //if logged in
+  var photoID = req.body.photoID;
+  var rowID = req.body.rowID;
+  var check = req.body.check;
+
+
+  if (req.session.passport) {
+    if (check) {
+      db.changeToTrue(photoID, function (photos) {
+        res.send(photoID);
+        res.redirect("/test_file");
       });
+      console.log(check);
+      console.log(photoID);
     }
+    //else if (req.body.uncheck) {
+    // db.changeToFalse(function (photos) {
+    //res.json(req.body.uncheck);
+    //});
+    //}
+    //res.redirect("/test_file");
+  }
 });
 
 app.get('/bridge_links', (req, res) => {

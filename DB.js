@@ -79,8 +79,8 @@ exports.init = function () {
                     //Add reference to bridge bridgeID
                     table.integer('bridgeID').notNullable();
                     //Add reference
-                    
-                    
+
+
                     table.string('inspectionPerformed').notNullable();
                     //Add reference to user userID
                     table.string('inspectedBy').notNullable();
@@ -114,7 +114,7 @@ exports.init = function () {
                     table.string('inspDate2');
                     table.string('inspDate3');
                     table.string('inspDate4');
-                    
+
                     table.integer('Freq1');
                     table.integer('Freq2');
                     table.integer('Freq3');
@@ -146,6 +146,7 @@ exports.init = function () {
                     table.string('title').notNullable();
                     table.string('description').notNullable();
                     table.string('location').notNullable();
+                    table.boolean('selected').notNullable();
                 })
                 .createTable('profpics', function (table) {
                     table.increments('picID').unique();
@@ -468,11 +469,11 @@ exports.populateRoles = function () {
     )
 };
 
-exports.addProfPics = function(){
+exports.addProfPics = function () {
     return knex('profpics').insert([
         {
-        userID: 2,
-        location: "pictures/default.png"
+            userID: 2,
+            location: "pictures/default.png"
         },
         {
             userID: 5,
@@ -518,35 +519,35 @@ exports.addPhotos = function () {
     return knex('photos').insert([
         {
             userID: 2,
-            date: 4/3/2018,
+            date: 4 / 3 / 2018,
             title: "Abraham G. Sams Memorial Bridge",
             decscription: "bridge",
             location: "https://i.imgur.com/DvWoKft.png"
         },
         {
             userID: 2,
-            date: 4/4/2018,
+            date: 4 / 4 / 2018,
             title: "photo 1",
             decscription: " FAILED WEB, STRINGER TWO PANEL FOUR, SPAN THREE",
             location: "https://i.imgur.com/WxSNlQ4.png"
         },
         {
             userID: 2,
-            date: 4/4/2018,
+            date: 4 / 4 / 2018,
             title: "photo 2",
             decscription: "STRINGER TWO, SPAN TWO, PANEL TWO SECTION LOSS",
             location: "https://i.imgur.com/USM0ix8.png"
         },
         {
             userID: 2,
-            date: 4/4/2018,
+            date: 4 / 4 / 2018,
             title: "photo 3",
             decscription: " DETERIORATION STRINGER THREE, PANEL TWO, SPAN ONE",
             location: "https://i.imgur.com/zDla9d1.png"
         },
         {
             userID: 2,
-            date: 4/4/2018,
+            date: 4 / 4 / 2018,
             title: "photo 4",
             decscription: "SPALLING UNDER BEARING AREA, SPAN TWO UNDER STRINGER ONE (BEARING REMAINS SUPPORTED)",
             location: "https://i.imgur.com/TdS84bT.png"
@@ -585,21 +586,67 @@ exports.getReports = function (cb) {
 
 exports.getReport = function (reportID, cb) {
     knex.table('reports').where('reportID', reportID).innerJoin('bridge', 'reports.bridgeID', '=', 'bridge.bridgeID')
-    .then(function (report) {
-        cb(report);
-    });
+        .then(function (report) {
+            cb(report);
+        });
 }
 
 exports.getPhoto = function (cb) {
-   knex.select('*').from('photos').where('photos.date', '=', '4/4/2018')
-   .then(function (photos) { 
-       cb(photos);
-    });
+    knex.select('*').from('photos').where('photos.date', '=', '4/4/2018')
+        .then(function (photos) {
+            cb(photos);
+        });
 }
 
 exports.getBridgePhotos = function (cb) {
     knex.select("*").from('photos').where('photos.title', '=', 'Abraham G. Sams Memorial Bridge')
-    .then(function (photos) {
-        cb(photos);
+        .then(function (photos) {
+            cb(photos);
+        });
+}
+
+exports.getSelectedPhotos = function (cb) {
+    knex.select('*').from('photos').where('photos.selected', '=', '1')
+        .then(function (photos) {
+            cb(photos)
+        });
+}
+
+//exports.changeToTrue = function (photoID) {
+//return knex('photos').where("photoID", photoID).update({'selected': '1'})
+//}
+
+//exports.changeToTrue = function (photoID, cb) {
+    //knex.raw('update dbo.photos set photos.selected = "1" where photos.photoID = ' + "'" + photoID + "'")
+        //.then(function (photos) {
+            //cb(photos)
+        //});
+//}
+
+exports.changeToTrue = function (photoID, cb) {
+    knex('photos').where('photoID', photoID).update({'selected': 'TRUE'})
+    .then(function(photos) {
+        cb(photos)
     });
+}
+
+//exports.changeToTrue = function (cb) {
+//knex('photos').update({selected: '1'})
+//.then(function(photos) {
+//cb(photos)
+//});
+//}
+
+exports.changeToFalse = function (cb) {
+    knex('photos').update({ selected: '0' })
+        .then(function (photos) {
+            cb(photos)
+        });
+}
+
+exports.countPhotos = function (cb) {
+    knex.count('*').from('photos')
+        .then(function (photos) {
+            cb(photos)
+        });
 }
