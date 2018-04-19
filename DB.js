@@ -56,7 +56,7 @@ exports.init = function () {
                 })
 
                 .createTable('bridge', function (table) {
-                    table.integer('bridgeID').unique();
+                    table.increments('bridgeID').unique();
                     table.string('name').notNullable();
                     table.string('location').notNullable();
                     //Add reference to counties countyID
@@ -69,7 +69,7 @@ exports.init = function () {
                     table.string('description');
                 })
                 .createTable('reports', function (table) {
-                    table.integer('reportID').unique();
+                    table.increments('reportID').unique();
                     table.string('status').notNullable();
                     //Don't use .date format, inconvinient
                     table.string('dateAssigned').notNullable();
@@ -79,8 +79,8 @@ exports.init = function () {
                     //Add reference to bridge bridgeID
                     table.integer('bridgeID').notNullable();
                     //Add reference
-                    
-                    
+
+
                     table.string('inspectionPerformed').notNullable();
                     //Add reference to user userID
                     table.string('inspectedBy').notNullable();
@@ -114,7 +114,7 @@ exports.init = function () {
                     table.string('inspDate2');
                     table.string('inspDate3');
                     table.string('inspDate4');
-                    
+
                     table.integer('Freq1');
                     table.integer('Freq2');
                     table.integer('Freq3');
@@ -128,7 +128,7 @@ exports.init = function () {
 
                 })
                 .createTable('reportItems', function (table) {
-                    table.integer('itemID').unique();
+                    table.increments('itemID').unique();
                     table.string('title').notNullable();
                     table.string('description').notNullable();
                     //Add reference to photo photoID
@@ -137,7 +137,7 @@ exports.init = function () {
                     table.integer('reportID');
                 })
                 .createTable('photos', function (table) {
-                    table.integer('photoID').unique();
+                    table.increments('photoID').unique();
                     //Add reference to users userID
                     table.integer('userID').notNullable();
                     //Add reference to reports reportID
@@ -154,7 +154,7 @@ exports.init = function () {
                     table.string('location').notNullable();
                 })
 
-                .then(() => { return exports.populateCounties() }).then(() => { return exports.populateRoles() }).then(() => { return exports.populateUsers() }).then(() => { return exports.addUsersToRoles() });
+                .then(() => { return exports.populateCounties() }).then(() => { return exports.populateRoles() }).then(() => { return exports.populateUsers() }).then(() => { return exports.addUsersToRoles() }).then (() => { return exports.addProfPics() });
         }
     })
 };
@@ -210,7 +210,6 @@ exports.populateUsers = function () {
         }
     ])
 }
-
 
 exports.populateCounties = function () {
     return knex('counties').insert(
@@ -468,12 +467,29 @@ exports.populateRoles = function () {
     )
 };
 
-exports.addProfPics = function(){
+exports.addProfPics = function () {
     return knex('profpics').insert([
         {
-        userID: 2,
-        location: "pictures/default.png"
+            userID: 2,
+            location: "pictures/default.png"
+        },
+        {
+            userID: 3,
+            location: "pictures/default.png"
+        },
+        {
+            userID: 4,
+            location: "pictures/default.png"
+        },
+        {
+            userID: 5,
+            location: "pictures/default.png"
+        },
+        {
+            userID: 1,
+            location: "pictures/default.png"
         }
+
     ])
 }
 
@@ -541,13 +557,13 @@ exports.getReports = function (cb) {
 
 exports.getReport = function (reportID, cb) {
     knex.table('reports').where('reportID', reportID).innerJoin('bridge', 'reports.bridgeID', '=', 'bridge.bridgeID')
-    .then(function (report) {
-        cb(report);
-    });
+        .then(function (report) {
+            cb(report);
+        });
 }
 
 exports.getPhoto = function (cb) {
-   knex.select('*').from('photos').then(function (photos) { 
-       cb(photos);
+    knex.select('*').from('photos').then(function (photos) {
+        cb(photos);
     });
 }
