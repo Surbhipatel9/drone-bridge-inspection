@@ -217,10 +217,11 @@ app.post('/buffer', (req, res) => {
     if (check) {
       db.changeToTrue(photoID, function (photos) {
         res.send(photoID);
+        console.log(photoID);
         res.redirect("/test_file");
       });
       console.log(check);
-      console.log(photoID);
+      //console.log(photoID);
     }
     //else if (req.body.uncheck) {
     // db.changeToFalse(function (photos) {
