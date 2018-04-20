@@ -56,7 +56,7 @@ exports.init = function () {
                 })
 
                 .createTable('bridge', function (table) {
-                    table.integer('bridgeID').unique();
+                    table.increments('bridgeID').unique();
                     table.string('name').notNullable();
                     table.string('location').notNullable();
                     //Add reference to counties countyID
@@ -69,7 +69,7 @@ exports.init = function () {
                     table.string('description');
                 })
                 .createTable('reports', function (table) {
-                    table.integer('reportID').unique();
+                    table.increments('reportID').unique();
                     table.string('status').notNullable();
                     //Don't use .date format, inconvinient
                     table.string('dateAssigned').notNullable();
@@ -128,7 +128,7 @@ exports.init = function () {
 
                 })
                 .createTable('reportItems', function (table) {
-                    table.integer('itemID').unique();
+                    table.increments('itemID').unique();
                     table.string('title').notNullable();
                     table.string('description').notNullable();
                     //Add reference to photo photoID
@@ -137,7 +137,7 @@ exports.init = function () {
                     table.integer('reportID');
                 })
                 .createTable('photos', function (table) {
-                    table.integer('photoID').unique();
+                    table.increments('photoID').unique();
                     //Add reference to users userID
                     table.integer('userID').notNullable();
                     //Add reference to reports reportID
@@ -211,7 +211,6 @@ exports.populateUsers = function () {
         }
     ])
 }
-
 
 exports.populateCounties = function () {
     return knex('counties').insert(
@@ -476,9 +475,22 @@ exports.addProfPics = function () {
             location: "pictures/default.png"
         },
         {
+            userID: 3,
+            location: "pictures/default.png"
+        },
+        {
+            userID: 4,
+            location: "pictures/default.png"
+        },
+        {
             userID: 5,
             location: "pictures/default.png"
+        },
+        {
+            userID: 1,
+            location: "pictures/default.png"
         }
+
     ])
 }
 
@@ -540,14 +552,14 @@ exports.addPhotos = function () {
         },
         {
             userID: 2,
-            date: 4 / 4 / 2018,
+            date: 4/4/2018,
             title: "photo 3",
-            decscription: " DETERIORATION STRINGER THREE, PANEL TWO, SPAN ONE",
+            decscription: "DETERIORATION STRINGER THREE, PANEL TWO, SPAN ONE",
             location: "https://i.imgur.com/zDla9d1.png"
         },
         {
             userID: 2,
-            date: 4 / 4 / 2018,
+            date: 4/4/2018,
             title: "photo 4",
             decscription: "SPALLING UNDER BEARING AREA, SPAN TWO UNDER STRINGER ONE (BEARING REMAINS SUPPORTED)",
             location: "https://i.imgur.com/TdS84bT.png"
@@ -599,7 +611,7 @@ exports.getIndPhotos = function (photoID, cb) {
 }
 
 exports.getPhoto = function (cb) {
-    knex.select('*').from('photos').where('photos.date', '=', '4/4/2018')
+    knex.raw('SELECT * FROM photos WHERE photos.selected = 0 OR photos.selected IS NULL')
         .then(function (photos) {
             cb(photos);
         });
@@ -636,6 +648,17 @@ exports.changeToTrue = function (photoID, cb) {
         cb(photos)
     });
 }
+
+exports.updatePhotos = function (photoID, title, desc, cb) {
+    knex('photos').where('photoID', photoID).update({'title': title, 'description': desc, 'selected': 1})
+    .then(function(photos) {
+        cb(photos);
+    });
+}
+
+//exports.updatePhotos = function (photoID, title, description) {
+    //return knex('photos').where('photoID', photoID).update({'title': title, 'description': description})
+//}
 
 //exports.changeToTrue = function (cb) {
 //knex('photos').update({selected: '1'})

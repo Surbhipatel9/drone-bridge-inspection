@@ -163,12 +163,41 @@ app.get('/edit_photo', (req, res) => {
   }
 });
 
+app.post('/edit_photo', (req, res) => {
+  if (req.session.passport) {
+    var id = req.body.photoID;
+    var title = req.body.title;
+    var desc = req.body.description;
+    var photoID = req.query['photoID'];
+    console.log(id);
+    console.log(title);
+    console.log(desc);
+    console.log(photoID);
+
+    db.updatePhotos(id, title, desc, function(photos) {
+      res.redirect('/buffer');
+    });
+  }
+  //if not logged in send blank userinfo to web app
+  else {
+    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
+  }
+});
+
 app.get('/buffer', (req, res) => {
   //if logged in
   if (req.session.passport) {
+    var id = req.query['photoID'];
+    var pID = req.body.photoID;
+    var title = req.body.title;
+    var check = req.body.selected;
     db.getPhoto(function (photos) {
       //get userinfo and send to the web page 
       res.render(__dirname + "/public/views/buffer.ejs", { userinfo: JSON.stringify(req.session.passport.user), photos });
+      console.log(id);
+      console.log(pID);
+      console.log(title);
+      console.log(check);
     });
   }
   //if not logged in send blank userinfo to web app

@@ -67,17 +67,20 @@
     <div class="projects-horizontal" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); background: white; padding: 50px; padding-bottom: 15px; margin-left: 5%; margin-right: 5%; margin-top: 15px; margin-bottom: 15px; border-radius: 50px">
         <div id="pics" class="image-section">
             <div class="container site-section">
+             <% photos.forEach(function(photo) { %>
+                <input type="hidden" id="photoID" name='photoID' value="">
                 <div class="intro">
-                    <h2 class="text-center">My Images</h2>
+                    <h2 class="text-center">Editing <%- photo.title %></h2>
+                    
                 </div>
-                <form action="/edit_photo" method="GET">
+                <form action="/edit_photo" method="POST" id="editform">
                     <div class="row projects">
-                        <% photos.forEach(function(photo) { %>
+                    
                             <div class="col-sm-6 item">
                                 <div class="row">
                                     <div class="col-md-12 col-lg-5">
                                         <a href="<%- photo.location %>" target="_blank" data-lightbox="bridge">
-                                            <img class="img-fluid" src="<%- photo. location %>" data-lightbox="bridge">
+                                            <img class="img-fluid" src="<%- photo.location %>" data-lightbox="bridge">
                                         </a>
                                         <!--<div class="btn-group" role="group">
                                             <!--<button class="btn btn-primary" type="submit">Add Image</button>
@@ -95,15 +98,22 @@
                                         
                                     </div>-->
                                     <div class="col">
-                                        <h3 class="name"><%- photo.title %></h3>
+                                        <input type="hidden" name="photoID" value="<%- photo.photoID %>"<br/>
+                                        <h3 class="name">Title:</h3><br/>
+                                        <input type="text" name="title" value="<%- photo.title %>"<br/>
                                         <h3 class="name"><%- photo.date %></h3>
-                                        <p class="description"><%- photo.description %></p>
+                                        <h3 class="name">Description:</h3>
+                                        <textarea rows="4" cols="50" name="description" form="editform"><%- photo.description %></textarea>
+                                        <!--<h3 class="name">Send:</h3><br/>
+                                        <input type="text" name="selected" value="<%- photo.selected %>"<br/>-->
+                                        <input class="form-check-input" type="checkbox" id="checky[]" name="check[]" value="1" role="group"><br/>
+                                        <!--<p class="description"><%- photo.description %></p>-->
                                     </div>
                                 </div>
                             </div>
                             <% }); %>
                                 <div class="btn-group" role="group">
-                                    <button class="btn btn-primary" type="submit" role="button">Add Images</button>
+                                    <button class="btn btn-primary" type="submit" role="button">SAVE</button>
 
                                 </div>
                     </div>
