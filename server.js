@@ -164,7 +164,7 @@ app.get('/report_buffer', (req, res) => {
   }
 });
 
-app.post('/report_buffe', (req, res) => {
+app.post('/report_buffer', (req, res) => {
   if (req.session.passport) {
     var reportID = req.query['reportID'];
     var id = req.body.reportID;
@@ -173,8 +173,8 @@ app.post('/report_buffe', (req, res) => {
     db.updateToSubmitted(function (rep) {
       //get userinfo and send to the web page 
       //res.render(__dirname + "/public/views/report_buffer.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
-      res.redirect('/user');
     });
+    res.redirect('/user');
   }
   //if not logged in send blank userinfo to web app
   else {
@@ -269,7 +269,10 @@ app.post('/edit_report_photo', (req, res) => {
 
 app.get('/submit', (req, res) => {
   if (req.session.passport) {
-    res.render(__dirname + "/public/views/report_buffer.ejs", { userinfo: JSON.stringify(req.session.passport.user) });
+    db.getSubmittedPage( function (report) {
+      //get userinfo and send to the web page 
+      res.render(__dirname + "/public/views/submit.ejs", { userinfo: JSON.stringify(req.session.passport.user), report });
+    });
   }
   //if not logged in send blank userinfo to web app
   else {
@@ -277,15 +280,15 @@ app.get('/submit', (req, res) => {
   }
 });
 
-app.post('/report_buffer', (req, res) => {
+app.post('/submit', (req, res) => {
   if (req.session.passport) {
     var reportID = req.query['reportID'];
     var id = req.body.reportID;
     console.log(reportID);
     console.log(id);
-    db.updateToSubmitted(function (rep) {
+    db.updateToSubmitted(function (report) {
       //get userinfo and send to the web page 
-      //res.render(__dirname + "/public/views/report_buffer.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
+      res.render(__dirname + "/public/views/submit.ejs", { userinfo: JSON.stringify(req.session.passport.user), report });
       res.redirect('/user');
     });
   }

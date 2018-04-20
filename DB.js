@@ -699,7 +699,17 @@ exports.updateCheckedReportPhotos = function (photoID, title, desc, cb) {
 }
 
 exports.updateToSubmitted = function (cb) {
-    knex('reports').update({'status': "submitted"})
+    knex('reports').update({'status': 'submitted'})
+    .then(function (report) {
+        cb(report);
+    });
+}
+
+exports.getSubmittedPage = function (cb) {
+    knex.select('*').from('photos')
+    .then(function (report) {
+        cb(report);
+    });
 }
 //exports.updatePhotos = function (photoID, title, description) {
     //return knex('photos').where('photoID', photoID).update({'title': title, 'description': description})
