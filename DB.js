@@ -610,11 +610,18 @@ exports.getIndPhotos = function (photoID, cb) {
     });
 }
 
+//exports.getPhoto = function (cb) {
+    //knex.raw('SELECT * FROM photos WHERE photos.selected = 0 OR photos.selected IS NULL')
+        //.then(function (photos) {
+            //cb(photos);
+        //});
+//}
+
 exports.getPhoto = function (cb) {
-    knex.raw('SELECT * FROM photos WHERE photos.selected = 0 OR photos.selected IS NULL')
-        .then(function (photos) {
-            cb(photos);
-        });
+    knex.select('*').from('photos').whereNot('title', '=', 'Abraham G. Sams Memorial Bridge')
+    .then(function (photos) {
+        cb(photos);
+    });
 }
 
 exports.getBridgePhotos = function (cb) {

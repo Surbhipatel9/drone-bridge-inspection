@@ -194,10 +194,6 @@ app.get('/buffer', (req, res) => {
     db.getPhoto(function (photos) {
       //get userinfo and send to the web page 
       res.render(__dirname + "/public/views/buffer.ejs", { userinfo: JSON.stringify(req.session.passport.user), photos });
-      console.log(id);
-      console.log(pID);
-      console.log(title);
-      console.log(check);
     });
   }
   //if not logged in send blank userinfo to web app
