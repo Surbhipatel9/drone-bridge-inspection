@@ -74,7 +74,7 @@
                     <!--<h3 class="name"><%- photo.date %></h3>-->
                     
                 </div>
-                <form action="/edit_photo" method="POST" id="editform">
+                <form action="/edit_report_photo" method="POST" id="editform">
                     <div class="row projects">
                     
                             <div class="col-sm-6 item">
@@ -106,15 +106,15 @@
                                         <textarea rows="4" cols="50" name="description" form="editform"><%- photo.description %></textarea>
                                         <!--<h3 class="name">Send:</h3><br/>
                                         <input type="text" name="selected" value="<%- photo.selected %>"<br/>-->
-                                        <input class="form-check-input" type="checkbox" id="checky[]" name="check[]" value="1" role="group">
-                                        <label class="form-check-label" for="formCheck-1">Check to send to report</label>
+                                        <input class="form-check-input" type="checkbox" id="checky[]" name="check[]" value="0" role="group">
+                                        <label class="form-check-label" for="formCheck-1">remove from report</label>
                                         <!--<p class="description"><%- photo.description %></p>-->
                                     </div>
                                 </div>
                             </div>
                             <% }); %>
                                 <div class="btn-group" role="group">
-                                    <button class="btn btn-primary" type="submit" role="button" value="SAVE">SAVE</button>
+                                    <button class="btn btn-primary" type="submit" role="button">SAVE</button>
 
                                 </div>
                     </div>

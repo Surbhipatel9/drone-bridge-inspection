@@ -4,19 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Images</title>
+    <title>WV DoT Bridge Inspection - Report</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
-    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.10.0/css/lightbox.min.css">
-    <link rel="stylesheet" href="assets/css/Pretty-Search-Form.css">
-    <link rel="stylesheet" href="assets/css/Projects-Clean.css">
-    <link rel="stylesheet" href="assets/css/Projects-Horizontal.css">
-    <link rel="stylesheet" href="assets/css/style_buffer.css">
+    <link rel="stylesheet" href="assets/css/styles.min.css">
 </head>
 
-<body style="background: #e6ecf0">
-    <nav class="navbar navbar-light navbar-expand-md sticky-top" style="background: white">
+<body id="Header_Body" style="background: #e6ecf0">
+    <nav class="navbar navbar-light navbar-expand-md sticky-top">
         <div id="nav" class="container">
             <a class="navbar-brand" href="#">WV Bridge Inspection Tool</a>
             <button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1">
@@ -38,7 +32,6 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" href="/logout">Log Out</a>
                         </li>
-
                         <% } %>
                             <%if (!userinfo) { %>
                                 <li class="nav-item" role="presentation">
@@ -49,33 +42,22 @@
             </div>
         </div>
     </nav>
-    <div class="container">
-        <form class="search-form">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">
-                        <i class="fa fa-search"></i>
-                    </span>
-                </div>
-                <input class="form-control" type="text" placeholder="I am looking for..">
-                <div class="input-group-append">
-                    <button class="btn btn-light" type="button">Search </button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="projects-horizontal" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); background: white; padding: 50px; padding-bottom: 15px; margin-left: 5%; margin-right: 5%; margin-top: 15px; margin-bottom: 15px; border-radius: 50px">
+    <div style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); background: white; padding: 50px; padding-bottom: 15px; margin-left: 5%; margin-right: 5%; margin-top: 15px; margin-bottom: 15px; border-radius: 50px">
+        <p id="DoT_Tag">The West Virginia Department of Transportation&nbsp;</p>
+        <p id="DoT_Tag2">Divsion of Highways</p>
+        <p id="Title">Bridge Inspection Report</p>
+        <p id="Head">Image Section</p>
+        <br>
+        <hr>
+        <hr>
         <div id="pics" class="image-section">
             <div class="container site-section">
                 <div class="intro">
-                    <h2 class="text-center">My Images</h2>
-                    <form action="/upload" method="POST" enctype="multipart/form-data" id="reportSubmit" >
-                        <input type="file" name="reportFile" onchange="this.form.submit()">
-                    </form>
                 </div>
-                <form action="/edit_photo" method="GET">
+                <form action="/report_buffer" method="GET">
                     <div class="row projects">
-                        <% photos.forEach(function(photo) { %>
+                        <% rep.forEach(function(photo) { %>
+                            <input type="hidden" id="reportID" name='reportID' value="<%- photo.reportID %>">
                             <div class="col-sm-6 item">
                                 <div class="row">
                                     <div class="col-md-12 col-lg-5">
@@ -86,7 +68,7 @@
                                             <!--<button class="btn btn-primary" type="submit">Add Image</button>-->
                                             <input type="hidden" id="photoID" name='photoID' value="<%- photo.photoID %>">
                                             <!--<button class="btn btn-primary" type="submit">Edit Image</button>-->
-                                            <a href="/edit_photo?photoID=<%- photo.photoID %>">Edit Image</a>
+                                            <a href="/edit_report_photo?photoID=<%- photo.photoID %>">Edit Image</a>
                                         </div>
                                     </div>
                                     <div class="col">
@@ -97,18 +79,28 @@
                                 </div>
                             </div>
                             <% }); %>
-                               <!-- <div class="btn-group" role="group">
-                                    <button class="btn btn-primary" type="submit" role="button">Add Images</button>
-
-                                </div>-->
-                    </div>
+        <div id="element"></div>
+        <br>
+        <!--<div style="text-align: center; width: 100%">
+           <!-- <form action="/report_buffer" method="POST">
+                <input type="hidden" id="reportID" name='reportID' value="<%- rep.reportID %>">
+                <input type="submit" class="btn btn-primary" role="button" style="width: 40%; display: block; margin: auto;" value="Submit Report">
+           </form>
+        </div>-->
+        <div style="text-align: center; width: 100%">
+                <form action="/submit" method="get">
+                    <input type="hidden" id="reportID" name='reportID' value="<%- rep[0]["reportID"] %>">
+                    <input type="submit" class="btn btn-primary" role="button" style="width: 40%; display: block; margin: auto;" value="Next" />
                 </form>
-            </div>
         </div>
     </div>
+
+
+
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.10.0/js/lightbox-plus-jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 </body>
 
 </html>

@@ -141,7 +141,7 @@ exports.init = function () {
                     //Add reference to users userID
                     table.integer('userID').notNullable();
                     //Add reference to reports reportID
-                    table.integer('reportID').notNullable();
+                    table.integer('reportID');
                     table.string('date').notNullable();
                     table.string('title').notNullable();
                     table.string('description').notNullable();
@@ -603,6 +603,20 @@ exports.getReport = function (reportID, cb) {
         });
 }
 
+//exports.getReportBuffer = function (reportID, cb) {
+  //  knex.table('reports', 'photos').where('reportID', reportID).innerJoin('photos', 'photos.selected = 1')
+    //.then(function (report) {
+      //  cb(report);
+    //});
+//}
+
+exports.getReportBuffer = function (reportID, cb) {
+    knex.raw('SELECT * from reports INNER JOIN photos ON photos.reportID = reports.reportID WHERE photos.selected = 1 AND photos.reportID = ' + "'" + reportID + "'")
+    .then(function (report) {
+        cb(report);
+    });
+}
+
 exports.getIndPhotos = function (photoID, cb) {
     knex.table('photos').where('photoID', photoID)
     .then(function (photo) {
@@ -657,12 +671,36 @@ exports.changeToTrue = function (photoID, cb) {
 }
 
 exports.updatePhotos = function (photoID, title, desc, cb) {
+    knex('photos').where('photoID', photoID).update({'title': title, 'description': desc})
+    .then(function(photos) {
+        cb(photos);
+    });
+}
+
+exports.updateCheckedPhotos = function (photoID, title, desc, cb) {
     knex('photos').where('photoID', photoID).update({'title': title, 'description': desc, 'selected': 1})
     .then(function(photos) {
         cb(photos);
     });
 }
 
+exports.updateReportPhotos = function (photoID, title, desc, cb) {
+    knex('photos').where('photoID', photoID).update({'title': title, 'description': desc})
+    .then(function(photos) {
+        cb(photos);
+    });
+}
+
+exports.updateCheckedReportPhotos = function (photoID, title, desc, cb) {
+    knex('photos').where('photoID', photoID).update({'title': title, 'description': desc, 'selected': 0})
+    .then(function(photos) {
+        cb(photos);
+    });
+}
+
+exports.updateToSubmitted = function (cb) {
+    knex('reports').update({'status': "submitted"})
+}
 //exports.updatePhotos = function (photoID, title, description) {
     //return knex('photos').where('photoID', photoID).update({'title': title, 'description': description})
 //}
@@ -686,4 +724,9 @@ exports.countPhotos = function (cb) {
         .then(function (photos) {
             cb(photos)
         });
+}
+exports.insertQueries = function(query, cb){
+    knex.raw(query).then(()=>{
+        console.log('inserted successful')
+    })
 }

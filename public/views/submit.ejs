@@ -47,30 +47,20 @@
         <p id="DoT_Tag2">Divsion of Highways</p>
         <p id="Title">Bridge Inspection Report</p>
         <br>
+        <p id="Head">Image Section</p>
         <hr>
-        <p id="Bridge_Name">
-            <%- rep[0]["name"]%>
-        </p>
-        <p id="Bridge_Loc">
-            <%- rep[0]["location"]%>
-        </p>
         <hr>
-        <div id="holder">
-            <div style="padding: 15px">
-                <input type="text" placeholder="Header" name="header" style="display: block; width: 100%; margin: auto;" required>
-            </div>
-            <div class="container" style="padding: 0; margin: 0; margin-bottom: 15px; min-width: 100%;">
-                <div class="row">
+        <div id="pics" class="image-section">
+            <div class="container site-section">
+                <div class="intro">
                 </div>
-            </div>
-        </div>
         <div id="element"></div>
         <br>
         <div style="text-align: center; width: 100%">
-            <form action="/header">
-                <input type="submit" class="btn btn-primary" role="button" style="width: 40%; display: block; margin: auto;" value="Submit Report"
-                />
-            </form>
+            <form action="/submit" method="POST">
+               
+                <input type="submit" class="btn btn-primary" role="button" style="width: 40%; display: block; margin: auto;" value="Submit Report">
+           </form>
         </div>
     </div>
 
@@ -83,3 +73,4 @@
 </body>
 
 </html>
+

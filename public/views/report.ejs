@@ -79,10 +79,16 @@
         <button class="btn btn-primary" id="adder" style="width: 40%; display: block; margin: auto;" />Add another element</button>
         <br>
         <div style="text-align: center; width: 100%">
-            <form action="/header">
+            <!--<form action="/header">
                 <input type="submit" class="btn btn-primary" role="button" style="width: 40%; display: block; margin: auto;" value="Submit Report"
                 />
             </form>
+        </div>-->
+        <div style="text-align: center; width: 100%">
+                <form action="/report_buffer" method="get">
+                    <input type="hidden" id="reportID" name='reportID' value="<%- rep[0]["reportID"] %>">
+                    <input type="submit" class="btn btn-primary" role="button" style="width: 40%; display: block; margin: auto;" value="Next" />
+                </form>
         </div>
     </div>
 
