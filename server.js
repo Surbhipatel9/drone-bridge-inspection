@@ -182,6 +182,21 @@ app.post('/report_buffer', (req, res) => {
   }
 });
 
+app.get('/submitted_report', (req, res) => {
+  if (req.session.passport) {
+    var reportID = req.query['reportID'];
+
+    db.getReportBuffer(reportID, function (rep) {
+      //get userinfo and send to the web page 
+      res.render(__dirname + "/public/views/submitted_report.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
+    });
+  }
+  //if not logged in send blank userinfo to web app
+  else {
+    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
+  }
+});
+
 app.get('/edit_photo', (req, res) => {
   if (req.session.passport) {
     var photoID = req.query['photoID'];

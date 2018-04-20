@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WV DoT Bridge Inspection - Report</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles.min.css">
+</head>
+
+<body id="Header_Body" style="background: #e6ecf0">
+    <nav class="navbar navbar-light navbar-expand-md sticky-top">
+        <div id="nav" class="container">
+            <a class="navbar-brand" href="#">WV Bridge Inspection Tool</a>
+            <button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav ml-auto">
+                    <%if (userinfo) { %>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" href="/bridge_links">My Bridges
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" href="/user">Logged in as
+                                <%- JSON.parse(userinfo).userName %>
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" href="/logout">Log Out</a>
+                        </li>
+                        <% } %>
+                            <%if (!userinfo) { %>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" href="/login">Log In</a>
+                                </li>
+                                <% } %>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); background: white; padding: 50px; padding-bottom: 15px; margin-left: 5%; margin-right: 5%; margin-top: 15px; margin-bottom: 15px; border-radius: 50px">
+        <p id="DoT_Tag">The West Virginia Department of Transportation&nbsp;</p>
+        <p id="DoT_Tag2">Divsion of Highways</p>
+        <p id="Title">Bridge Inspection Report</p>
+        <br>
+        <hr>
+        <p id="Bridge_Name">
+                <%- rep[0]["name"]%>
+            </p>
+            <div>
+            <!--<p id="Bridge_Loc">-->
+                <a href="https://i.imgur.com/DvWoKft.png"></a>
+            </p>
+            </div>
+        <div id="No">
+            <p style="color: blue; font-weight: bold; display: inline;  margin-right: 0;" id="Bridge_No;">Bridge No.</p>
+            <p style="display: inline; margin-left: 0;">
+                <%- rep[0]["bridgeNo"]%>
+            </p>
+            <p style="display: inline; margin-left: 15px; float: right">
+                    <%- rep[0]["barsNo"]%>
+                </p>
+            <p style="color: blue;  font-weight: bold; display: inline;  margin-right: 0; float: right" id="Bridge_No;">Bars No.</p>
+        </div>
+        
+        <div style="margin-top: 15px; margin-bottom: 15px">
+            <p style="color: blue; font-weight: bold; display: inline;  margin-right: 0">Type of Inspection Performed: </p>
+            <p style="display: inline; margin-left: 0">
+                <%- rep[0]["inspectionPerformed"]%>
+            </p>
+        </div>
+        <div style="margin-top: 15px; margin-bottom: 15px">
+            <p style="color: blue; font-weight: bold; display: inline;  margin-right: 0">Field Inspected By:</p>
+            <p style="display: inline; margin-left: 0">
+                <%- rep[0]["inspectedBy"]%>
+            </p>
+        </div>
+        <div style="margin-top: 15px; margin-bottom: 15px">
+            <p style="color: blue; font-weight: bold; display: inline; margin-right: 0">Structural Evaluation By:</p>
+            <p style="display: inline; margin-left: 0">
+                <%- rep[0]["structuralEvalBy"]%>
+            </p>
+        </div>
+        <div style="margin-top: 15px; margin-bottom: 15px">
+            <p style="color: blue; font-weight: bold; display: inline; margin-right: 0">Reviewd and Approved By: </p>
+            <p style="display: inline; margin-left: 0">
+                <%- rep[0]["reviewApprovedBy"]%>
+            </p>
+            <hr>
+            <div id="Insp">
+                <div style="margin-top: 15px; margin-bottom: 15px">
+                    <p style="color: blue; font-weight: bold; display: inline; float: left;" id="NBI90">NBI90 (Routine) Date: </p>
+                    <p style="display: inline; margin-left: 0px; float: left;">
+                        <%- rep[0]["NBI90Date"]%>
+
+                    </p>
+                    <p style="display: inline; margin-left: 0px; float: right;">
+                        <%- rep[0]["NBI90Freq"]%>
+                    </p>
+                    <p id="Freq" style="color: blue; font-weight: bold; display: inline; float: right">Frequency:
+                    </p>
+
+                </div>
+
+                <br>
+                <p id="Insp_Types" style="color: blue; font-weight: bold;">Inspection Types</p>
+                <% if(rep[0]["inspectionTypePeriodic"] == true){ %>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" disabled="" id="formCheck-4" checked>
+                        <label class="form-check-label" for="formCheck-4">Periodic</label>
+                    </div>
+                    <%} else {%>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" disabled="" id="formCheck-4">
+                            <label class="form-check-label" for="formCheck-4">Periodic</label>
+                        </div>
+                        <% } %>
+                            <br>
+                            <% if(rep[0]["inspectionTypeInDepth"] == true){ %>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" disabled="" id="formCheck-4" checked>
+                                    <label class="form-check-label" for="formCheck-4">In-Depth</label>
+                                </div>
+                                <%} else {%>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" disabled="" id="formCheck-4">
+                                        <label class="form-check-label" for="formCheck-4">In-Depth</label>
+                                    </div>
+                                    <% } %>
+                                        <br>
+                                        <% if(rep[0]["inspectionTypeInCond"] == true){ %>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" disabled="" id="formCheck-4" checked>
+                                                <label class="form-check-label" for="formCheck-4">Interim-Condition</label>
+                                            </div>
+                                            <%} else {%>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" disabled="" id="formCheck-4">
+                                                    <label class="form-check-label" for="formCheck-4">Interim-Condition</label>
+                                                </div>
+                                                <% } %>
+            </div>
+            <p id="Type">Type</p>
+            <hr>
+            <div class="container" id="Info">
+                <div class="row">
+                    <div class="col">
+                        <% if(rep[0]["fractureCritical"] == true){ %>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" disabled="" id="formCheck-1" checked>
+                                <label class="form-check-label" for="formCheck-1">Fracture Critical</label>
+                            </div>
+                            <%} else {%>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" disabled="" id="formCheck-1">
+                                    <label class="form-check-label" for="formCheck-1">Fracture Critical</label>
+                                </div>
+                                <% } %>
+                                    <br>
+                                    <% if(rep[0]["underwater"] == true){ %>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" disabled="" id="formCheck-2" checked>
+                                            <label class="form-check-label" for="formCheck-2">Underwater</label>
+                                        </div>
+                                        <%} else {%>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" disabled="" id="formCheck-2">
+                                                <label class="form-check-label" for="formCheck-2">Underwater</label>
+                                            </div>
+                                            <% } %>
+                                                <br>
+                                                <br>
+                                                <% if(rep[0]["otherSpecial"] == true){ %>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" disabled="" id="formCheck-3" checked>
+                                                        <label class="form-check-label" for="formCheck-3">Other Special</label>
+                                                    </div>
+                                                    <%} else {%>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" disabled="" id="formCheck-3">
+                                                            <label class="form-check-label" for="formCheck-3">Other Special</label>
+                                                        </div>
+                                                        <% } %>
+                                                            <br>
+                                                            <br>
+                                                            <div class="form-check">
+                                                                <% if(rep[0]["inventory"] == true){ %>
+                                                                    <input class="form-check-input" type="checkbox" disabled="" id="formCheck-3" checked>
+                                                                    <%} else {%>
+                                                                        <input class="form-check-input" type="checkbox" disabled="" id="formCheck-3">
+                                                                        <% } %>
+                                                                            <label class="form-check-label" for="formCheck-3">Inventory</label>
+                                                            </div>
+                                                            <br>
+                                                            <div class="form-check">
+                                                                <% if(rep[0]["interim"] == true){ %>
+                                                                    <input class="form-check-input" type="checkbox" disabled="" id="formCheck-1" checked>
+                                                                    <%} else {%>
+                                                                        <input class="form-check-input" type="checkbox" disabled="" id="formCheck-1">
+                                                                        <% } %>
+                                                                            <label class="form-check-label" for="formCheck-1">Interim</label>
+                                                            </div>
+                                                            <br>
+                                                            <div class="form-check">
+                                                                <% if(rep[0]["damageSpecial"] == true){ %>
+                                                                    <input class="form-check-input" type="checkbox" disabled="" id="formCheck-1" checked>
+                                                                    <%} else {%>
+                                                                        <input class="form-check-input" type="checkbox" disabled="" id="formCheck-1">
+                                                                        <% } %>
+                                                                            <label class="form-check-label" for="formCheck-1">Damage/Special</label>
+                                                            </div>
+                                                            <br>
+                                                            <div class="form-check">
+                                                                <% if(rep[0]["closure"] == true){ %>
+                                                                    <input class="form-check-input" type="checkbox" disabled="" id="formCheck-1" checked>
+                                                                    <%} else {%>
+                                                                        <input class="form-check-input" type="checkbox" disabled="" id="formCheck-1">
+                                                                        <% } %>
+                                                                            <label class="form-check-label" for="formCheck-1">Clsoure</label>
+                                                            </div>
+                    </div>
+                    <div class="col">
+                        <% if(rep[0]["fractCritReq"] == true){ %>
+                            <p>Required: Y&nbsp;</p>
+                            <%} else {%>
+                                <p>Required: N&nbsp;</p>
+                                <% } %>
+                                    <% if(rep[0]["underwaterReq"] == true){ %>
+                                        <p>Required: Y&nbsp;</p>
+                                        <%} else {%>
+                                            <p>Required: N&nbsp;</p>
+                                            <% } %>
+                                                <p>Underwater Equipment:
+                                                    <%- rep[0]["underWEq"] %>&nbsp;</p>
+                                                <br>
+                                                <p>Special Code:
+                                                    <%- rep[0]["specialCode"] %>&nbsp;</p>
+                    </div>
+                    <div class="col">
+                        <p>Item 93A Date:
+                            <%- rep[0]["item93ADate"] %>
+                        </p>
+                        <p>Item93B Date:
+                            <%- rep[0]["item93BDate"] %>
+                        </p>
+                        <br>
+                        <p>Item93C Date:
+                            <%- rep[0]["item93CDate"] %>
+                        </p>
+                        <br>
+                        <p>Inspection Date:
+                            <%- rep[0]["inspDate1"] %>
+                        </p>
+                        <p>Inspection Date:
+                            <%- rep[0]["inspDate2"] %>
+                        </p>
+                        <p>Inspection Date:
+                            <%- rep[0]["inspDate3"] %>
+                        </p>
+                        <p>Inspection Date:
+                            <%- rep[0]["inspDate4"] %>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p>Frequency:
+                            <%- rep[0]["Freq1"] %>
+                        </p>
+                        <p>Frequency:
+                            <%- rep[0]["Freq2"] %>
+                        </p>
+                        <br>
+                        <p>Frequency:
+                            <%- rep[0]["Freq3"] %>
+                        </p>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <p>Frequency:
+                            <%- rep[0]["Freq4"] %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <section id="UB_Info">
+                <div class="row" style="text-align: center">
+                    <div class="col">
+                        <div class="form-check" id="Ub_Check" style="margin: 15px">
+                            <% if(rep[0]["UBReq"] == true){ %>
+                                <input class="form-check-input" type="checkbox" disabled="" id="formCheck-1" checked>
+                                <%} else {%>
+                                    <input class="form-check-input" type="checkbox" disabled="" id="formCheck-1">
+                                    <% } %>
+                                        <label class="form-check-label" for="formCheck-1">UB Inspecytion Required</label>
+                        </div>
+                        <br>
+                        <p id="UB_Vehic" style="position: absolute">UB Inspection Vehicle:
+                            <%- rep[0]["UBinspVehic"] %>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p id="UB_Date">Inspection Date:
+                            <%- rep[0]["UBInspDate"] %>
+                        </p>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                    </div>
+                    <div class="col">
+                        <p id="UB_Freq">Frequency:
+                            <%- rep[0]["UBFreq"] %>&nbsp;</p>
+                        </div>
+                </div>
+            </section>
+            <br>
+            <hr>
+            <!--<div style="text-align: center; width: 100%">
+                    <form action="/report" method="get">
+                        <input type="hidden" id="reportID" name='reportID' value="<%- rep[0]["reportID"] %>">
+                        <input type="submit" class="btn btn-primary" role="button" style="width: 40%; display: block; margin: auto;" value="Next" />
+                    </form>
+            </div>-->
+        </div>
+        <div class="row projects">
+                <% rep.forEach(function(photo) { %>
+                    <input type="hidden" id="reportID" name='reportID' value="<%- photo.reportID %>">
+                    <div class="col-sm-6 item">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-5">
+                                <a href="<%- photo.location %>" target="_blank" data-lightbox="bridge">
+                                    <img class="img-fluid" src="<%- photo. location %>" data-lightbox="bridge">
+                                </a>
+                                <div class="btn-group" role="group">
+                                    <!--<button class="btn btn-primary" type="submit">Add Image</button>-->
+                                    <input type="hidden" id="photoID" name='photoID' value="<%- photo.photoID %>">
+                                    <!--<button class="btn btn-primary" type="submit">Edit Image</button>-->
+                                    <!--<a href="/edit_report_photo?photoID=<%- photo.photoID %>">Edit Image</a>-->
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h3 class="name"><%- photo.title %></h3>
+                                <!--<h3 class="name"><%- photo.date %></h3>-->
+                                <p class="description"><%- photo.description %></p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <% }); %>
+<div id="element"></div>
+<br>
+<!-- <div style="text-align: center; width: 100%">
+    <form action="/report_buffer" method="POST">
+        <input type="hidden" id="reportID" name='reportID' value="<%- rep.reportID %>">
+        <input type="submit" class="btn btn-primary" role="button" style="width: 40%; display: block; margin: auto;" value="Submit Report">
+   </form>-->
+</div>
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>
