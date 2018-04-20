@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WV DoT Bridge Inspection - Report</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles.min.css">
+</head>
+
+<body id="Header_Body" style="background: #e6ecf0">
+    <nav class="navbar navbar-light navbar-expand-md sticky-top">
+        <div id="nav" class="container">
+            <a class="navbar-brand" href="#">WV Bridge Inspection Tool</a>
+            <button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav ml-auto">
+                    <%if (userinfo) { %>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" href="/bridge_links">My Bridges
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" href="/user">Logged in as
+                                <%- JSON.parse(userinfo).userName %>
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" href="/logout">Log Out</a>
+                        </li>
+                        <% } %>
+                            <%if (!userinfo) { %>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" href="/login">Log In</a>
+                                </li>
+                                <% } %>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); background: white; padding: 50px; padding-bottom: 15px; margin-left: 5%; margin-right: 5%; margin-top: 15px; margin-bottom: 15px; border-radius: 50px">
+        <p id="DoT_Tag">The West Virginia Department of Transportation&nbsp;</p>
+        <p id="DoT_Tag2">Divsion of Highways</p>
+        <p id="Title">Bridge Inspection Report</p>
+        <br>
+       
+        <hr>
+        <hr>
+        <div id="pics" class="image-section">
+            <div class="container site-section">
+                <div class="intro">
+                </div>
+        <div id="element"></div>
+        <br>
+        <div style="text-align: center; width: 100%">
+            <form action="/submit" method="POST">
+               
+                <input type="submit" class="btn btn-primary" role="button" style="width: 40%; display: block; margin: auto;" value="Submit Report">
+           </form>
+        </div>
+    </div>
+
+
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</body>
+
+</html>
+

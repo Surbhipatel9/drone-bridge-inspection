@@ -64,45 +64,31 @@
             </div>
         </form>
     </div>
-    <div class="projects-horizontal" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); background: white; padding: 50px; padding-bottom: 15px; margin-left: 5%; margin-right: 5%; margin-top: 15px; margin-bottom: 15px; border-radius: 50px">
+    <div class="projects-horizontal"style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); background: white; padding: 50px; padding-bottom: 15px; margin-left: 5%; margin-right: 5%; margin-top: 15px; margin-bottom: 15px; border-radius: 50px">
         <div id="pics" class="image-section">
             <div class="container site-section">
                 <div class="intro">
-                    <h2 class="text-center">My Images</h2>
-                    <form action="/upload" method="POST" enctype="multipart/form-data" id="reportSubmit" >
-                        <input type="file" name="reportFile" onchange="this.form.submit()">
-                    </form>
+                    <h2 class="text-center">My Selected Images</h2>
                 </div>
-                <form action="/edit_photo" method="GET">
-                    <div class="row projects">
-                        <% photos.forEach(function(photo) { %>
-                            <div class="col-sm-6 item">
-                                <div class="row">
-                                    <div class="col-md-12 col-lg-5">
-                                        <a href="<%- photo.location %>" target="_blank" data-lightbox="bridge">
-                                            <img class="img-fluid" src="<%- photo. location %>" data-lightbox="bridge">
-                                        </a>
-                                        <div class="btn-group" role="group">
-                                            <!--<button class="btn btn-primary" type="submit">Add Image</button>-->
-                                            <input type="hidden" id="photoID" name='photoID' value="<%- photo.photoID %>">
-                                            <!--<button class="btn btn-primary" type="submit">Edit Image</button>-->
-                                            <a href="/edit_photo?photoID=<%- photo.photoID %>">Edit Image</a>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <h3 class="name"><%- photo.title %></h3>
-                                        <h3 class="name"><%- photo.date %></h3>
-                                        <p class="description"><%- photo.description %></p>
-                                    </div>
-                                </div>
+                <div class="row projects">
+                    <% for (var i = 0; i < photos.length; i++) { %>
+                    <div class="col-sm-6 item">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-5">
+                                <a href="<%- photos[i][" location "] %>" target="_blank" data-lightbox="bridge">
+                                    <img class="img-fluid" src="<%- photos[i][" location "] %>" data-lightbox="bridge">
+                                </a>
+                             
                             </div>
-                            <% }); %>
-                               <!-- <div class="btn-group" role="group">
-                                    <button class="btn btn-primary" type="submit" role="button">Add Images</button>
-
-                                </div>-->
+                            <div class="col">
+                                <h3 class="name"><%- photos[i]["title"] %></h3>
+                                <h3 class="name"><%- photos[i]["date"] %></h3>
+                                <p class="description"><%- photos[i]["description"] %></p>
+                            </div>
+                        </div>
                     </div>
-                </form>
+                    <% } %>
+                </div>
             </div>
         </div>
     </div>

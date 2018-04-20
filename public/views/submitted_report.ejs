@@ -51,9 +51,11 @@
         <p id="Bridge_Name">
                 <%- rep[0]["name"]%>
             </p>
-            <p id="Bridge_Loc">
-                <%- rep[0]["location"]%>
+            <div>
+            <!--<p id="Bridge_Loc">-->
+                <a href="https://i.imgur.com/DvWoKft.png"></a>
             </p>
+            </div>
         <div id="No">
             <p style="color: blue; font-weight: bold; display: inline;  margin-right: 0;" id="Bridge_No;">Bridge No.</p>
             <p style="display: inline; margin-left: 0;">
@@ -305,6 +307,10 @@
                         <p id="UB_Date">Inspection Date:
                             <%- rep[0]["UBInspDate"] %>
                         </p>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
                     </div>
                     <div class="col">
                         <p id="UB_Freq">Frequency:
@@ -313,13 +319,47 @@
                 </div>
             </section>
             <br>
-            <div style="text-align: center; width: 100%">
+            <hr>
+            <!--<div style="text-align: center; width: 100%">
                     <form action="/report" method="get">
                         <input type="hidden" id="reportID" name='reportID' value="<%- rep[0]["reportID"] %>">
                         <input type="submit" class="btn btn-primary" role="button" style="width: 40%; display: block; margin: auto;" value="Next" />
                     </form>
-            </div>
+            </div>-->
         </div>
+        <div class="row projects">
+                <% rep.forEach(function(photo) { %>
+                    <input type="hidden" id="reportID" name='reportID' value="<%- photo.reportID %>">
+                    <div class="col-sm-6 item">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-5">
+                                <a href="<%- photo.location %>" target="_blank" data-lightbox="bridge">
+                                    <img class="img-fluid" src="<%- photo. location %>" data-lightbox="bridge">
+                                </a>
+                                <div class="btn-group" role="group">
+                                    <!--<button class="btn btn-primary" type="submit">Add Image</button>-->
+                                    <input type="hidden" id="photoID" name='photoID' value="<%- photo.photoID %>">
+                                    <!--<button class="btn btn-primary" type="submit">Edit Image</button>-->
+                                    <!--<a href="/edit_report_photo?photoID=<%- photo.photoID %>">Edit Image</a>-->
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h3 class="name"><%- photo.title %></h3>
+                                <!--<h3 class="name"><%- photo.date %></h3>-->
+                                <p class="description"><%- photo.description %></p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <% }); %>
+<div id="element"></div>
+<br>
+<!-- <div style="text-align: center; width: 100%">
+    <form action="/report_buffer" method="POST">
+        <input type="hidden" id="reportID" name='reportID' value="<%- rep.reportID %>">
+        <input type="submit" class="btn btn-primary" role="button" style="width: 40%; display: block; margin: auto;" value="Submit Report">
+   </form>-->
+</div>
         <script src="assets/js/jquery.min.js"></script>
         <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 </body>
