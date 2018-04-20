@@ -141,7 +141,7 @@ exports.init = function () {
                     //Add reference to users userID
                     table.integer('userID').notNullable();
                     //Add reference to reports reportID
-                    table.integer('reportID').notNullable();
+                    table.integer('reportID');
                     table.string('date').notNullable();
                     table.string('title').notNullable();
                     table.string('description').notNullable();
