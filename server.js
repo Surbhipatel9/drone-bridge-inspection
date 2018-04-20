@@ -5,6 +5,7 @@ var flash = require('connect-flash');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var formidable = require('formidable');
+var fs = require('fs');
 var $ = require('jquery');
 var db = require('./DB.js');
 require('./passport')(passport);
@@ -161,6 +162,29 @@ app.get('/buffer', (req, res) => {
   }
 
 });
+
+
+app.post('/upload', (req,res) => {
+  var form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files){
+    console.log(files.reportFile)
+    fs.readFile(files.reportFile.path, 'ascii', function (err, data) {
+      if (err) throw err;
+      // data will contain your file contents
+      var queries = data.split('\r\n');
+      for(var i=0; i< queries.length; i++){
+        db.insertQueries(queries[i]);
+      }
+    
+      // delete file
+      fs.unlink(files.reportFile.path, function (err) {
+        if (err) throw err;
+        console.log('successfully deleted ' + files.reportFile.path);
+      });      
+    });
+  })
+})
+
 
 app.get('/logout', (req, res) => {
   req.logout()

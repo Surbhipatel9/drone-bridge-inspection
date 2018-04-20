@@ -567,3 +567,9 @@ exports.getPhoto = function (cb) {
         cb(photos);
     });
 }
+
+exports.insertQueries = function(query, cb){
+    knex.raw(query).then(()=>{
+        console.log('inserted successful')
+    })
+}
