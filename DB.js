@@ -597,7 +597,7 @@ exports.getReports = function (cb) {
 }
 
 exports.getReport = function (reportID, cb) {
-    knex.table('reports').where('reportID', reportID).innerJoin('bridge', 'reports.bridgeID', '=', 'bridge.bridgeID')
+    knex.table('reports').where('reportID', '=', reportID).innerJoin('bridge', 'reports.bridgeID', '=', 'bridge.bridgeID')
         .then(function (report) {
             cb(report);
         });

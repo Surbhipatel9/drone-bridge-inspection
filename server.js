@@ -109,13 +109,13 @@ app.post('/user', function (req, res) {
   if (req.session.passport) {
     db.getReports(function (reports) {
       //get userinfo and send to the web page 
-      res.render(__dirname + "/public/views/report.ejs", { userinfo: JSON.stringify(req.session.passport.user), reports });
+      res.render(__dirname + "/public/views/user.ejs", { userinfo: JSON.stringify(req.session.passport.user), reports });
     });
   }
   //if not logged in send blank userinfo to web app
   else {
     db.getReports(function (reports) {
-      res.render(__dirname + "/public/views/report.ejs", { message: req.flash('loginMessage'), userinfo: false, reports });
+      res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, reports });
     });
   }
 });
@@ -123,7 +123,7 @@ app.post('/user', function (req, res) {
 app.get('/header', (req, res) => {
   if (req.session.passport) {
     var reportID = req.query['reportID'];
-    db.getReport(reportID, function (rep) {
+    db.getReport(parseInt(parseInt(req.query['reportID'])), function (rep) {
       //get userinfo and send to the web page 
       res.render(__dirname + "/public/views/header.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
     });
@@ -137,7 +137,7 @@ app.get('/header', (req, res) => {
 app.get('/report', (req, res) => {
   if (req.session.passport) {
     var reportID = req.query['reportID'];
-
+    console.log(reportID);
     db.getReport(reportID, function (rep) {
       //get userinfo and send to the web page 
       res.render(__dirname + "/public/views/report.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
@@ -145,8 +145,12 @@ app.get('/report', (req, res) => {
   }
   //if not logged in send blank userinfo to web app
   else {
+    var reportID = req.query['reportID'];
+    console.log(reportID);
+    db.getReport(reportID, function (rep) {
     res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
-  }
+  });
+}
 });
 
 app.get('/report_buffer', (req, res) => {
@@ -282,7 +286,7 @@ app.post('/edit_report_photo', (req, res) => {
   }
 });
 
-app.get('/submit', (req, res) => {
+/*app.get('/submit', (req, res) => {
   if (req.session.passport) {
     db.getSubmittedPage( function (report) {
       //get userinfo and send to the web page 
@@ -293,9 +297,9 @@ app.get('/submit', (req, res) => {
   else {
     res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
   }
-});
+});*/
 
-app.post('/submit', (req, res) => {
+/*app.post('/submit', (req, res) => {
   if (req.session.passport) {
     var reportID = req.query['reportID'];
     var id = req.body.reportID;
@@ -311,7 +315,7 @@ app.post('/submit', (req, res) => {
   else {
     res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
   }
-});
+});*/
 
 app.get('/buffer', (req, res) => {
   //if logged in

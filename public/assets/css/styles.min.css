@@ -227,7 +227,6 @@ html {
   padding: 3%;
   text-align: center;
   width: 100%;
-  position: absolute;
   top: 39px;
   margin: 0;
 }
@@ -235,7 +234,6 @@ html {
 #profpic input {
   color: rgb(0, 0, 0);
   font-size: 15px;
-  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -256,7 +254,6 @@ html {
   padding: 3%;
   text-align: center;
   width: 100%;
-  position: absolute;
   top: 13px;
   margin: 0;
 }

@@ -7,6 +7,8 @@
     <title>WV DoT Bridge Inspection - Report</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/styles.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
 </head>
 
 <body id="Header_Body" style="background: #e6ecf0">
@@ -21,7 +23,7 @@
                 <ul class="nav navbar-nav ml-auto">
                     <%if (userinfo) { %>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" href="/bridge_links">My Bridges
+                            <a class="nav-link" href="/buffer">My Images
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -48,6 +50,7 @@
         <p id="Title">Bridge Inspection Report</p>
         <br>
         <hr>
+        <input  type=hidden name=reportID value=<%- rep[0]["reportID"] %>>
         <p id="Bridge_Name">
             <%- rep[0]["name"]%>
         </p>
@@ -55,9 +58,12 @@
             <%- rep[0]["location"]%>
         </p>
         <hr>
-        <div id="holder">
-            <div style="padding: 15px">
-                <input type="text" placeholder="Header" name="header" style="display: block; width: 100%; margin: auto;" required>
+        <form action="/report" method="post">
+        <ul class="allElements">
+        <li class="ui-state-default" id="holder1" style="padding: 15px; list-style-type: none;"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+            <div  style="padding: 15px">
+                <input type="text" placeholder="Header" name="header" style="display: inline-block; width: 94%; margin: auto;">                
+                 <button type="button" id="remove1" class="btn btn-primary" id="remover" onclick="remove(this.id)" style="width: 5% ; display: inline-block; margin: auto;">X</button>
             </div>
             <div class="container" style="padding: 0; margin: 0; margin-bottom: 15px; min-width: 100%;">
                 <div class="row">
@@ -66,66 +72,102 @@
 
                     </div>
                     <div class="col-lg" style="padding: 15px ;margin: 0;">
-                        <div class="uploader" onclick="$('#filePhoto').click()">
-                            click here or drag here your images
+                        <div class="uploader" name="1" >
+                            Click here or drag here your image
                             <img id="image1" src="/pictures/Empty.png" />
-                            <input type="file" id="filePhoto" name="1" onclick="myFunction(this.name)" name="userprofile_picture" id="filePhoto"  style="background: transperent"/>
+                            <input class="up"  onclick="myFunction(this.name)" ondrop="myFunction(this.name)" type="file" id="filePhoto1" name="1" style="background: transperent"/>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="element"></div>
-        <button class="btn btn-primary" id="adder" style="width: 40%; display: block; margin: auto;" />Add another element</button>
-        <br>
-        <div style="text-align: center; width: 100%">
-            <!--<form action="/header">
-                <input type="submit" class="btn btn-primary" role="button" style="width: 40%; display: block; margin: auto;" value="Submit Report"
-                />
-            </form>
-        </div>-->
-        <div style="text-align: center; width: 100%">
-                <form action="/report_buffer" method="get">
-                    <input type="hidden" id="reportID" name='reportID' value="<%- rep[0]["reportID"] %>">
-                    <input type="submit" class="btn btn-primary" role="button" style="width: 40%; display: block; margin: auto;" value="Next" />
+        </li>
+    </ul>
+        <div id="buttonHolder">
+                <button type="button" class="btn btn-primary" id="adder" style="width: 40%; display: block; margin: auto;">Add another element</button>
+                <br id="removeBreak">
+                <input type="submit" class="btn btn-primary" style="width: 40%; display: block; margin: auto;" value="Submit Report">
                 </form>
+                </div>
         </div>
+        
+    
     </div>
 
 
 
+    
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 </body>
 
 </html>
 <script>
-    var counter = 2;
-    var func = "$('#filePhoto').click()"
-    $(document).ready(function () {
-        $("#adder").click(function () {
-            var el = $('<div id="holder"><div style="padding: 15px"><input type="text" placeholder="Header" name="header" style="display: block; width: 100%; margin: auto;" required></div><div class="container" style="padding: 0; margin: 0; margin-bottom: 15px; min-width: 100%;"><div class="row"><div class="col-lg" style="padding: 15px ;margin: 0;"><textarea placeholder="Enter your comment here" rows="4" cols="50" style="margin-bottom: 15px;margin-right: 0px;height: 350px;width: 100%;display: inline-block;"></textarea></div><div class="col-lg" style="padding: 15px ;margin: 0;"><div class="uploader" onclick="'+func+'">click here or drag here your images for preview and set userprofile_picture data<img src="/pictures/Empty.png" id="image'+counter+'" /><input type="file"  onclick="myFunction(this.name)" id="filePhoto" name="'+counter+'" style="background: transperent"/></div></div></div></div></div>')
-            //$("#element").append('<input type="text" placeholder="Header" name="header" style="display: block; width: 100%; margin: auto;" required>')
-            $("#element").append(el);
-            counter++;
-        });
-    });
-</script>
-<script>
-    function myFunction(clicked_name) {
-        var imageLoader = document.getElementsByName(clicked_name)[0];
-        imageLoader.addEventListener('change', handleImage, false);
+        $('.ui-state-default').mousedown(function(){ $('.container').hide(); })
+        $('.allElements').on('mousedown', 'li.ui-state-default', function() {
+         $('div.container').hide(); })
 
+    var counter = 1;
+    function myFunction(name){
+        var imageLoader = document.getElementById("filePhoto"+String(name));
+        imageLoader.addEventListener('change', handleImage, false);
         function handleImage(e) {
             var reader = new FileReader();
             reader.onload = function (event) {
-
-                $('#image'+String(clicked_name)).attr('src', event.target.result);
+                $('#image'+String(name)).attr('src', event.target.result);
             }
             reader.readAsDataURL(e.target.files[0]);
         }
-
     }
+    function remove(id){
+        counter = counter - 1;
+        var num = id.replace(/\D/g,'');
+        $("#holder"+num).remove();
+    
+    }
+   
+    $(function() {
+        $( ".allElements" ).sortable({
+            stop: function(){ $('.container').show(); },
+            axis: "y",
+            connectWith: '.allElements',
+            items: '.ui-state-default',
+            placeholder: 'placeholder',
+            tolerance: 'pointer',
+            });
+    });
+        $("#adder").click(function () {
+            counter++;
+            var el = $('<li class="ui-state-default" id="holder'+counter+'" style="padding: 15px; list-style-type: none;"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><div  style="padding: 15px"><input type="text" placeholder="Header" name="header" style="display: inline-block; width: 94%; margin: auto;"><button type="button" id="remove'+counter+'" class="btn btn-primary" id="remover" onclick="remove(this.id)" style="width: 5% ; display: inline-block; margin: auto;">X</button></div><div class="container" style="padding: 0; margin: 0; margin-bottom: 15px; min-width: 100%;"><div class="row"><div class="col-lg" style="padding: 15px ;margin: 0;"><textarea placeholder="Enter your comment here" rows="4" cols="50" style="margin-bottom: 15px;margin-right: 0px;height: 350px;width: 100%;display: inline-block;"></textarea></div><div class="col-lg" style="padding: 15px ;margin: 0;"><div class="uploader" name="1" >Click here or drag here your image<img id="image'+counter+'" src="/pictures/Empty.png" /><input class="up"  onclick="myFunction(this.name)" ondrop="myFunction(this.name)" type="file" id="filePhoto'+counter+'" name="1" style="background: transperent"/></div></div></div></div></li></ul>')
+            //$("#element").append('<input type="text" placeholder="Header" name="header" style="display: block; width: 100%; margin: auto;" required>')
+            $(".allElements").append(el);
+        });
+        /*if(counter == 0){
+            removeButton.disabled = true;
+            $('#remover').attr('style', "display: none; width: 40%; margin: auto;");
+            $('#removeBreak').attr('style', "display: none;")
+        } if(counter == 1){
+            removeButton.disabled = false;
+            $('#remover').attr('style', "width: 40%; display: block; margin: auto;");
+            $('#removeBreak').attr('style', "")
+        }
+        });*/
+        
+       /* $("#remover").click(function () {
+           $("#holder"+String(counter)).remove();         
+           counter = counter - 1;           
+            var removeButton = document.getElementById('remover')
+        if(counter == 0){
+            removeButton.disabled = true;
+            $('#removeBreak').attr('style', "display: none;")
+            $('#remover').attr('style', "display: none; width: 40%; margin: auto;");
+        } if(counter == 1){
+            removeButton.disabled = false;
+            $('#removeBreak').attr('style', "")
+            $('#remover').attr('style', "width: 40%; display: block; margin: auto;");
+        }
+        });*/
 </script>
