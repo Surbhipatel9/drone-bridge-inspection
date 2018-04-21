@@ -1,42 +1,47 @@
-var http = require('http');
-var express = require('express');
-var passport = require('passport');
-var flash = require('connect-flash');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var formidable = require('formidable');
-var fs = require('fs');
-var $ = require('jquery');
-var db = require('./DB.js');
-var fs = require('fs');
-var pdf = require('html-pdf');
-require('./passport')(passport);
+var http = require("http");
+var express = require("express");
+var passport = require("passport");
+var flash = require("connect-flash");
+var cookieParser = require("cookie-parser");
+var bodyParser = require("body-parser");
+var formidable = require("formidable");
+var fs = require("fs");
+var $ = require("jquery");
+var db = require("./DB.js");
+var fs = require("fs");
+var pdf = require("html-pdf");
+require("./passport")(passport);
 
-const path = require('path');
-const LocalStrategy = require('passport-local').Strategy;
-const qs = require('qs');
+const path = require("path");
+const LocalStrategy = require("passport-local").Strategy;
+const qs = require("qs");
 
 var app = express();
 
-app.set('view engine', 'ejs')
-app.set('views', 'public/views')
+app.set("view engine", "ejs");
+app.set("views", "public/views");
 
-app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
-app.use(express.static('public'))
+app.use("/jquery", express.static(__dirname + "/node_modules/jquery/dist/"));
+app.use(express.static("public"));
 
 // Passport middleware.
-app.use(require('express-session')({
-  secret: 'dryooisacoolguy',
-  resave: false,
-  saveUninitialized: false
-}));
+app.use(
+  require("express-session")({
+    secret: "dryooisacoolguy",
+    resave: false,
+    saveUninitialized: false
+  })
+);
 
 app.use(cookieParser());
 // Body parser middleware.
-app.use(bodyParser.json());			// to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-  extended: true
-}));
+app.use(bodyParser.json()); // to support JSON-encoded bodies
+app.use(
+  bodyParser.urlencoded({
+    // to support URL-encoded bodies
+    extended: true
+  })
+);
 
 // required for passport
 app.use(passport.initialize());
@@ -45,15 +50,21 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 db.init();
 
-app.get('/', (req, res) => {
-  res.render('login.ejs', { message: req.flash('loginMessage'), userinfo: false });
+app.get("/", (req, res) => {
+  res.render("login.ejs", {
+    message: req.flash("loginMessage"),
+    userinfo: false
+  });
   //if(req.session.passport)
   //console.log(req.session.passport.user)  //GET SESSION INFO FOR CURRENTLY LOGGED IN USER
-})
+});
 
-app.get('/login', (req, res, passport) => {
-  res.render('login.ejs', { message: req.flash('loginMessage'), userinfo: false });
-})
+app.get("/login", (req, res, passport) => {
+  res.render("login.ejs", {
+    message: req.flash("loginMessage"),
+    userinfo: false
+  });
+});
 
 /*// LOCAL LOGIN ROUTE
 app.get('/login', (req, res, passport) => {
@@ -62,227 +73,290 @@ app.get('/login', (req, res, passport) => {
 
 //LOCAL LOGIN POST ROUTE
 //authenticate the login and redirect on success/failure and send failure message if needed
-app.post('/login', passport.authenticate('local-login', {
-  successRedirect: '/user',
-  failureRedirect: '/login',
-  failureFlash: true
-}), (res, req) => {
-});
+app.post(
+  "/login",
+  passport.authenticate("local-login", {
+    successRedirect: "/user",
+    failureRedirect: "/login",
+    failureFlash: true
+  }),
+  (res, req) => {}
+);
 
 // User route.
-app.get('/user', (req, res) => {
+app.get("/user", (req, res) => {
   //if logged in
   if (req.session.passport) {
-    db.getReports(function (reports) {
-      //get userinfo and send to the web page 
-      res.render(__dirname + "/public/views/user.ejs", { userinfo: JSON.stringify(req.session.passport.user), reports });
+    db.getReports(function(reports) {
+      //get userinfo and send to the web page
+      res.render(__dirname + "/public/views/user.ejs", {
+        userinfo: JSON.stringify(req.session.passport.user),
+        reports
+      });
     });
   }
   //if not logged in send blank userinfo to web app
   else {
-    db.getReports(function (reports) {
-      res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, userinfo: false, reports });
+    db.getReports(function(reports) {
+      res.render(__dirname + "/public/views/login.ejs", {
+        message: req.flash("loginMessage"),
+        userinfo: false,
+        userinfo: false,
+        reports
+      });
     });
   }
-
 });
 
-app.post('/user', function (req, res) {
+app.post("/user", function(req, res) {
   var form = new formidable.IncomingForm();
 
   form.parse(req);
 
-  var userinfo = JSON.stringify(req.session.passport.user)
-  var userID = JSON.parse(userinfo).userID
+  var userinfo = JSON.stringify(req.session.passport.user);
+  var userID = JSON.parse(userinfo).userID;
 
-  form.on('fileBegin', function (name, file) {
-    file.path = __dirname + '/public/pictures/' + file.name;
-    db.updProfPic(userID, '/pictures/' + file.name).then(function (result) {
-
-    });
+  form.on("fileBegin", function(name, file) {
+    file.path = __dirname + "/public/pictures/" + file.name;
+    db.updProfPic(userID, "/pictures/" + file.name).then(function(result) {});
   });
 
-
-  form.on('file', function (name, file) {
-    console.log('Uploaded ' + file.name);
+  form.on("file", function(name, file) {
+    console.log("Uploaded " + file.name);
   });
   if (req.session.passport) {
-    db.getReports(function (reports) {
-      //get userinfo and send to the web page 
-      res.render(__dirname + "/public/views/user.ejs", { userinfo: JSON.stringify(req.session.passport.user), reports });
+    db.getReports(function(reports) {
+      //get userinfo and send to the web page
+      res.render(__dirname + "/public/views/user.ejs", {
+        userinfo: JSON.stringify(req.session.passport.user),
+        reports
+      });
     });
   }
   //if not logged in send blank userinfo to web app
   else {
-    db.getReports(function (reports) {
-      res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, reports });
+    db.getReports(function(reports) {
+      res.render(__dirname + "/public/views/login.ejs", {
+        message: req.flash("loginMessage"),
+        userinfo: false,
+        reports
+      });
     });
   }
 });
 
-app.get('/header', (req, res) => {
+app.get("/header", (req, res) => {
   if (req.session.passport) {
-    var reportID = req.query['reportID'];
-    db.getReport(parseInt(parseInt(req.query['reportID'])), function (rep) {
-      //get userinfo and send to the web page 
-      res.render(__dirname + "/public/views/header.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
-    });
-  }
-  //if not logged in send blank userinfo to web app
-  else {
-    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
-  }
-});
-
-app.get('/report', (req, res) => {
-  if (req.session.passport) {
-    var reportID = req.query['reportID'];
-    console.log(reportID);
-    db.getReport(reportID, function (rep) {
-      //get userinfo and send to the web page 
-      res.render(__dirname + "/public/views/report.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
+    var reportID = req.query["reportID"];
+    db.getReport(parseInt(parseInt(req.query["reportID"])), function(rep) {
+      //get userinfo and send to the web page
+      res.render(__dirname + "/public/views/header.ejs", {
+        userinfo: JSON.stringify(req.session.passport.user),
+        rep
+      });
     });
   }
   //if not logged in send blank userinfo to web app
   else {
-    var reportID = req.query['reportID'];
-    console.log(reportID);
-    db.getReport(reportID, function (rep) {
-    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
-  });
-}
+    res.render(__dirname + "/public/views/login.ejs", {
+      message: req.flash("loginMessage"),
+      userinfo: false
+    });
+  }
 });
 
-app.get('/report_buffer', (req, res) => {
+app.get("/report", (req, res) => {
   if (req.session.passport) {
-    var reportID = req.query['reportID'];
-
-    db.getReportBuffer(reportID, function (rep) {
-      //get userinfo and send to the web page 
-      res.render(__dirname + "/public/views/report_buffer.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
+    var reportID = req.query["reportID"];
+    db.getReport(reportID, function(rep) {
+      db.getPhotos(reportID, function(photos) {
+        //get userinfo and send to the web page
+        res.render(__dirname + "/public/views/report.ejs", {
+          userinfo: JSON.stringify(req.session.passport.user),
+          rep,
+          photos
+        });
+      });
     });
   }
   //if not logged in send blank userinfo to web app
   else {
-    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
+    var reportID = req.query["reportID"];
+    res.render(__dirname + "/public/views/login.ejs", {
+      message: req.flash("loginMessage"),
+      userinfo: false
+    });
   }
 });
 
-app.post('/report_buffer', (req, res) => {
+app.post("/report", (req, res) => {
+  var data = req.body;
+  console.log(data);
+});
+
+app.get("/report_buffer", (req, res) => {
   if (req.session.passport) {
-    var reportID = req.query['reportID'];
+    var reportID = req.query["reportID"];
+
+    db.getReportBuffer(reportID, function(rep) {
+      //get userinfo and send to the web page
+      res.render(__dirname + "/public/views/report_buffer.ejs", {
+        userinfo: JSON.stringify(req.session.passport.user),
+        rep
+      });
+    });
+  }
+  //if not logged in send blank userinfo to web app
+  else {
+    res.render(__dirname + "/public/views/login.ejs", {
+      message: req.flash("loginMessage"),
+      userinfo: false
+    });
+  }
+});
+
+app.post("/report_buffer", (req, res) => {
+  if (req.session.passport) {
+    var reportID = req.query["reportID"];
     var id = req.body.reportID;
     console.log(reportID);
     console.log(id);
-    db.updateToSubmitted(function (rep) {
-      //get userinfo and send to the web page 
+    db.updateToSubmitted(function(rep) {
+      //get userinfo and send to the web page
       //res.render(__dirname + "/public/views/report_buffer.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
     });
-    res.redirect('/user');
+    res.redirect("/user");
   }
   //if not logged in send blank userinfo to web app
   else {
-    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
+    res.render(__dirname + "/public/views/login.ejs", {
+      message: req.flash("loginMessage"),
+      userinfo: false
+    });
   }
 });
 
-app.get('/submitted_report', (req, res) => {
+app.get("/submitted_report", (req, res) => {
   if (req.session.passport) {
-    var reportID = req.query['reportID'];
+    var reportID = req.query["reportID"];
 
-    db.getReportBuffer(reportID, function (rep) {
-      //get userinfo and send to the web page 
-      res.render(__dirname + "/public/views/submitted_report.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
+    db.getReportBuffer(reportID, function(rep) {
+      //get userinfo and send to the web page
+      res.render(__dirname + "/public/views/submitted_report.ejs", {
+        userinfo: JSON.stringify(req.session.passport.user),
+        rep
+      });
     });
   }
   //if not logged in send blank userinfo to web app
   else {
-    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
+    res.render(__dirname + "/public/views/login.ejs", {
+      message: req.flash("loginMessage"),
+      userinfo: false
+    });
   }
 });
 
-app.get('/edit_photo', (req, res) => {
+app.get("/edit_photo", (req, res) => {
   if (req.session.passport) {
-    var photoID = req.query['photoID'];
+    var photoID = req.query["photoID"];
 
-    db.getIndPhotos(photoID, function (photos) {
-      //get userinfo and send to the web page 
-      res.render(__dirname + "/public/views/edit_photo.ejs", { userinfo: JSON.stringify(req.session.passport.user), photos });
+    db.getIndPhotos(photoID, function(photos) {
+      //get userinfo and send to the web page
+      res.render(__dirname + "/public/views/edit_photo.ejs", {
+        userinfo: JSON.stringify(req.session.passport.user),
+        photos
+      });
     });
   }
   //if not logged in send blank userinfo to web app
   else {
-    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
+    res.render(__dirname + "/public/views/login.ejs", {
+      message: req.flash("loginMessage"),
+      userinfo: false
+    });
   }
 });
 
-app.post('/edit_photo', (req, res) => {
+app.post("/edit_photo", (req, res) => {
   if (req.session.passport) {
     var id = req.body.photoID;
     var title = req.body.title;
     var desc = req.body.description;
     var check = req.body.check;
-    var photoID = req.query['photoID'];
+    var photoID = req.query["photoID"];
     console.log(id);
     console.log(title);
     console.log(desc);
     console.log(photoID);
     if (check) {
-      db.updateCheckedPhotos(id, title, desc, function (photos) {
-        res.redirect('/buffer');
+      db.updateCheckedPhotos(id, title, desc, function(photos) {
+        res.redirect("/buffer");
       });
     }
 
-    db.updatePhotos(id, title, desc, function (photos) {
-      res.redirect('/buffer');
+    db.updatePhotos(id, title, desc, function(photos) {
+      res.redirect("/buffer");
     });
   }
   //if not logged in send blank userinfo to web app
   else {
-    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
+    res.render(__dirname + "/public/views/login.ejs", {
+      message: req.flash("loginMessage"),
+      userinfo: false
+    });
   }
 });
 
-app.get('/edit_report_photo', (req, res) => {
+app.get("/edit_report_photo", (req, res) => {
   if (req.session.passport) {
-    var photoID = req.query['photoID'];
+    var photoID = req.query["photoID"];
 
-    db.getIndPhotos(photoID, function (photos) {
-      //get userinfo and send to the web page 
-      res.render(__dirname + "/public/views/edit_report_photo.ejs", { userinfo: JSON.stringify(req.session.passport.user), photos });
+    db.getIndPhotos(photoID, function(photos) {
+      //get userinfo and send to the web page
+      res.render(__dirname + "/public/views/edit_report_photo.ejs", {
+        userinfo: JSON.stringify(req.session.passport.user),
+        photos
+      });
     });
   }
   //if not logged in send blank userinfo to web app
   else {
-    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
+    res.render(__dirname + "/public/views/login.ejs", {
+      message: req.flash("loginMessage"),
+      userinfo: false
+    });
   }
 });
 
-app.post('/edit_report_photo', (req, res) => {
+app.post("/edit_report_photo", (req, res) => {
   if (req.session.passport) {
     var id = req.body.photoID;
     var title = req.body.title;
     var desc = req.body.description;
     var check = req.body.check;
-    var photoID = req.query['photoID'];
+    var photoID = req.query["photoID"];
     console.log(id);
     console.log(title);
     console.log(desc);
     console.log(photoID);
 
     if (check) {
-      db.updateCheckedReportPhotos(id, title, desc, function (photos) {
-        res.redirect('/user');
+      db.updateCheckedReportPhotos(id, title, desc, function(photos) {
+        res.redirect("/user");
       });
     }
 
-    db.updateReportPhotos(id, title, desc, function (photos) {
-      res.redirect('/user');
+    db.updateReportPhotos(id, title, desc, function(photos) {
+      res.redirect("/user");
     });
   }
   //if not logged in send blank userinfo to web app
   else {
-    res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
+    res.render(__dirname + "/public/views/login.ejs", {
+      message: req.flash("loginMessage"),
+      userinfo: false
+    });
   }
 });
 
@@ -317,54 +391,68 @@ app.post('/edit_report_photo', (req, res) => {
   }
 });*/
 
-app.get('/buffer', (req, res) => {
+app.get("/buffer", (req, res) => {
   //if logged in
   if (req.session.passport) {
-    var id = req.query['photoID'];
+    var id = req.query["photoID"];
     var pID = req.body.photoID;
     var title = req.body.title;
     var check = req.body.selected;
-    db.getPhoto(function (photos) {
-      //get userinfo and send to the web page 
-      res.render(__dirname + "/public/views/buffer.ejs", { userinfo: JSON.stringify(req.session.passport.user), photos });
+    db.getPhoto(function(photos) {
+      //get userinfo and send to the web page
+      res.render(__dirname + "/public/views/buffer.ejs", {
+        userinfo: JSON.stringify(req.session.passport.user),
+        photos
+      });
     });
   }
   //if not logged in send blank userinfo to web app
   else {
-    db.getPhoto(function (photos) {
-      res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, userinfo: false, photos });
+    db.getPhoto(function(photos) {
+      res.render(__dirname + "/public/views/login.ejs", {
+        message: req.flash("loginMessage"),
+        userinfo: false,
+        userinfo: false,
+        photos
+      });
     });
   }
-
 });
 
-app.get('/test_file', (req, res) => {
+app.get("/test_file", (req, res) => {
   //if logged in
   if (req.session.passport) {
-    db.getSelectedPhotos(function (photos) {
-      //get userinfo and send to the web page 
-      res.render(__dirname + "/public/views/test_file.ejs", { userinfo: JSON.stringify(req.session.passport.user), photos });
+    db.getSelectedPhotos(function(photos) {
+      //get userinfo and send to the web page
+      res.render(__dirname + "/public/views/test_file.ejs", {
+        userinfo: JSON.stringify(req.session.passport.user),
+        photos
+      });
     });
   }
   //if not logged in send blank userinfo to web app
   else {
-    db.getPhoto(function (photos) {
-      res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, userinfo: false, photos });
+    db.getPhoto(function(photos) {
+      res.render(__dirname + "/public/views/login.ejs", {
+        message: req.flash("loginMessage"),
+        userinfo: false,
+        userinfo: false,
+        photos
+      });
     });
   }
-
 });
 
-app.post('/buffer', (req, res) => {
+app.post("/buffer", (req, res) => {
   //if logged in
   var photoID = req.body.photoID;
-  var id = req.query['photoID'];
+  var id = req.query["photoID"];
   var rowID = req.body.rowID;
   var check = req.body.check;
 
   if (req.session.passport) {
     if (check > 0) {
-      db.changeToTrue(id, function (photos) {
+      db.changeToTrue(id, function(photos) {
         //for (var i = 0; i < photos; i++) {
         res.send(photoID);
         console.log(photoID);
@@ -384,74 +472,66 @@ app.post('/buffer', (req, res) => {
   }
 });
 
-app.get('/bridge_links', (req, res) => {
+app.get("/bridge_links", (req, res) => {
   //if logged in
   if (req.session.passport) {
-    db.getBridgePhotos(function (photos) {
-      //get userinfo and send to the web page 
-      res.render(__dirname + "/public/views/bridge_links.ejs", { userinfo: JSON.stringify(req.session.passport.user), photos });
+    db.getBridgePhotos(function(photos) {
+      //get userinfo and send to the web page
+      res.render(__dirname + "/public/views/bridge_links.ejs", {
+        userinfo: JSON.stringify(req.session.passport.user),
+        photos
+      });
     });
   }
   //if not logged in send blank userinfo to web app
   else {
-    db.getBridgePhotos(function (photos) {
-      res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false, userinfo: false, photos });
+    db.getBridgePhotos(function(photos) {
+      res.render(__dirname + "/public/views/login.ejs", {
+        message: req.flash("loginMessage"),
+        userinfo: false,
+        userinfo: false,
+        photos
+      });
     });
   }
-
 });
 
-app.post('/upload', (req, res) => {
+app.post("/upload", (req, res) => {
   var form = new formidable.IncomingForm();
-  form.parse(req, function (err, fields, files) {
-    console.log(files.reportFile)
-    fs.readFile(files.reportFile.path, 'ascii', function (err, data) {
+  form.parse(req, function(err, fields, files) {
+    console.log(files.reportFile);
+    fs.readFile(files.reportFile.path, "ascii", function(err, data) {
       if (err) throw err;
       // data will contain your file contents
-      var queries = data.split('\r\n');
+      var queries = data.split("\r\n");
       for (var i = 0; i < queries.length; i++) {
         db.insertQueries(queries[i]);
       }
 
       // delete file
-      fs.unlink(files.reportFile.path, function (err) {
+      fs.unlink(files.reportFile.path, function(err) {
         if (err) throw err;
-        console.log('successfully deleted ' + files.reportFile.path);
+        console.log("successfully deleted " + files.reportFile.path);
       });
     });
-  })
-})
+  });
+});
 
-
-app.get('/logout', (req, res) => {
-  req.logout()
+app.get("/logout", (req, res) => {
+  req.logout();
   req.session.passport.user = false;
-  res.redirect('/');
-})
+  res.redirect("/");
+});
 
 function isLoggedIn(req, res, next) {
-
-  // if user is authenticated in the session, carry on 
-  if (req.isAuthenticated())
-    return next();
+  // if user is authenticated in the session, carry on
+  if (req.isAuthenticated()) return next();
 
   // if they aren't redirect them to the home page
-  res.redirect('/');
+  res.redirect("/");
 }
 
-app.listen(8080)
-
-
-
-
-
-
-
-
-
-
-
-
+app.listen(8080);
 
 /*
 var http = require('http');

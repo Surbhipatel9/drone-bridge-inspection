@@ -602,6 +602,12 @@ exports.getReport = function (reportID, cb) {
             cb(report);
         });
 }
+exports.getPhotos = function (reportID, cb){
+    knex.table('photos').where('reportID', '=', reportID)
+        .then(function (photos){
+            cb(photos);
+        });
+}
 
 //exports.getReportBuffer = function (reportID, cb) {
   //  knex.table('reports', 'photos').where('reportID', reportID).innerJoin('photos', 'photos.selected = 1')
