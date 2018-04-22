@@ -129,8 +129,7 @@ exports.init = function () {
                 })
                 .createTable('reportItems', function (table) {
                     table.increments('itemID').unique();
-                    table.string('title').notNullable();
-                    table.string('description').notNullable();
+                    table.integer('order');
                     //Add reference to photo photoID
                     table.integer('photoID');
                     //Add reference to report reportID
@@ -142,11 +141,11 @@ exports.init = function () {
                     table.integer('userID').notNullable();
                     //Add reference to reports reportID
                     table.integer('reportID');
+                    table.integer('bridgeID');
                     table.string('date').notNullable();
                     table.string('title').notNullable();
                     table.string('description').notNullable();
                     table.string('location').notNullable();
-                    table.boolean('selected').notNullable();
                 })
                 .createTable('profpics', function (table) {
                     table.increments('picID').unique();
@@ -155,7 +154,7 @@ exports.init = function () {
                     table.string('location').notNullable();
                 })
 
-                .then(() => { return exports.populateCounties() }).then(() => { return exports.populateRoles() }).then(() => { return exports.populateUsers() }).then(() => { return exports.addUsersToRoles() }).then(() => { return exports.addPhotos() }).then(() => { return exports.addProfPics() });
+                .then(() => { return exports.populateCounties() }).then(() => { return exports.populateRoles() }).then(() => { return exports.populateUsers() }).then(() => { return exports.addUsersToRoles() }).then(() => { return exports.addPhotos() }).then(() => { return exports.addProfPics() }).then(() => { return console.log("DB Initialized") });
         }
     })
 };
@@ -531,37 +530,37 @@ exports.addPhotos = function () {
     return knex('photos').insert([
         {
             userID: 2,
-            date: 4 / 3 / 2018,
+            date: "4/3/2018",
             title: "Abraham G. Sams Memorial Bridge",
-            decscription: "bridge",
+            description: "bridge",
             location: "https://i.imgur.com/DvWoKft.png"
         },
         {
             userID: 2,
-            date: 4 / 4 / 2018,
+            date: "4/4/2018",
             title: "photo 1",
-            decscription: "FAILED WEB, STRINGER TWO PANEL FOUR, SPAN THREE",
+            description: "FAILED WEB, STRINGER TWO PANEL FOUR, SPAN THREE",
             location: "https://i.imgur.com/WxSNlQ4.png"
         },
         {
             userID: 2,
-            date: 4 / 4 / 2018,
+            date: "4/4/2018",
             title: "photo 2",
-            decscription: "STRINGER TWO, SPAN TWO, PANEL TWO SECTION LOSS",
+            description: "STRINGER TWO, SPAN TWO, PANEL TWO SECTION LOSS",
             location: "https://i.imgur.com/USM0ix8.png"
         },
         {
             userID: 2,
-            date: 4/4/2018,
+            date: "4/4/2018",
             title: "photo 3",
-            decscription: "DETERIORATION STRINGER THREE, PANEL TWO, SPAN ONE",
+            description: "DETERIORATION STRINGER THREE, PANEL TWO, SPAN ONE",
             location: "https://i.imgur.com/zDla9d1.png"
         },
         {
             userID: 2,
-            date: 4/4/2018,
+            date: "4/4/2018",
             title: "photo 4",
-            decscription: "SPALLING UNDER BEARING AREA, SPAN TWO UNDER STRINGER ONE (BEARING REMAINS SUPPORTED)",
+            description: "SPALLING UNDER BEARING AREA, SPAN TWO UNDER STRINGER ONE (BEARING REMAINS SUPPORTED)",
             location: "https://i.imgur.com/TdS84bT.png"
         }
     ])
@@ -582,6 +581,13 @@ exports.getUserInfo = function (userName, cb) {
         });
 };
 
+exports.getLatestPhotoId = function (cb) {
+    knex.raw(
+        `SELECT TOP 1 photoID FROM photos ORDER BY photoID DESC`
+    ).then(function (latestID) {
+        cb(JSON.stringify(latestID[0]).match(/\d+/)[0]);
+    });
+};
 
 exports.updProfPic = function (userID, loc) {
     return knex("profpics").where("userID", userID)
@@ -602,10 +608,9 @@ exports.getReport = function (reportID, cb) {
             cb(report);
         });
 }
-
-exports.getPhotos = function (reportID, cb){
-    knex.table('photos').where('photos.reportID', '=', reportID)
-        .then(function (photos){
+exports.getPhotos = function (reportID, cb) {
+    knex.table('photos').where('photos.reportID', '=', reportID) //.innerJoin('reportItems', 'photos.photoID', '=', 'reportItems.photoID')
+        .then(function (photos) {
             cb(photos);
         });
 }
@@ -618,33 +623,100 @@ exports.getImages = function (userID, cb) {
 }
 
 //exports.getReportBuffer = function (reportID, cb) {
-  //  knex.table('reports', 'photos').where('reportID', reportID).innerJoin('photos', 'photos.selected = 1')
-    //.then(function (report) {
-      //  cb(report);
-    //});
+//  knex.table('reports', 'photos').where('reportID', reportID).innerJoin('photos', 'photos.selected = 1')
+//.then(function (report) {
+//  cb(report);
+//});
 //}
 
 exports.getReportBuffer = function (reportID, cb) {
     knex.raw('SELECT * from reports INNER JOIN photos ON photos.reportID = reports.reportID WHERE photos.selected = 1 AND photos.reportID = ' + "'" + reportID + "'")
-    .then(function (report) {
-        cb(report);
-    });
+        .then(function (report) {
+            cb(report);
+        });
 }
 
 exports.getIndPhotos = function (photoID, cb) {
     knex.table('photos').where('photoID', photoID)
-    .then(function (photo) {
-        cb(photo);
-    });
+        .then(function (photo) {
+            cb(photo);
+        });
 }
 
+exports.insertIntoPhotos = function (repId, userId, i, data) {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+    today = yyyy + "-" + mm + "-" + dd;
+    for (var item in data) {
+        if (item == "id") {
+            var id = data[item][i];
+            console.log(id)
+        }
+        if (item == "header") {
+            var header = data[item][i];
+        }
+        if (item == "comment") {
+            var comment = data[item][i];
+        }
+    }
+    return knex("photos").insert([
+        {
+            userID: userId,
+            reportID: repId,
+            date: new Date(today),
+            title: header,
+            description: comment,
+            location: "https://i.imgur.com/sSp1Wsmg.png",
+        }
+    ]).the(() => {
+        knex("reportItems").insert([
+            {
+                order: parseInt(i) +1 ,
+                photoID: parseInt(id.replace(/\D/g, '')),
+                reportID: repId,
+            }
+
+        ])
+    }).then(() => {
+        console.log("Inserted sucessfully");
+    });
+};
+
+exports.updateReportItems = function (i, data) {
+
+};
+
+exports.updatePhotos = function (i, data) {
+    for (var item in data) {
+        if (item == "id") {
+            var id = data[item][i];
+            console.log(id)
+        }
+        if (item == "header") {
+            var header = data[item][i];
+        }
+        if (item == "comment") {
+            var comment = data[item][i];
+        }
+    }
+    return knex("photos")
+        .where("photoID", "=", parseInt(id.replace(/\D/g, '')))
+        .update({
+            title: header,
+            description: comment,
+        }).then(() => {
+            console.log("Updated sucessfully")
+        });
+}
 
 
 exports.getPhoto = function (cb) {
     knex.select('*').from('photos').whereNot('title', '=', 'Abraham G. Sams Memorial Bridge')
-    .then(function (photos) {
-        cb(photos);
-    });
+        .then(function (photos) {
+            cb(photos);
+        });
 }
 
 exports.getBridgePhotos = function (cb) {
@@ -666,62 +738,62 @@ exports.getSelectedPhotos = function (cb) {
 //}
 
 //exports.changeToTrue = function (photoID, cb) {
-    //knex.raw('update dbo.photos set photos.selected = "1" where photos.photoID = ' + "'" + photoID + "'")
-        //.then(function (photos) {
-            //cb(photos)
-        //});
+//knex.raw('update dbo.photos set photos.selected = "1" where photos.photoID = ' + "'" + photoID + "'")
+//.then(function (photos) {
+//cb(photos)
+//});
 //}
 
 exports.changeToTrue = function (photoID, cb) {
-    knex('photos').where('photoID', photoID).update({'selected': 'TRUE'})
-    .then(function(photos) {
-        cb(photos)
-    });
+    knex('photos').where('photoID', photoID).update({ 'selected': 'TRUE' })
+        .then(function (photos) {
+            cb(photos)
+        });
 }
 
-exports.updatePhotos = function (photoID, title, desc, cb) {
-    knex('photos').where('photoID', photoID).update({'title': title, 'description': desc})
-    .then(function(photos) {
-        cb(photos);
-    });
+/*exports.updatePhotos = function (photoID, title, desc, cb) {
+    knex('photos').where('photoID', photoID).update({ 'title': title, 'description': desc })
+        .then(function (photos) {
+            cb(photos);
+        });
 }
-
+*/
 exports.updateCheckedPhotos = function (photoID, title, desc, cb) {
-    knex('photos').where('photoID', photoID).update({'title': title, 'description': desc, 'selected': 1})
-    .then(function(photos) {
-        cb(photos);
-    });
+    knex('photos').where('photoID', photoID).update({ 'title': title, 'description': desc, 'selected': 1 })
+        .then(function (photos) {
+            cb(photos);
+        });
 }
 
 exports.updateReportPhotos = function (photoID, title, desc, cb) {
-    knex('photos').where('photoID', photoID).update({'title': title, 'description': desc})
-    .then(function(photos) {
-        cb(photos);
-    });
+    knex('photos').where('photoID', photoID).update({ 'title': title, 'description': desc })
+        .then(function (photos) {
+            cb(photos);
+        });
 }
 
 exports.updateCheckedReportPhotos = function (photoID, title, desc, cb) {
-    knex('photos').where('photoID', photoID).update({'title': title, 'description': desc, 'selected': 0})
-    .then(function(photos) {
-        cb(photos);
-    });
+    knex('photos').where('photoID', photoID).update({ 'title': title, 'description': desc, 'selected': 0 })
+        .then(function (photos) {
+            cb(photos);
+        });
 }
 
 exports.updateToSubmitted = function (cb) {
-    knex('reports').update({'status': 'submitted'})
-    .then(function (report) {
-        cb(report);
-    });
+    knex('reports').update({ 'status': 'submitted' })
+        .then(function (report) {
+            cb(report);
+        });
 }
 
 exports.getSubmittedPage = function (cb) {
     knex.select('*').from('photos')
-    .then(function (report) {
-        cb(report);
-    });
+        .then(function (report) {
+            cb(report);
+        });
 }
 //exports.updatePhotos = function (photoID, title, description) {
-    //return knex('photos').where('photoID', photoID).update({'title': title, 'description': description})
+//return knex('photos').where('photoID', photoID).update({'title': title, 'description': description})
 //}
 
 //exports.changeToTrue = function (cb) {
@@ -744,8 +816,8 @@ exports.countPhotos = function (cb) {
             cb(photos)
         });
 }
-exports.insertQueries = function(query, cb){
-    knex.raw(query).then(()=>{
+exports.insertQueries = function (query, cb) {
+    knex.raw(query).then(() => {
         console.log('inserted successful')
     })
 }
