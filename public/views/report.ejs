@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -45,33 +46,25 @@
         </div>
     </nav>
     <div style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); background: white; padding: 50px; padding-bottom: 15px; margin-left: 5%; margin-right: 5%; margin-top: 15px; margin-bottom: 15px; border-radius: 50px">
-        <p id="DoT_Tag">The West Virginia Department of Transportation&nbsp;</p>
-        <p id="DoT_Tag2">Divsion of Highways</p>
-        <p id="Title">Bridge Inspection Report</p>
+        <p id="DoT_Tag">Photo Collection&nbsp;</p>
         <br>
         <hr>
-        <input  type=hidden name=reportID value=<%- rep[0]["reportID"] %>>
-        <p id="Bridge_Name">
-            <%- rep[0]["name"]%>
-        </p>
-        <p id="Bridge_Loc">
-            <%- rep[0]["location"]%>
-        </p>
-        <hr>
         <form action="/report" method="post">
-        <ul class="allElements">
+        <ul class="allElements" style="padding: 0">
         <% for(var i = 0; i < photos.length; i++) {%>
             <input type="hidden" value=<%= photos[i]['photoID'] %> name="id">
         <li class="ui-state-default"  id="holder<%- i+1 %>" style="padding: 15px; list-style-type: none;"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
             <div  style="padding: 15px">
-                <input type="text" placeholder="Header" name="oldHeader" style="display: inline-block; width: 94%; margin: auto;">                
-                 <button type="button" id="remove<%- i+1 %>" class="btn btn-primary" onclick="remove(this.id)" style="width: 5% ; display: inline-block; margin: auto;">X</button>
-            </div>
+                <input type="text" placeholder="Header" name="oldHeader" style="display: inline-block; width: 71%; margin: auto;" value="<%= photos[i]["title"] %>">                
+                 <button type="button" name="<%- i+1 %>" class="btn btn-primary adder" style="width: auto ; display: inline-block; margin: auto;">Add Element Below</button> 
+                 <button type="button" name="<%- i+1 %>" class="btn btn-primary" onclick="up(this.name)" style="width: auto ; display: inline-block; margin: auto;">↑</button>
+                 <button type="button" name="<%- i+1 %>" class="btn btn-primary" onclick="down(this.name)" style="width: auto ; display: inline-block; margin: auto;">↓</button>
+                 <button type="button" id="remove<%- i+1 %>" class="btn btn-primary" onclick="remove(this.id)" style="width: auto ; display: inline-block; margin: auto;">X</button>
+                </div>
             <div class="container" style="padding: 0; margin: 0; margin-bottom: 15px; min-width: 100%;">
                 <div class="row">
                     <div class="col-lg" style="padding: 15px ;margin: 0;">
-                        <textarea name="oldComment" placeholder="Enter your comment here" rows="4" cols="50" style="margin-bottom: 15px;margin-right: 0px;height: 350px;width: 100%;display: inline-block;"></textarea>
-
+                        <textarea name="oldComment" placeholder="Enter your comment here" rows="4" cols="50" style="margin-bottom: 15px;margin-right: 0px;height: 350px;width: 100%;display: inline-block;"><%= photos[i]["description"] %></textarea>
                     </div>
                     <div class="col-lg" style="padding: 15px ;margin: 0;">
                         <div class="uploader" name="<%- i+1 %>" >
@@ -84,22 +77,15 @@
             </div>
         </li>
         <% } %>
-
     </ul>
-        <div id="buttonHolder">
-                <button type="button" class="btn btn-primary" id="adder" style="width: 40%; display: block; margin: auto;">Add another element</button>
-                <br id="removeBreak">
-                <input type="submit" class="btn btn-primary" style="width: 40%; display: block; margin: auto;" value="Submit Report">
+        <div id="buttonHolder" style="display: flex">
+                <button type="submit" class="btn btn-primary" value="save" style="width: 40%; display: inline-block; margin: auto;">Save Report</button>
+                <button type="submit" class="btn btn-primary" value="finalize" style="width: 40%; display: inline-block; margin: auto;">Finalize Report</button>
                 </form>
                 </div>
         </div>
-        
-    
     </div>
 
-
-
-    
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -111,7 +97,14 @@
 </html>
 <script>
     var counter = parseInt(<%- photos.length %>);
-
+    function up(name) {
+        var wrapper = $("#holder"+name).closest('li')
+        wrapper.insertBefore(wrapper.prev())
+    };
+    function down(name) {
+        var wrapper = $("#holder"+name).closest('li')
+        wrapper.insertAfter(wrapper.next())
+    };
     function myFunction(name){
         var imageLoader = document.getElementById("filePhoto"+String(name));
         imageLoader.addEventListener('change', handleImage, false);
@@ -123,7 +116,6 @@
             reader.readAsDataURL(e.target.files[0]);
         }
     }
-
     function remove(id){
         counter = counter - 1;
         var num = id.replace(/\D/g,'');
@@ -131,33 +123,13 @@
     
     }
    
-    $(function() {
-        $( ".allElements" ).sortable({
-            //helper: function() { return '<li class="ui-state-default"  id="holder1" style="padding: 15px; list-style-type: none;"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span> <input type="text" placeholder="Dragged Element" name="header" style="display: inline-block; width: 94%; margin: auto;"></div></li>'; },
-            stop: function(){ $('.container').show(); 
-            $('li.ui-state-default').height("auto")
-                    },
-            start: function(){
-                    $('div.container').hide();
-                    $('li.ui-state-default').height("90px")
-                    },
-            axis: "y",
-            connectWith: '.allElements',
-            items: '.ui-state-default',
-            placeholder: 'placeholder',
-            tolerance: 'pointer',
-            })
-            $( ".allElements" ).sortable("option", "cursorAt", // then call option method
-            {
-                left: 5,
-                top: 5
-            });
-    });
-        $("#adder").click(function () {
+        $(".adder").click(function () {
             counter++;
-            var el = $('<li class="ui-state-default" id="holder'+counter+'" style="padding: 15px; list-style-type: none;"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><div  style="padding: 15px"><input type="text" placeholder="Header" name="newHeader" style="display: inline-block; width: 94%; margin: auto;"><button type="button" id="remove'+counter+'" class="btn btn-primary" id="remover" onclick="remove(this.id)" style="width: 5% ; display: inline-block; margin: auto;">X</button></div><div class="container" style="padding: 0; margin: 0; margin-bottom: 15px; min-width: 100%;"><div class="row"><div class="col-lg" style="padding: 15px ;margin: 0;"><textarea name="newComment" placeholder="Enter your comment here" rows="4" cols="50" style="margin-bottom: 15px;margin-right: 0px;height: 350px;width: 100%;display: inline-block;"></textarea></div><div class="col-lg" style="padding: 15px ;margin: 0;"><div class="uploader" name="1" >Click here or drag here your image<img id="image'+counter+'" src="/pictures/Empty.png" /><input class="up"  onclick="myFunction(this.name)" ondrop="myFunction(this.name)" type="file" id="filePhoto'+counter+'" name="'+counter+'" style="background: transperent"/></div></div></div></div></li></ul>')
-            //$("#element").append('<input type="text" placeholder="Header" name="header" style="display: block; width: 100%; margin: auto;" required>')
-            $(".allElements").append(el);
+            var el = $('<li class="ui-state-default" id="holder'+counter+'" style="padding: 15px; list-style-type: none;"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><div  style="padding: 15px"><input type="text" placeholder="Header" name="newHeader" style="display: inline-block; width: 70%; margin: auto;">  <button type="button" name="<%- i+1 %>" class="btn btn-primary adder" style="width: auto ; display: inline-block; margin: auto;">Add Element Below</button> <button type="button" name="<%- i+1 %>" class="btn btn-primary" onclick="up(this.name)" style="width: auto ; display: inline-block; margin: auto;">↑</button> <button type="button" name="<%- i+1 %>" class="btn btn-primary" onclick="down(this.name)" style="width: auto ; display: inline-block; margin: auto;">↓</button> <button type="button" id="remove<%- i+1 %>" class="btn btn-primary" onclick="remove(this.id)" style="width: auto ; display: inline-block; margin: auto;">X</button> </div><div class="container" style="padding: 0; margin: 0; margin-bottom: 15px; min-width: 100%;"><div class="row"><div class="col-lg" style="padding: 15px ;margin: 0;"><textarea name="newComment" placeholder="Enter your comment here" rows="4" cols="50" style="margin-bottom: 15px;margin-right: 0px;height: 350px;width: 100%;display: inline-block;"></textarea></div><div class="col-lg" style="padding: 15px ;margin: 0;"><div class="uploader" name="1" >Click here or drag here your image<img id="image'+counter+'" src="/pictures/Empty.png" /><input class="up"  onclick="myFunction(this.name)" ondrop="myFunction(this.name)" type="file" id="filePhoto'+counter+'" name="'+counter+'" style="background: transperent"/></div></div></div></div></li>')
+            //$("#element").append('<input type="text" placeholder="Header" name="header" style="display: block; width: 100%; margin: auto;" required>') 
+            //$(".allElements").append(el);
+            var wrapper = $(this).closest('li')
+            el.insertAfter(wrapper.next())
         });
         /*if(counter == 0){
             removeButton.disabled = true;

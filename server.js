@@ -360,7 +360,7 @@ app.post("/edit_report_photo", (req, res) => {
   }
 });
 
-/*app.get('/submit', (req, res) => {
+app.get('/submit', (req, res) => {
   if (req.session.passport) {
     db.getSubmittedPage( function (report) {
       //get userinfo and send to the web page 
@@ -371,9 +371,9 @@ app.post("/edit_report_photo", (req, res) => {
   else {
     res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
   }
-});*/
+});
 
-/*app.post('/submit', (req, res) => {
+app.post('/submit', (req, res) => {
   if (req.session.passport) {
     var reportID = req.query['reportID'];
     var id = req.body.reportID;
@@ -389,7 +389,7 @@ app.post("/edit_report_photo", (req, res) => {
   else {
     res.render(__dirname + "/public/views/login.ejs", { message: req.flash('loginMessage'), userinfo: false });
   }
-});*/
+});
 
 app.get("/buffer", (req, res) => {
   //if logged in
