@@ -603,7 +603,7 @@ exports.getReport = function (reportID, cb) {
         });
 }
 exports.getPhotos = function (reportID, cb){
-    knex.table('photos').where('reportID', '=', reportID)
+    knex.table('photos').where('photos.reportID', '=', reportID)
         .then(function (photos){
             cb(photos);
         });
