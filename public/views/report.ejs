@@ -52,7 +52,7 @@
         <form action="/report" method="post">
         <ul class="allElements" style="padding: 0">
         <% for(var i = 0; i < photos.length; i++) {%>
-            <input type="hidden" value=<%= photos[i]['photoID'] %> name="id">
+            <input type="hidden" value="<%= photos[i]['photoID'] %>" name="id">
         <li class="ui-state-default"  id="holder<%- i+1 %>" style="padding: 15px; list-style-type: none;"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
             <div  style="padding: 15px">
                 <input type="text" placeholder="Header" name="oldHeader" style="display: inline-block; width: 71%; margin: auto;" value="<%= photos[i]["title"] %>">                
@@ -99,7 +99,7 @@
 
 </html>
 <script>
-    var counter = parseInt(<%- photos.length %>);
+    var counter = parseInt('<%- photos.length %>');
     function up(name) {
         var wrapper = $("#holder"+name).closest('li')
         wrapper.insertBefore(wrapper.prev())
