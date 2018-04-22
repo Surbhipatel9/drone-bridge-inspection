@@ -48,6 +48,11 @@
     <div style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); background: white; padding: 50px; padding-bottom: 15px; margin-left: 5%; margin-right: 5%; margin-top: 15px; margin-bottom: 15px; border-radius: 50px">
         <p id="DoT_Tag">Photo Collection&nbsp;</p>
         <br>
+        <div>
+                <form action="/buffer" method="get">
+                    <button name="redirect" class="btn btn-primary" style="width: 20%; display: inline-block; margin: auto;" onClick="redirect()">Import</button>
+                </form>
+            </div>
         <hr>
         <form action="/report" method="post">
         <ul class="allElements" style="padding: 0">
@@ -80,12 +85,14 @@
     </ul>
         <div id="buttonHolder" style="display: flex">
                 <button type="submit" class="btn btn-primary" value="save" style="width: 40%; display: inline-block; margin: auto;">Save Report</button>
-                <form action="/buffer" method="get">
-                    <button type="submit" class="btn btn-primary" value="submit" style="width: 40%; display: inline-block; margin: auto;">Import From Image Collection</button>
-                </form>
                 <button type="submit" class="btn btn-primary" value="finalize" style="width: 40%; display: inline-block; margin: auto;">Finalize Report</button>
+             </form>
+             </div>
+             <div>
+                <form action="/buffer" method="get">
+                    <button name="redirect" class="btn btn-primary" style="width: 40%; display: inline-block; margin: auto;" onClick="redirect()">Import</button>
                 </form>
-                </div>
+            </div>
         </div>
     </div>
 
@@ -99,7 +106,7 @@
 
 </html>
 <script>
-    var counter = parseInt('<%- photos.length %>');
+    var counter = parseInt(<%- photos.length %>);
     function up(name) {
         var wrapper = $("#holder"+name).closest('li')
         wrapper.insertBefore(wrapper.prev())
@@ -159,4 +166,8 @@
             $('#remover').attr('style', "width: 40%; display: block; margin: auto;");
         }
         });*/
+    function redirect() {
+        var url = '/buffer';
+        window.location(url);
+    }
 </script>
