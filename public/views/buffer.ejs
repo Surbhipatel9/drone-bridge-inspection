@@ -49,60 +49,55 @@
             </div>
         </div>
     </nav>
-    <div class="container">
-        <form class="search-form">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">
-                        <i class="fa fa-search"></i>
-                    </span>
-                </div>
-                <input class="form-control" type="text" placeholder="I am looking for..">
-                <div class="input-group-append">
-                    <button class="btn btn-light" type="button">Search </button>
-                </div>
-            </div>
-        </form>
-    </div>
     <div class="projects-horizontal" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); background: white; padding: 50px; padding-bottom: 15px; margin-left: 5%; margin-right: 5%; margin-top: 15px; margin-bottom: 15px; border-radius: 50px">
         <div id="pics" class="image-section">
             <div class="container site-section">
                 <div class="intro">
                     <h2 class="text-center">My Images</h2>
-                    <form action="/upload" method="POST" enctype="multipart/form-data" id="reportSubmit" >
-                        <input type="file" name="reportFile" onchange="this.form.submit()">
-                    </form>
                 </div>
-                <form action="/edit_photo" method="GET">
+                <form action="/buffer" method="POST">
                     <div class="row projects">
-                        <% photos.forEach(function(photo) { %>
+                            <input type="hidden" name="reportID" value="<%- reportID %>"/>
+                        <% for(var i = 0; i < photos.length; i++) { %>
                             <div class="col-sm-6 item">
                                 <div class="row">
                                     <div class="col-md-12 col-lg-5">
-                                        <a href="<%- photo.location %>" target="_blank" data-lightbox="bridge">
-                                            <img class="img-fluid" src="<%- photo. location %>" data-lightbox="bridge">
+                                        <a href="<%- photos[i]['location'] %>" target="_blank" data-lightbox="bridge">
+                                            <img class="img-fluid" src="<%- photos[i]['location'] %>" data-lightbox="bridge">
                                         </a>
                                         <div class="btn-group" role="group">
                                             <!--<button class="btn btn-primary" type="submit">Add Image</button>-->
-                                            <input type="hidden" id="photoID" name='photoID' value="<%- photo.photoID %>">
+                                            <input type="hidden" name='photoID' value="<%- photos[i]['photoID'] %>">
                                             <!--<button class="btn btn-primary" type="submit">Edit Image</button>-->
-                                            <a href="/edit_photo?photoID=<%- photo.photoID %>">Edit Image</a>
+                                            <a href="/edit_photo?photoID=<%- photos[i]['photoID'] %>">Edit Image</a>
+                                            <br>
+                                            <br>
                                         </div>
+                                        <br>
+                                        <input type="hidden" name="include" value="0"/><input type="checkbox"   onclick="this.previousSibling.value=1-this.previousSibling.value" > Add to report
                                     </div>
                                     <div class="col">
-                                        <h3 class="name"><%- photo.title %></h3>
-                                        <h3 class="name"><%- photo.date %></h3>
-                                        <p class="description"><%- photo.description %></p>
+                                        <input type="hidden" name='header' value="<%- photos[i]['title'] %>">
+                                        <input type="hidden" name='comment' value="<%- photos[i]['description'] %>">
+                                        <h3 class="name" name="header"><%- photos[i]['title'] %></h3>
+                                        <h3 class="name"><%- photos[i]['date'] %></h3>
+                                        <p class="description" name="comment"><%- photos[i]['description'] %></p>
                                     </div>
                                 </div>
                             </div>
-                            <% }); %>
+                            <% } %>
+                            <br>
+                            <hr>
                                <!-- <div class="btn-group" role="group">
                                     <button class="btn btn-primary" type="submit" role="button">Add Images</button>
 
                                 </div>-->
+
                     </div>
-                </form>
+
+                <button type="submit" class="btn btn-primary"  style="width: auto; display: inline-block; margin-left: 40%;">Add Pictures to Report</button>
+            </form>
+
             </div>
         </div>
     </div>
