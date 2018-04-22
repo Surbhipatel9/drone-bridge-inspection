@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,16 +44,18 @@
         </div>
     </nav>
     <div style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); background: white; padding: 50px; padding-bottom: 15px; margin-left: 5%; margin-right: 5%; margin-top: 15px; margin-bottom: 15px; border-radius: 50px">
-        <p id="DoT_Tag">Photo Collection&nbsp;</p>
+        <p id="DoT_Tag">Report Photo Collection&nbsp;</p>
         <br>
         <hr>
         <form action="/report" method="post">
+        <input type="hidden" value="<%= rep[0]['reportID'] %>" name="repId">
+        <input type="hidden" value="<%- JSON.parse(userinfo).userID %>" name="userId">
         <ul class="allElements" style="padding: 0">
         <% for(var i = 0; i < photos.length; i++) {%>
-            <input type="hidden" value=<%= photos[i]['photoID'] %> name="id">
         <li class="ui-state-default"  id="holder<%- i+1 %>" style="padding: 15px; list-style-type: none;"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
             <div  style="padding: 15px">
-                <input type="text" placeholder="Header" name="oldHeader" style="display: inline-block; width: 71%; margin: auto;" value="<%= photos[i]["title"] %>">                
+                <input type="hidden" id="idHolder<%- i+1 %>" value="old<%= photos[i]['photoID'] %>" name="id">
+                <input type="text" placeholder="Header" name="header" style="display: inline-block; width: 71%; margin: auto;" value="<%= photos[i]["title"] %>">                
                  <button type="button" name="<%- i+1 %>" class="btn btn-primary adder" style="width: auto ; display: inline-block; margin: auto;">Add Element Below</button> 
                  <button type="button" name="<%- i+1 %>" class="btn btn-primary" onclick="up(this.name)" style="width: auto ; display: inline-block; margin: auto;">↑</button>
                  <button type="button" name="<%- i+1 %>" class="btn btn-primary" onclick="down(this.name)" style="width: auto ; display: inline-block; margin: auto;">↓</button>
@@ -63,13 +64,13 @@
             <div class="container" style="padding: 0; margin: 0; margin-bottom: 15px; min-width: 100%;">
                 <div class="row">
                     <div class="col-lg" style="padding: 15px ;margin: 0;">
-                        <textarea name="oldComment" placeholder="Enter your comment here" rows="4" cols="50" style="margin-bottom: 15px;margin-right: 0px;height: 350px;width: 100%;display: inline-block;"><%= photos[i]["description"] %></textarea>
+                        <textarea name="comment" placeholder="Enter your comment here" rows="4" cols="50" style="margin-bottom: 15px;margin-right: 0px;height: 350px;width: 100%;display: inline-block;"><%= photos[i]["description"] %></textarea>
 
                     </div>
                     <div class="col-lg" style="padding: 15px ;margin: 0;">
                         <div class="uploader" name="<%- i+1 %>" >
                             Click here or drag here your image
-                            <img id="image<%- i+1 %>" src="<%- photos[i]['location']%>" />
+                            <img id="image<%- i+1 %>" src="<%- photos[i]['location'] %>" />
                             <!-- <input class="up"  onclick="myFunction(this.name)" ondrop="myFunction(this.id)" type="file" id="filePhoto<%- i+1 %>" name="<%- i+1 %>" style="background: transperent"/> -->
                         </div>
                     </div>
@@ -79,8 +80,11 @@
         <% } %>
     </ul>
         <div id="buttonHolder" style="display: flex">
-                <button type="submit" class="btn btn-primary" value="save" style="width: 40%; display: inline-block; margin: auto;">Save Report</button>
-                <button type="submit" class="btn btn-primary" value="finalize" style="width: 40%; display: inline-block; margin: auto;">Finalize Report</button>
+                <iframe src="http://www.google.co.in" name="targetframe" allowTransparency="true" scrolling="no" frameborder="0" >
+                </iframe>
+                <button type="button" class="btn btn-primary" onclick="openBuffer()" style="width: 30%; display: inline-block; margin: auto;">Open Photo Buffer</button>
+                <button type="submit" class="btn btn-primary" value="save" style="width: 30%; display: inline-block; margin: auto;">Save Report</button>
+                <button type="submit" class="btn btn-primary" value="finalize" style="width: 30%; display: inline-block; margin: auto;">Finalize Report</button>
                 </form>
                 </div>
         </div>
@@ -96,7 +100,18 @@
 
 </html>
 <script>
+    function openBuffer(){
+    Shadowbox.open({ 
+        content:    'http://www.google.com/', 
+        player:     "html", 
+        title:      "New Window", 
+        height:     350, 
+        width:      350 
+    });
+    }
+
     var counter = parseInt(<%- photos.length %>);
+    var photoId = parseInt(<%- lastId %>) + 1;
 
     function up(name) {
         var wrapper = $("#holder"+name).closest('li')
@@ -119,21 +134,28 @@
             reader.readAsDataURL(e.target.files[0]);
         }
     }
+    
+    function reduceId(){
+        photoId = photoId - 1;
+    };
 
     function remove(id){
         counter = counter - 1;
         var num = id.replace(/\D/g,'');
-        $("#holder"+num).remove();
-    
-    }
+        $("#holder"+num).hide();
+        var val =  $("#idHolder"+num).val();
+        $("#idHolder"+num).attr('value', val+"remove");
+        //$("#holder"+num).siblings('.idHolder').val('remove');
+    };
    
-        $(".adder").click(function () {
+    $(".allElements").on("click", ".adder", function(){
             counter++;
-            var el = $('<li class="ui-state-default" id="holder'+counter+'" style="padding: 15px; list-style-type: none;"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><div  style="padding: 15px"><input type="text" placeholder="Header" name="newHeader" style="display: inline-block; width: 70%; margin: auto;">  <button type="button" name="<%- i+1 %>" class="btn btn-primary adder" style="width: auto ; display: inline-block; margin: auto;">Add Element Below</button> <button type="button" name="<%- i+1 %>" class="btn btn-primary" onclick="up(this.name)" style="width: auto ; display: inline-block; margin: auto;">↑</button> <button type="button" name="<%- i+1 %>" class="btn btn-primary" onclick="down(this.name)" style="width: auto ; display: inline-block; margin: auto;">↓</button> <button type="button" id="remove<%- i+1 %>" class="btn btn-primary" onclick="remove(this.id)" style="width: auto ; display: inline-block; margin: auto;">X</button> </div><div class="container" style="padding: 0; margin: 0; margin-bottom: 15px; min-width: 100%;"><div class="row"><div class="col-lg" style="padding: 15px ;margin: 0;"><textarea name="newComment" placeholder="Enter your comment here" rows="4" cols="50" style="margin-bottom: 15px;margin-right: 0px;height: 350px;width: 100%;display: inline-block;"></textarea></div><div class="col-lg" style="padding: 15px ;margin: 0;"><div class="uploader" name="1" >Click here or drag here your image<img id="image'+counter+'" src="/pictures/Empty.png" /><input class="up"  onclick="myFunction(this.name)" ondrop="myFunction(this.name)" type="file" id="filePhoto'+counter+'" name="'+counter+'" style="background: transperent"/></div></div></div></div></li>')
+            var el = $('<li class="ui-state-default" id="holder'+counter+'" style="padding: 15px; list-style-type: none;"><input type="hidden" value="new'+photoId+'" name="id"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><div  style="padding: 15px"><input type="text" placeholder="Header" name="header" style="display: inline-block; width: 70%; margin: auto;">  <button type="button" name="'+counter+'" class="btn btn-primary adder" style="width: auto ; display: inline-block; margin: auto;">Add Element Below</button> <button type="button" name="'+counter+'" class="btn btn-primary" onclick="up(this.name)" style="width: auto ; display: inline-block; margin: auto;">↑</button> <button type="button" name="'+counter+'" class="btn btn-primary" onclick="down(this.name)" style="width: auto ; display: inline-block; margin: auto;">↓</button> <button type="button" id="remove'+counter+'" class="btn btn-primary" onclick="remove(this.id); reduceId();" style="width: auto ; display: inline-block; margin: auto;">X</button> </div><div class="container" style="padding: 0; margin: 0; margin-bottom: 15px; min-width: 100%;"><div class="row"><div class="col-lg" style="padding: 15px ;margin: 0;"><textarea name="comment" placeholder="Enter your comment here" rows="4" cols="50" style="margin-bottom: 15px;margin-right: 0px;height: 350px;width: 100%;display: inline-block;"></textarea></div><div class="col-lg" style="padding: 15px ;margin: 0;"><div class="uploader" name="1" >Click here or drag here your image<img id="image'+counter+'" src="/pictures/Empty.png" /><input class="up"  onclick="myFunction(this.name)" ondrop="myFunction(this.name)" type="file" id="filePhoto'+counter+'" name="'+counter+'" style="background: transperent"/></div></div></div></div></li>')
             //$("#element").append('<input type="text" placeholder="Header" name="header" style="display: block; width: 100%; margin: auto;" required>') 
             //$(".allElements").append(el);
             var wrapper = $(this).closest('li')
-            el.insertAfter(wrapper.next())
+            el.insertAfter(wrapper);
+            photoId++;
         });
         /*if(counter == 0){
             removeButton.disabled = true;
