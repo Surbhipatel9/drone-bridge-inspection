@@ -394,11 +394,13 @@ app.post("/edit_report_photo", (req, res) => {
 app.get("/buffer", (req, res) => {
   //if logged in
   if (req.session.passport) {
-    var id = req.query["photoID"];
+    var id = req.query["userID"];
+    var userinfo = JSON.stringify(req.session.passport.user);
+    var userID = JSON.parse(userinfo).userID;
     var pID = req.body.photoID;
     var title = req.body.title;
     var check = req.body.selected;
-    db.getPhoto(function(photos) {
+    db.getPhoto(userID, function(photos) {
       //get userinfo and send to the web page
       res.render(__dirname + "/public/views/buffer.ejs", {
         userinfo: JSON.stringify(req.session.passport.user),
@@ -515,6 +517,18 @@ app.post("/upload", (req, res) => {
       });
     });
   });
+});
+
+app.get('/final_report', (req, res) => {
+  if (req.session.passport) {
+    db.getSubmittedPage(function(photos) {
+      //get userinfo and send to the web page
+      res.render(__dirname + "/public/views/final_report.ejs", {
+        userinfo: JSON.stringify(req.session.passport.user),
+        photos
+      });
+    });
+  }
 });
 
 app.get("/logout", (req, res) => {

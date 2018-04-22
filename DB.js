@@ -602,8 +602,8 @@ exports.getReport = function (reportID, cb) {
             cb(report);
         });
 }
-exports.getPhotos = function (reportID, cb){
-    knex.table('photos').where('reportID', '=', reportID)
+exports.getPhotos = function (userID, cb){
+    knex.table('photos').where('userID', userID)
         .then(function (photos){
             cb(photos);
         });
