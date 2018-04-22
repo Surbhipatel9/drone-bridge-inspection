@@ -75,7 +75,10 @@
                 </div>
                 <form action="/edit_photo" method="GET">
                     <div class="row projects">
+                            <input type="hidden" id="userID" name='userID' value="<%- JSON.parse(userinfo).userID %>">
                         <% photos.forEach(function(photo) { %>
+                            
+                            
                             <div class="col-sm-6 item">
                                 <div class="row">
                                     <div class="col-md-12 col-lg-5">
@@ -97,6 +100,7 @@
                                     </div>
                                 </div>
                             </div>
+                                
                             <% }); %>
                             <br/>
                             <br/>

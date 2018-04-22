@@ -602,11 +602,18 @@ exports.getReport = function (reportID, cb) {
             cb(report);
         });
 }
-exports.getPhotos = function (userID, cb){
-    knex.table('photos').where('userID', userID)
+exports.getPhotos = function (cb){
+    knex.select('*').from('photos')
         .then(function (photos){
             cb(photos);
         });
+}
+
+exports.getImages = function (userID, cb) {
+    knex.raw('SELECT * from photos WHERE photos.userID = ' + "'" + userID + "'")
+    .then(function (photos) {
+        cb(photos);
+    });
 }
 
 //exports.getReportBuffer = function (reportID, cb) {
@@ -630,12 +637,7 @@ exports.getIndPhotos = function (photoID, cb) {
     });
 }
 
-//exports.getPhoto = function (cb) {
-    //knex.raw('SELECT * FROM photos WHERE photos.selected = 0 OR photos.selected IS NULL')
-        //.then(function (photos) {
-            //cb(photos);
-        //});
-//}
+
 
 exports.getPhoto = function (cb) {
     knex.select('*').from('photos').whereNot('title', '=', 'Abraham G. Sams Memorial Bridge')
