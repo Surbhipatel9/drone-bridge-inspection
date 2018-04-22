@@ -774,6 +774,17 @@ exports.addReportId = function(i, reportId, data) {
     });
 };
 
+exports.finalizeReport = function(reportId){
+    return knex("reports")
+    .where("reportID", '=', parseInt(reportId))
+    .update({
+        status: "submitted",
+    })
+    .then(() => {
+        console.log("Report finalized");
+    });
+};
+
 exports.updatePhotos = function(i, data) {
   for (var item in data) {
     if (item == "id") {

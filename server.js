@@ -210,9 +210,14 @@ app.post("/report", (req, res) => {
     var repId = data["repId"][0];
     var userId = data["userId"][0];
     function first() {
+      if (inputValue == "finalize") {
+        db.finalizeReport(reportId);
+      }
       for (var i = 0; i < data["id"].length; i++) {
         if (data["id"][i].replace(/\d+/g, "") === "oldremove") {
           db.removeItem(i, reportId, data);
+        }if (data["id"][i].replace(/\d+/g, "") === "old") {
+          db.updatePhotos(i, data);
         }
       }
       //wait until items are processed(wow, a promise)
@@ -560,9 +565,9 @@ app.post("/upload", (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-  req.logout();
-  req.session.passport.user = false;
-  res.redirect("/");
+  req.session.destroy(function (err) {
+    res.redirect('/'); //Inside a callback… bulletproof!
+  });
 });
 
 function isLoggedIn(req, res, next) {

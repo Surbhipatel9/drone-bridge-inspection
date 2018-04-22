@@ -50,9 +50,9 @@
                     <img src="<%= JSON.parse(userinfo).profPic %>" alt="/pictures/default.png" class="image">
                     <div class="overlay">
                         <form action="/user" enctype="multipart/form-data" method="post">
-                            <input type="button" id="get_file" value="Select File">
-                            <input type="file" id="my_file" name="upload" multiple>
-                            <input type="submit" value="Upload">
+                            <input type="button" id="get_file" style="position: absolute" value="Select File">
+                            <input type="file" id="my_file"  name="upload" multiple>
+                            <input type="submit" style="position: absolute" value="Upload">
                         </form>
                     </div>
                 </div>
