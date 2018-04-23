@@ -27,7 +27,7 @@
                 <ul class="nav navbar-nav ml-auto">
                     <%if (userinfo) { %>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" href="/bridge_links">My Bridges
+                            <a class="nav-link" href="/buffer">My Images
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -65,6 +65,7 @@
                                         <a href="<%- photos[i]['location'] %>" target="_blank" data-lightbox="bridge">
                                             <img class="img-fluid" src="<%- photos[i]['location'] %>" data-lightbox="bridge">
                                         </a>
+                                        
                                         <div class="btn-group" role="group">
                                             <!--<button class="btn btn-primary" type="submit">Add Image</button>-->
                                             <input type="hidden" name='photoID' value="<%- photos[i]['photoID'] %>">

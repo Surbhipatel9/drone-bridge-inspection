@@ -667,6 +667,13 @@ exports.getPhotos = function(reportID, cb) {
     });
 };
 
+exports.getImages = function (userID, cb) {
+    knex.raw('SELECT * from photos WHERE photos.userID = ' + "'" + userID + "'")
+    .then(function (photos) {
+        cb(photos);
+    });
+}
+
 //exports.getReportBuffer = function (reportID, cb) {
 //  knex.table('reports', 'photos').where('reportID', reportID).innerJoin('photos', 'photos.selected = 1')
 //.then(function (report) {
@@ -674,10 +681,23 @@ exports.getPhotos = function(reportID, cb) {
 //});
 //}
 
-exports.getReportBuffer = function(reportID, cb) {
+exports.getFinalReport = function(reportID, cb) {
   knex
     .raw(
-      "SELECT * from reports INNER JOIN photos ON photos.reportID = reports.reportID WHERE photos.selected = 1 AND photos.reportID = " +
+      "SELECT * from reports INNER JOIN photos ON photos.reportID = reports.reportID WHERE photos.reportID = " +
+        "'" +
+        reportID +
+        "'"
+    )
+    .then(function(report) {
+      cb(report);
+    });
+};
+
+exports.getFinalReports = function(reportID, cb) {
+  knex
+    .raw(
+      "SELECT * from reports INNER JOIN photos ON photos.reportID = reports.reportID INNER JOIN bridge ON reports.bridgeID=bridge.bridgeID WHERE photos.reportID = " +
         "'" +
         reportID +
         "'"
@@ -809,12 +829,6 @@ exports.updatePhotos = function(i, data) {
     });
 };
 
-//exports.getPhoto = function (cb) {
-//knex.raw('SELECT * FROM photos WHERE photos.selected = 0 OR photos.selected IS NULL')
-//.then(function (photos) {
-//cb(photos);
-//});
-//}
 
 exports.updateOrder = function(i, photoId, reportId) {
   return knex("reportItems")
