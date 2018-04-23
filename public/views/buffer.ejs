@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Images</title>
+    <title>Photo Collection</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
@@ -18,7 +18,7 @@
 <body style="background: #e6ecf0">
     <nav class="navbar navbar-light navbar-expand-md sticky-top" style="background: white">
         <div id="nav" class="container">
-            <a class="navbar-brand" href="#">WV Bridge Inspection Tool</a>
+            <a class="navbar-brand" href="/">WV Bridge Inspection Tool</a>
             <button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="navbar-toggler-icon"></span>
@@ -27,7 +27,7 @@
                 <ul class="nav navbar-nav ml-auto">
                     <%if (userinfo) { %>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" href="/buffer">My Images
+                            <a class="nav-link" href="/buffer">Photo Collection
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -53,8 +53,13 @@
         <div id="pics" class="image-section">
             <div class="container site-section">
                 <div class="intro">
-                    <h2 class="text-center">My Images</h2>
+                    <h2 class="text-center">Photo Collection</h2>
                 </div>
+                <hr>
+                <% if (photos.length == 0) { %>
+                    <p style="color: grey; font-size: 20px; margin: 50px; text-align: center;">No Photos in Photo Collection. </p>
+                    <p style="color: grey; font-size: 20px; margin: 50px; text-align: center;">Please, Upload More Pictures With Mobile Application&nbsp;</p> 
+                    <% } %>
                 <form action="/buffer" method="POST">
                     <div class="row projects">
                             <input type="hidden" name="reportID" value="<%- reportID %>"/>
@@ -95,8 +100,10 @@
                                 </div>-->
 
                     </div>
-
+                    <hr>
+                    <% if(showButton == true){ %>
                 <button type="submit" class="btn btn-primary"  style="width: auto; display: inline-block; margin-left: 40%;">Add Pictures to Report</button>
+           <% } %>
             </form>
 
             </div>
