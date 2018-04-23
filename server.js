@@ -573,7 +573,8 @@ function isLoggedIn(req, res, next) {
   res.redirect("/");
 }
 
-app.listen(8080);
+var port_number = server.listen(process.env.PORT || 3000);
+app.listen(port_number);
 
 /*
 var http = require('http');
