@@ -123,7 +123,7 @@
                                                             </td>
                                                             <td>
                                                                 <strong>
-                                                                    <%-   reports[j]["location"] %>
+                                                                    <%-   reports[j]["bridgeLocation"] %>
                                                                 </strong>
                                                             </td>
                                                             <td>
@@ -132,11 +132,14 @@
                                                                 </strong>
 
                                                             </td>
+                                                           
                                                             <td style="text-align: center">
                                                                 <strong>
-                                                                    <button class="btn btn-primary" type="submit" role="button" style="width: 100%">View Report</button>
+                                                                    <!--<button class="btn btn-primary" type="submit" role="button" style="width: 100%">View Report</button>-->
+                                                                    <a href="/header?reportID=<%- reports[j]['reportID'] %>" id="viewReport" value="View Report">View Report</a>
                                                                 </strong>
                                                             </td>
+                                                            
 
                                                         </tr>
                                                         <% } %>
@@ -175,7 +178,7 @@
                                                         </td>
                                                         <td>
                                                             <strong>
-                                                                <%-   reports[j]["location"] %>
+                                                                <%-   reports[j]["bridgeLocation"] %>
                                                             </strong>
                                                         </td>
                                                         <td>

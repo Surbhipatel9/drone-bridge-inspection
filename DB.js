@@ -681,10 +681,23 @@ exports.getImages = function (userID, cb) {
 //});
 //}
 
-exports.getReportBuffer = function(reportID, cb) {
+exports.getFinalReport = function(reportID, cb) {
   knex
     .raw(
       "SELECT * from reports INNER JOIN photos ON photos.reportID = reports.reportID WHERE photos.reportID = " +
+        "'" +
+        reportID +
+        "'"
+    )
+    .then(function(report) {
+      cb(report);
+    });
+};
+
+exports.getFinalReports = function(reportID, cb) {
+  knex
+    .raw(
+      "SELECT * from reports INNER JOIN photos ON photos.reportID = reports.reportID INNER JOIN bridge ON reports.bridgeID=bridge.bridgeID WHERE photos.reportID = " +
         "'" +
         reportID +
         "'"

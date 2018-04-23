@@ -292,7 +292,7 @@ app.get("/submitted_report", (req, res) => {
   if (req.session.passport) {
     var reportID = req.query["reportID"];
 
-    db.getReportBuffer(reportID, function(rep) {
+    db.getFinalReports(reportID, function(rep) {
       //get userinfo and send to the web page
       res.render(__dirname + "/public/views/submitted_report.ejs", {
         userinfo: JSON.stringify(req.session.passport.user),

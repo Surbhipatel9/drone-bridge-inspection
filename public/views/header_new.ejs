@@ -324,52 +324,16 @@
             <hr style="background-color:#1603f7;">
         </div>
     </div>
-        <% } %>
-        <% var j = 1 %>
-        <% for (var i = 0; i < rep.length; i++) { %>
-            <% if ((i % 2) === 0) { %>
-                <div id="shadow">
-                <header style="page-break-before: always">
-                    <div id="head">
-                        <div class="jumbotron">
-                            <h1 class="text-center text-primary" id="j-text"><img src="assets/img/wvdotlogo_clear.png" id="logo">West Virginia Division of Highways</h1>
-                            <p class="text-truncate text-primary" id="j-text">Photo Section</p>
-                            <p class="text-left"><span>BARS No. : <%- rep[i]["barsNo"] %></span><span id="photo_date">Date : <%- rep[i]["dateSubmitted"] %></span></p>
-                        </div>
-                        <div>
-                            <hr style="background-color:#1603f7;">
-                        </div>
-                    </div>
-                </header>
-                <% } %>
-        <div>
-            <div class="container">
-                <div class="row">
-                    <!--<div class="col-md-12"><img src="<%- rep[i]["location"] %>" id="img_border">-->
-                    <div class="col-md-12">
-                        <div id="parent">
-                            <a href="<%- rep[i]['location'] %>" target="_blank" data-lightbox="bridge">
-                                <img class="img-fluid" src="<%- rep[i]['location'] %>" data-lightbox="bridge" id="img-stuff">
-                            </a>
-                        </div>
-                        <p class="text-center" id="para"><%- rep[i]["title"] %> -&nbsp;<%- rep[i]["description"] %><br><br></p>
-                    </div>
-                </div>
+            <br>
+            <div style="text-align: center; width: 100%">
+                    <form action="/report" method="get">
+                        <input type="hidden" id="reportID" name='reportID' value="<%- rep[0]["reportID"] %>">
+                        <input type="submit" class="btn btn-primary" role="button" style="width: 40%; display: block; margin: auto;" value="Next" />
+                    </form>
             </div>
-            </div>
-            <% if ((i % 2) === 1) { %>
-                <p style="text-align: center;"><%= j %></p>
-                <% j++ %>
-                 </div>
-            <% } %>
-        <% } %>
-    
-    
-    </div>
-    <script src="assets/js/jquery_submitted.min.js"></script>
-    <script src="assets/js/jquery_photos.min.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.10.0/js/lightbox-plus-jquery.min.js"></script>
+        </div>
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 </body>
 
 </html>
