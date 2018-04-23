@@ -10,7 +10,7 @@
   padding: 48px;
   background-color:rgb(211,211,211);
   margin: 0 auto;
-  border:5px solid rgb(0, 0, 153);
+  border:2px solid rgb(0,0,153);
   max-width:800px;
   max-height: 185px;
 }
@@ -38,6 +38,10 @@
   width: 500px;
 }
 
+#parent-header {
+  width: 300px;
+}
+
 #img-stuff {
   display: block;
   width: 100%;
@@ -49,7 +53,8 @@
 }
 
 #j-text {
-  font-size:43;
+  font-size: 25;
+  font-weight: 500;
   color:rgb(0, 0, 153);
 }
 
@@ -70,4 +75,5 @@
 }
 #row-color {
   color:rgb(0, 0, 153);
+  font-weight: 600;
 }

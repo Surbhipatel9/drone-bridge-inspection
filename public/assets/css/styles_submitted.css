@@ -36,7 +36,13 @@ html {
   color:rgb(0, 0, 153);
 }
 
+#names {
+  font-size: medium;
+  color: black;
+}
+
 #row {
   color:rgb(0, 0, 153);
+  font-weight: 600;
 }
 

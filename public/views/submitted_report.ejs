@@ -64,7 +64,7 @@
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;
                                 <span>BARS No.<span style="color:black"><%- rep[i]["barsNo"] %></span></span>
                             </p>
                             <div>
@@ -89,15 +89,17 @@
                                 </div>
                             </div>
                             <br/>
-                            <div>
-                                <p>Field Inspected By: <span style="color:black"><%- rep[i]["inspectedBy"] %></span></p>
-                                <p>Structural Evaluation By: <span style="color:black"><%- rep[i]["structuralEvalBy"]%></span></p>
-                                <p>Review and Approve By: <span style="color:black"><%- rep[i]["reviewApprovedBy"]%></span></p>
+                            <div id="dot">
+                                
+                                <p>Field Inspected By: <span id="names"><%- rep[i]["inspectedBy"] %></span></p>
+                                <p>Structural Evaluation By: <span id="names"><%- rep[i]["structuralEvalBy"]%></span></p>
+                                <p>Review and Approve By: <span id="names"><%- rep[i]["reviewApprovedBy"]%></span></p>
+                                
                                 <p class="text-center" id="dot">
                                     <strong>The West Virginia Department of Transportation Division of Highways</strong>
                                 </p>
                                 <p id="dot">
-                                    <strong>Inspection Types</strong>
+                                    Inspection Types
                                 </p>
                             </div>
                         </div>
@@ -188,6 +190,7 @@
                                 <label class="form-check-label" for="formCheck-2">Underwater</label>
                             </div>
                              <% } %>
+                             <br/>
                         <% if(rep[i]["otherSpecial"] === true){ %>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="formCheck-3" checked>
@@ -199,6 +202,7 @@
                                 <label class="form-check-label" for="formCheck-3">otherSpecial</label>
                             </div>
                              <% } %>
+                             <br/>
                         <% if(rep[i]["inventory"] === true){ %>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="formCheck-4" checked>
@@ -258,13 +262,16 @@
                                 <li>Required: <span style="color:black">N</span></li>
                                 <% } %>
                             <li>Underwater Equipment: <%- rep[i]["underWEq"] %></li>
+                            <br/>
                             <li>Special Code: <%- rep[i]["specialCode"] %></li>
                         </ul>
                     </div>
                     <div class="col">
                         <ul id="list">
                             <li>Item 93A Date: <span style="color:black"><%- rep[i]["item93ADate"] %></span></li>
+                            <br/>
                             <li>Item 93B Date: <span style="color:black"><%- rep[i]["item93BDate"] %></span></li>
+                            <br/>
                             <li>Item 93C Date: <span style="color:black"><%- rep[i]["item93CDate"] %></span></li>
                             <li>Inspection Date: <span style="color:black"><%- rep[i]["inspDate1"] %></span></li>
                             <li>Inspection Date: <span style="color:black"><%- rep[i]["inspDate2"] %></span></li>
@@ -276,7 +283,12 @@
                         <ul id="list">
                             <li>Frequency: <span style="color:black"><%- rep[i]["Freq1"] %></span></li>
                             <li>Frequency: <span style="color:black"><%- rep[i]["Freq1"] %></span></li>
+                            <br/>
                             <li>Frequency: <span style="color:black"><%- rep[i]["Freq1"] %></span></li>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
                             <li>Frequency: <span style="color:black"><%- rep[i]["Freq1"] %></span></li>
                         </ul>
                     </div>
