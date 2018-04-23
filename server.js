@@ -477,30 +477,6 @@ app.get("/buffer", (req, res) => {
   }
 });
 
-app.get("/test_file", (req, res) => {
-  //if logged in
-  if (req.session.passport) {
-    db.getSelectedPhotos(function(photos) {
-      //get userinfo and send to the web page
-      res.render(__dirname + "/public/views/test_file.ejs", {
-        userinfo: JSON.stringify(req.session.passport.user),
-        photos
-      });
-    });
-  }
-  //if not logged in send blank userinfo to web app
-  else {
-    db.getPhoto(function(photos) {
-      res.render(__dirname + "/public/views/login.ejs", {
-        message: req.flash("loginMessage"),
-        userinfo: false,
-        userinfo: false,
-        photos
-      });
-    });
-  }
-});
-
 app.post("/buffer", (req, res) => {
   var data = req.body;
   var reportId = req.body.reportID;

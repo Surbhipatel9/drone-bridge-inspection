@@ -1,0 +1,42 @@
+html {
+  font-family:calibri, sans-serif;
+  /*line-height:1.15;*/
+  /*-webkit-text-size-adjust:100%;*/
+  /*-ms-text-size-adjust:100%;*/
+  /*-ms-overflow-style:scrollbar;*/
+  /*-webkit-tap-highlight-color:transparent;*/
+}
+
+html {
+  font-family:calibri, sans-serif;
+  line-height:1.15;
+  -webkit-text-size-adjust:100%;
+  -ms-text-size-adjust:100%;
+  -ms-overflow-style:scrollbar;
+  -webkit-tap-highlight-color:transparent;
+}
+
+#bridge {
+  margin-left:350px;
+  border:5px solid black;
+}
+
+#list {
+  list-style-type:none;
+  padding:0;
+  margin:0;
+}
+
+#body {
+  padding:50px;
+}
+
+#dot {
+  font-size:large;
+  color:blue;
+}
+
+#row {
+  color:blue;
+}
+

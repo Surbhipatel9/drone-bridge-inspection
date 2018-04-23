@@ -684,7 +684,7 @@ exports.getImages = function (userID, cb) {
 exports.getReportBuffer = function(reportID, cb) {
   knex
     .raw(
-      "SELECT * from reports INNER JOIN photos ON photos.reportID = reports.reportID WHERE photos.selected = 1 AND photos.reportID = " +
+      "SELECT * from reports INNER JOIN photos ON photos.reportID = reports.reportID WHERE photos.reportID = " +
         "'" +
         reportID +
         "'"
