@@ -527,6 +527,11 @@ app.post("/buffer", (req, res) => {
         }
       }
     });
+    return new Promise(function(resolve, reject) {
+      setTimeout(function() {
+        resolve("Done");
+      }, 1000);
+    });
   }
   first().then(function() {
     res.redirect("/report?reportID=" + reportId);
