@@ -26,7 +26,7 @@ app.use(express.static("public"));
 
 // Passport middleware.
 app.use(
-  require("express-session")({
+  require("cookie-session")({
     secret: "dryooisacoolguy",
     resave: false,
     saveUninitialized: false
@@ -582,10 +582,10 @@ app.post("/upload", (req, res) => {
   });
 });
 
+
 app.get("/logout", (req, res) => {
-  req.session.destroy(function(err) {
+  req.session = null;
     res.redirect("/"); //Inside a callback… bulletproof!
-  });
 });
 
 function isLoggedIn(req, res, next) {
