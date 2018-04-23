@@ -12,7 +12,7 @@
 <body>
     <nav class="navbar navbar-light navbar-expand-md sticky-top">
         <div id="nav" class="container">
-            <a class="navbar-brand" href="#">WV Bridge Inspection Tool</a>
+            <a class="navbar-brand" href="/">WV Bridge Inspection Tool</a>
             <button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="navbar-toggler-icon"></span>
@@ -21,7 +21,7 @@
                 <ul class="nav navbar-nav ml-auto">
                     <%if (userinfo) { %>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" href="/bridge_links">My Bridges
+                            <a class="nav-link" href="/buffer">Photo Collection
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -50,9 +50,9 @@
                     <img src="<%= JSON.parse(userinfo).profPic %>" alt="/pictures/default.png" class="image">
                     <div class="overlay">
                         <form action="/user" enctype="multipart/form-data" method="post">
-                            <input type="button" id="get_file" value="Select File">
-                            <input type="file" id="my_file" name="upload" multiple>
-                            <input type="submit" value="Upload">
+                            <input type="button" id="get_file" style="position: absolute" value="Select File">
+                            <input type="file" id="my_file"  name="upload" multiple>
+                            <input type="submit" style="position: absolute" value="Upload">
                         </form>
                     </div>
                 </div>
@@ -97,8 +97,7 @@
                                         <table class="table table-bordered table-hover table-responsive table-sm d-table">
                                             <thead>
                                                 <tr class="table-primary">
-                                                    <th style="width:8%;">Report ID </th>
-                                                    <th style="width:15%;">Name </th>
+                                                    <th style="width:23%;">Name </th>
                                                     <th style="width:35%;">Location </th>
                                                     <th style="width:10%;">Date Assigned </th>
                                                     <th> </th>
@@ -109,13 +108,6 @@
                                                 <% for (var j = 0; j < reports.length; j++) { %>
                                                     <% if((reports[j]["status"] == "assigned" || reports[j]["status"] == "started") && reports[j]["assignedTo"] == JSON.parse(userinfo).userID ) {%>
                                                         <tr>
-
-                                                            <td>
-                                                                <strong>
-                                                                    <%-   reports[j]["reportID"] %>
-                                                                        <input type="hidden" id="reportID" name='reportID' value="<%- reports[j]["reportID"] %>">
-                                                                </strong>
-                                                            </td>
                                                             <td>
                                                                 <strong>
                                                                     <%-   reports[j]["name"] %>
@@ -123,7 +115,7 @@
                                                             </td>
                                                             <td>
                                                                 <strong>
-                                                                    <%-   reports[j]["location"] %>
+                                                                    <%-   reports[j]["bridgeLocation"] %>
                                                                 </strong>
                                                             </td>
                                                             <td>
@@ -132,11 +124,14 @@
                                                                 </strong>
 
                                                             </td>
+                                                           
                                                             <td style="text-align: center">
                                                                 <strong>
-                                                                    <button class="btn btn-primary" type="submit" role="button" style="width: 100%">View Report</button>
+                                                                    <!--<button class="btn btn-primary" type="submit" role="button" style="width: 100%">View Report</button>-->
+                                                                    <a href="/header?reportID=<%- reports[j]['reportID'] %>" id="viewReport" style="text-decoration: underline" value="View Report">View Report</a>
                                                                 </strong>
                                                             </td>
+                                                            
 
                                                         </tr>
                                                         <% } %>
@@ -154,8 +149,7 @@
                                     <table class="table table-bordered table-hover table-responsive table-sm d-table">
                                         <thead>
                                             <tr class="table-primary">
-                                                <th style="width:8%;">Report ID </th>
-                                                <th style="width:15%;">Name </th>
+                                                <th style="width:23%;">Name </th>
                                                 <th style="width:35%;">Location </th>
                                                 <th style="width:10%;">Date Assigned </th>
                                                 <th> </th>
@@ -167,15 +161,12 @@
                                                     <tr>
                                                         <td>
                                                             <strong>
-                                                                <%-   reports[j]["reportID"] %>
+                                                            <%-   reports[j]["name"] %>
                                                             </strong>
                                                         </td>
                                                         <td>
-                                                            <%-   reports[j]["name"] %>
-                                                        </td>
-                                                        <td>
                                                             <strong>
-                                                                <%-   reports[j]["location"] %>
+                                                                <%-   reports[j]["bridgeLocation"] %>
                                                             </strong>
                                                         </td>
                                                         <td>
@@ -184,9 +175,9 @@
                                                             </strong>
 
                                                         </td>
-                                                        <td>
+                                                        <td style="text-align: center;">
                                                             <strong>
-                                                                <a href="/submitted_report?reportID=1" id="viewReport" value="View Report">View Report</a>
+                                                                <a href="/submitted_report?reportID=<%- reports[j]['reportID'] %>" id="viewReport" style="text-decoration: underline" value="View Report">View Report</a>
                                                             </strong>
                                                         </td>
                                                     </tr>

@@ -13,7 +13,7 @@
 <body id="Header_Body" style="background: #e6ecf0">
     <nav class="navbar navbar-light navbar-expand-md sticky-top">
         <div id="nav" class="container">
-            <a class="navbar-brand" href="#">WV Bridge Inspection Tool</a>
+            <a class="navbar-brand" href="/">WV Bridge Inspection Tool</a>
             <button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="navbar-toggler-icon"></span>
@@ -22,7 +22,7 @@
                 <ul class="nav navbar-nav ml-auto">
                     <%if (userinfo) { %>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" href="/buffer">My Images
+                            <a class="nav-link" href="/buffer">Photo Collection
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -51,6 +51,11 @@
         <input type="hidden" value="<%= rep[0]['reportID'] %>" name="repId">
         <input type="hidden" value="<%- JSON.parse(userinfo).userID %>" name="userId">
         <ul class="allElements" style="padding: 0">
+        <input type="hidden" value="<%= photos.length %>" name="numOfItems">
+        <% if (photos.length == 0) { %>
+            <p style="color: grey; font-size: 20px; margin: 50px; text-align: center;">No Photos in Photo Collection. </p>
+            <p style="color: grey; font-size: 20px; margin: 50px; text-align: center;">Please, Click Select Photos to Add Photos to this Report&nbsp;</p> 
+            <% } %>
         <% for(var i = 0; i < photos.length; i++) {%>
         <li class="ui-state-default"  id="holder<%- i+1 %>" style="padding: 15px; list-style-type: none;"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
             <div  style="padding: 15px">
@@ -65,7 +70,6 @@
                 <div class="row">
                     <div class="col-lg" style="padding: 15px ;margin: 0;">
                         <textarea name="comment" placeholder="Enter your comment here" rows="4" cols="50" style="margin-bottom: 15px;margin-right: 0px;height: 350px;width: 100%;display: inline-block;"><%= photos[i]["description"] %></textarea>
-
                     </div>
                     <div class="col-lg" style="padding: 15px ;margin: 0;">
                         <div class="uploader" name="<%- i+1 %>" >
@@ -79,8 +83,9 @@
         </li>
         <% } %>
     </ul>
+    <hr>
         <div id="buttonHolder" style="display: flex">
-                <button type="submit" class="btn btn-primary" name="vote" value="buffer" style="width: 30%; display: inline-block; margin: auto;">Open Photo Buffer</button>
+                <button type="submit" class="btn btn-primary" name="vote" value="buffer" style="width: 30%; display: inline-block; margin: auto;">Select Photos</button>
                 <button type="submit" class="btn btn-primary" name="vote" value="save" style="width: 30%; display: inline-block; margin: auto;">Save Report</button>
                 <button type="submit" class="btn btn-primary" name="vote" value="finalize" style="width: 30%; display: inline-block; margin: auto;">Finalize Report</button>
                 </form>
@@ -100,17 +105,14 @@
 <script>
     var counter = parseInt(<%- photos.length %>);
     var photoId = parseInt(<%- lastId %>) + 1;
-
     function up(name) {
         var wrapper = $("#holder"+name).closest('li')
         wrapper.insertBefore(wrapper.prev())
     };
-
     function down(name) {
         var wrapper = $("#holder"+name).closest('li')
         wrapper.insertAfter(wrapper.next())
     };
-
     function myFunction(name){
         var imageLoader = document.getElementById("filePhoto"+String(name));
         imageLoader.addEventListener('change', handleImage, false);
@@ -126,7 +128,6 @@
     function reduceId(){
         photoId = photoId - 1;
     };
-
     function remove(id){
         counter = counter - 1;
         var num = id.replace(/\D/g,'');

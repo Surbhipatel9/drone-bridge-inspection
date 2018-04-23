@@ -18,23 +18,23 @@ var knex = require("knex")({
   }
 });
 
-exports.init = function() {
-  knex.schema.hasTable("counties").then(function(exists) {
+exports.init = function () {
+  knex.schema.hasTable("counties").then(function (exists) {
     if (!exists) {
       return knex.schema
 
-        .createTable("counties", function(table) {
+        .createTable("counties", function (table) {
           table.integer("countyID").unique();
           table.string("countyName").notNullable();
         })
 
-        .createTable("roles", function(table) {
+        .createTable("roles", function (table) {
           table.increments("roleID").unique();
           table.string("roleName").notNullable();
           table.boolean("isActive").notNullable();
         })
 
-        .createTable("users", function(table) {
+        .createTable("users", function (table) {
           table.increments("userID").unique();
           table.string("userName").notNullable();
           table.string("passwordHash").notNullable();
@@ -50,7 +50,7 @@ exports.init = function() {
           table.string("phone").nullable();
         })
 
-        .createTable("userRoles", function(table) {
+        .createTable("userRoles", function (table) {
           table
             .integer("roleID")
             .references("roleID")
@@ -62,7 +62,7 @@ exports.init = function() {
           table.unique(["roleID", "userID"]);
         })
 
-        .createTable("bridge", function(table) {
+        .createTable("bridge", function (table) {
           table.increments("bridgeID").unique();
           table.string("name").notNullable();
           table.string("location").notNullable();
@@ -75,7 +75,7 @@ exports.init = function() {
           table.string("coordinates").notNullable();
           table.string("description");
         })
-        .createTable("reports", function(table) {
+        .createTable("reports", function (table) {
           table.increments("reportID").unique();
           table.string("status").notNullable();
           //Don't use .date format, inconvinient
@@ -131,7 +131,7 @@ exports.init = function() {
           table.string("UBFreq");
           table.string("UBinspVehic");
         })
-        .createTable("reportItems", function(table) {
+        .createTable("reportItems", function (table) {
           table.increments("itemID").unique();
           table.integer("orderNum");
           //Add reference to photo photoID
@@ -139,7 +139,7 @@ exports.init = function() {
           //Add reference to report reportID
           table.integer("reportID");
         })
-        .createTable("photos", function(table) {
+        .createTable("photos", function (table) {
           table.increments("photoID").unique();
           //Add reference to users userID
           table.integer("userID").notNullable();
@@ -151,7 +151,7 @@ exports.init = function() {
           table.string("description").notNullable();
           table.string("location").notNullable();
         })
-        .createTable("profpics", function(table) {
+        .createTable("profpics", function (table) {
           table.increments("picID").unique();
           //Add reference to users userID
           table.integer("userID").notNullable();
@@ -183,7 +183,7 @@ exports.init = function() {
   });
 };
 
-exports.populateUsers = function() {
+exports.populateUsers = function () {
   return knex("users").insert([
     {
       userName: "Admin",
@@ -235,7 +235,7 @@ exports.populateUsers = function() {
   ]);
 };
 
-exports.populateCounties = function() {
+exports.populateCounties = function () {
   return knex("counties").insert([
     {
       countyID: 0,
@@ -464,7 +464,7 @@ exports.populateCounties = function() {
   ]);
 };
 
-exports.populateRoles = function() {
+exports.populateRoles = function () {
   //roles
   return knex("roles").insert([
     {
@@ -490,7 +490,7 @@ exports.populateRoles = function() {
   ]);
 };
 
-exports.addProfPics = function() {
+exports.addProfPics = function () {
   return knex("profpics").insert([
     {
       userID: 2,
@@ -515,7 +515,7 @@ exports.addProfPics = function() {
   ]);
 };
 
-exports.addUsersToRoles = function() {
+exports.addUsersToRoles = function () {
   return knex("userRoles").insert([
     {
       roleID: 1,
@@ -548,7 +548,7 @@ exports.addUsersToRoles = function() {
   ]);
 };
 
-exports.addPhotos = function() {
+exports.addPhotos = function () {
   return knex("photos").insert([
     {
       userID: 2,
@@ -589,67 +589,67 @@ exports.addPhotos = function() {
   ]);
 };
 
-exports.checkLogin = function(userName, cb) {
+exports.checkLogin = function (userName, cb) {
   knex
     .select()
     .from("users")
     .where({
       userName: userName
     })
-    .then(function(grabbedUser) {
+    .then(function (grabbedUser) {
       cb(grabbedUser[0]);
     });
 };
 
-exports.getUserInfo = function(userName, cb) {
+exports.getUserInfo = function (userName, cb) {
   knex
     .raw(
       "select profpics.location, users.userID, users.userName, users.phone, users.firstName, users.lastName, users.email, roles.roleName, counties.countyName from ((((users inner join userRoles on users.userID = userRoles.userID) inner join roles on userRoles.roleID = roles.roleID) inner join counties on counties.countyID = users.countyID) inner join profpics on users.userID = profpics.userID) where users.userName = " +
-        "'" +
-        userName +
-        "'"
+      "'" +
+      userName +
+      "'"
     )
-    .then(function(userinfo) {
+    .then(function (userinfo) {
       cb(userinfo);
     });
 };
 
-exports.getLatestPhotoId = function(cb) {
+exports.getLatestPhotoId = function (cb) {
   knex
     .raw(`SELECT TOP 1 photoID FROM photos ORDER BY photoID DESC`)
-    .then(function(latestID) {
+    .then(function (latestID) {
       cb(JSON.stringify(latestID[0]).match(/\d+/)[0]);
     });
 };
 
-exports.updProfPic = function(userID, loc) {
+exports.updProfPic = function (userID, loc) {
   return knex("profpics")
     .where("userID", userID)
     .update({ location: loc });
 };
 
-exports.getReports = function(cb) {
+exports.getReports = function (cb) {
   knex
     .select("*")
     .from("reports")
-    .join("bridge", function() {
+    .join("bridge", function () {
       this.on("reports.bridgeID", "=", "bridge.bridgeID");
     })
-    .then(function(reports) {
+    .then(function (reports) {
       cb(reports);
     });
 };
 
-exports.getReport = function(reportID, cb) {
+exports.getReport = function (reportID, cb) {
   knex
     .table("reports")
     .where("reportID", "=", reportID)
     .innerJoin("bridge", "reports.bridgeID", "=", "bridge.bridgeID")
-    .then(function(report) {
+    .then(function (report) {
       cb(report);
     });
 };
-exports.getPhotos = function(reportID, cb) {
+exports.getPhotos = function (reportID, cb) {
   knex
     .select(
       "location",
@@ -662,10 +662,17 @@ exports.getPhotos = function(reportID, cb) {
     .where("photos.reportID", "=", reportID)
     .innerJoin("reportItems", "photos.photoID", "=", "reportItems.photoID")
     .orderBy("orderNum", "asc")
-    .then(function(photos) {
+    .then(function (photos) {
       cb(photos);
     });
 };
+
+exports.getImages = function (userID, cb) {
+  knex.raw('SELECT * from photos WHERE photos.userID = ' + "'" + userID + "'")
+    .then(function (photos) {
+      cb(photos);
+    });
+}
 
 //exports.getReportBuffer = function (reportID, cb) {
 //  knex.table('reports', 'photos').where('reportID', reportID).innerJoin('photos', 'photos.selected = 1')
@@ -674,29 +681,42 @@ exports.getPhotos = function(reportID, cb) {
 //});
 //}
 
-exports.getReportBuffer = function(reportID, cb) {
+exports.getFinalReport = function (reportID, cb) {
   knex
     .raw(
-      "SELECT * from reports INNER JOIN photos ON photos.reportID = reports.reportID WHERE photos.selected = 1 AND photos.reportID = " +
-        "'" +
-        reportID +
-        "'"
+      "SELECT * from reports INNER JOIN photos ON photos.reportID = reports.reportID WHERE photos.reportID = " +
+      "'" +
+      reportID +
+      "'"
     )
-    .then(function(report) {
+    .then(function (report) {
       cb(report);
     });
 };
 
-exports.getIndPhotos = function(photoID, cb) {
+exports.getFinalReports = function (reportID, cb) {
+  knex
+    .raw(
+      "SELECT * from reports INNER JOIN photos ON photos.reportID = reports.reportID INNER JOIN bridge ON reports.bridgeID=bridge.bridgeID WHERE photos.reportID = " +
+      "'" +
+      reportID +
+      "'"
+    )
+    .then(function (report) {
+      cb(report);
+    });
+};
+
+exports.getIndPhotos = function (photoID, cb) {
   knex
     .table("photos")
     .where("photoID", photoID)
-    .then(function(photo) {
+    .then(function (photo) {
       cb(photo);
     });
 };
 
-exports.insertIntoPhotos = function(repId, userId, i, data) {
+exports.insertIntoPhotos = function (repId, userId, i, data) {
   var today = new Date();
   var dd = today.getDate();
   var mm = today.getMonth() + 1;
@@ -705,7 +725,6 @@ exports.insertIntoPhotos = function(repId, userId, i, data) {
   for (var item in data) {
     if (item == "id") {
       var id = data[item][i];
-      console.log(id);
     }
     if (item == "header") {
       var header = data[item][i];
@@ -735,14 +754,18 @@ exports.insertIntoPhotos = function(repId, userId, i, data) {
       ]);
     })
     .then(() => {
-      console.log("Inserted sucessfully");
+      console.log("Inserted sucessfully into photos");
     });
 };
 
-exports.insertIntoReportItems = function(i, orderNum, reportId, data) {
-  for (var item in data) {
-    if (item == "photoID") {
-      var photoId = data[item][i];
+exports.insertIntoReportItems = function (i, orderNum, reportId, data) {
+  if (i == -1) {
+    var photoId = data['photoID'];
+  } else {
+    for (var item in data) {
+      if (item == "photoID") {
+        var photoId = data[item][i];
+      }
     }
   }
   return knex("reportItems")
@@ -758,10 +781,14 @@ exports.insertIntoReportItems = function(i, orderNum, reportId, data) {
     });
 };
 
-exports.addReportId = function(i, reportId, data) {
-  for (var item in data) {
-    if (item == "photoID") {
-      var id = data[item][i];
+exports.addReportId = function (i, reportId, data) {
+  if (i == -1) {
+    var id = data['photoID'];
+  } else {
+    for (var item in data) {
+      if (item == "photoID") {
+        var id = data[item][i];
+      }
     }
   }
   return knex("photos")
@@ -774,17 +801,33 @@ exports.addReportId = function(i, reportId, data) {
     });
 };
 
-exports.updatePhotos = function(i, data) {
-  for (var item in data) {
-    if (item == "id") {
-      var id = data[item][i];
-      console.log(id);
-    }
-    if (item == "header") {
-      var header = data[item][i];
-    }
-    if (item == "comment") {
-      var comment = data[item][i];
+exports.finalizeReport = function (reportId) {
+  return knex("reports")
+    .where("reportID", '=', parseInt(reportId))
+    .update({
+      status: "submitted",
+    })
+    .then(() => {
+      console.log("Report finalized");
+    });
+};
+
+exports.updatePhotos = function (i, data) {
+  if (i == -1) {
+    var id = data["id"];
+    var header = data["header"];
+    var comment = data["comment"];
+  } else {
+    for (var item in data) {
+      if (item == "id") {
+        var id = data[item][i];
+      }
+      if (item == "header") {
+        var header = data[item][i];
+      }
+      if (item == "comment") {
+        var comment = data[item][i];
+      }
     }
   }
   return knex("photos")
@@ -794,18 +837,15 @@ exports.updatePhotos = function(i, data) {
       description: comment
     })
     .then(() => {
-      console.log("Updated sucessfully");
+      console.log("Photos updated sucessfully");
     });
 };
 
-//exports.getPhoto = function (cb) {
-//knex.raw('SELECT * FROM photos WHERE photos.selected = 0 OR photos.selected IS NULL')
-//.then(function (photos) {
-//cb(photos);
-//});
-//}
 
-exports.updateOrder = function(i, photoId, reportId) {
+exports.updateOrder = function (i, photoId, reportId) {
+  if(i == -1){
+    i = 0;
+  }
   return knex("reportItems")
     .where("photoId", "=", parseInt(photoId.replace(/\D/g, "")))
     .andWhere("reportID", "=", reportId)
@@ -817,10 +857,14 @@ exports.updateOrder = function(i, photoId, reportId) {
     });
 };
 
-exports.removeItem = function(i, reportId, data) {
-  for (var item in data) {
-    if (item == "id") {
-      var id = parseInt(data["id"][i].replace(/\D/g, ""));
+exports.removeItem = function (i, reportId, data) {
+  if (i == -1) {
+    var id = parseInt(data["id"].replace(/\D/g, ""));
+  } else {
+    for (var item in data) {
+      if (item == "id") {
+        var id = parseInt(data["id"][i].replace(/\D/g, ""));
+      }
     }
   }
   return knex("reportItems")
@@ -835,19 +879,18 @@ exports.removeItem = function(i, reportId, data) {
         });
     })
     .then(() => {
-      console.log("deleted row from reportItems");
+      console.log("Successfuly deleted row from reportItems");
     });
 };
 
-exports.getLatestOrder = function(reportId, cb) {
+exports.getLatestOrder = function (reportId, cb) {
   knex
     .raw(
       "SELECT TOP 1 orderNum FROM reportItems WHERE reportID = " +
-        reportId +
-        " ORDER BY orderNum DESC"
+      reportId +
+      " ORDER BY orderNum DESC"
     )
-    .then(function(result) {
-        console.log(result);
+    .then(function (result) {
       if (result.length == 0) {
         cb(0);
       } else {
@@ -856,33 +899,33 @@ exports.getLatestOrder = function(reportId, cb) {
     });
 };
 
-exports.getPhoto = function(userId, cb) {
+exports.getPhoto = function (userId, cb) {
   knex
     .select("*")
     .from("photos")
     .whereNull("reportID")
     .andWhere("userID", "=", userId)
-    .then(function(photos) {
+    .then(function (photos) {
       cb(photos);
     });
 };
 
-exports.getBridgePhotos = function(cb) {
+exports.getBridgePhotos = function (cb) {
   knex
     .select("*")
     .from("photos")
     .where("photos.title", "=", "Abraham G. Sams Memorial Bridge")
-    .then(function(photos) {
+    .then(function (photos) {
       cb(photos);
     });
 };
 
-exports.getSelectedPhotos = function(cb) {
+exports.getSelectedPhotos = function (cb) {
   knex
     .select("*")
     .from("photos")
     .where("photos.selected", "=", "1")
-    .then(function(photos) {
+    .then(function (photos) {
       cb(photos);
     });
 };
@@ -898,11 +941,11 @@ exports.getSelectedPhotos = function(cb) {
 //});
 //}
 
-exports.changeToTrue = function(photoID, cb) {
+exports.changeToTrue = function (photoID, cb) {
   knex("photos")
     .where("photoID", photoID)
     .update({ selected: "TRUE" })
-    .then(function(photos) {
+    .then(function (photos) {
       cb(photos);
     });
 };
@@ -914,46 +957,46 @@ exports.changeToTrue = function(photoID, cb) {
         });
 }
 */
-exports.updateCheckedPhotos = function(photoID, title, desc, cb) {
+exports.updateCheckedPhotos = function (photoID, title, desc, cb) {
   knex("photos")
     .where("photoID", photoID)
     .update({ title: title, description: desc, selected: 1 })
-    .then(function(photos) {
+    .then(function (photos) {
       cb(photos);
     });
 };
 
-exports.updateReportPhotos = function(photoID, title, desc, cb) {
+exports.updateReportPhotos = function (photoID, title, desc, cb) {
   knex("photos")
     .where("photoID", photoID)
     .update({ title: title, description: desc })
-    .then(function(photos) {
+    .then(function (photos) {
       cb(photos);
     });
 };
 
-exports.updateCheckedReportPhotos = function(photoID, title, desc, cb) {
+exports.updateCheckedReportPhotos = function (photoID, title, desc, cb) {
   knex("photos")
     .where("photoID", photoID)
     .update({ title: title, description: desc, selected: 0 })
-    .then(function(photos) {
+    .then(function (photos) {
       cb(photos);
     });
 };
 
-exports.updateToSubmitted = function(cb) {
+exports.updateToSubmitted = function (cb) {
   knex("reports")
     .update({ status: "submitted" })
-    .then(function(report) {
+    .then(function (report) {
       cb(report);
     });
 };
 
-exports.getSubmittedPage = function(cb) {
+exports.getSubmittedPage = function (cb) {
   knex
     .select("*")
     .from("photos")
-    .then(function(report) {
+    .then(function (report) {
       cb(report);
     });
 };
@@ -968,23 +1011,23 @@ exports.getSubmittedPage = function(cb) {
 //});
 //}
 
-exports.changeToFalse = function(cb) {
+exports.changeToFalse = function (cb) {
   knex("photos")
     .update({ selected: "0" })
-    .then(function(photos) {
+    .then(function (photos) {
       cb(photos);
     });
 };
 
-exports.countPhotos = function(cb) {
+exports.countPhotos = function (cb) {
   knex
     .count("*")
     .from("photos")
-    .then(function(photos) {
+    .then(function (photos) {
       cb(photos);
     });
 };
-exports.insertQueries = function(query, cb) {
+exports.insertQueries = function (query, cb) {
   knex.raw(query).then(() => {
     console.log("inserted successful");
   });
