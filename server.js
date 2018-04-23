@@ -453,13 +453,18 @@ app.post("/submit", (req, res) => {
 app.get("/buffer", (req, res) => {
   //if logged in
   if (req.session.passport) {
+    var showButton = false;
     var reportID = req.query["reportID"];
+    if(reportID){
+      showButton = true;
+    }
     db.getPhoto(req.session.passport.user.userID, function(photos) {
       //get userinfo and send to the web page
       res.render(__dirname + "/public/views/buffer.ejs", {
         userinfo: JSON.stringify(req.session.passport.user),
         photos,
-        reportID
+        reportID,
+        showButton
       });
     });
   }
