@@ -117,40 +117,57 @@ app.get("/user", (req, res) => {
 });
 
 app.post("/user", function(req, res) {
-  var form = new formidable.IncomingForm();
+  function first() {
+    var form = new formidable.IncomingForm();
 
-  form.parse(req);
+    form.parse(req);
 
-  var userinfo = JSON.stringify(req.session.passport.user);
-  var userID = JSON.parse(userinfo).userID;
+    var userinfo = JSON.stringify(req.session.passport.user);
+    var userID = JSON.parse(userinfo).userID;
 
-  form.on("fileBegin", function(name, file) {
-    file.path = __dirname + "/public/pictures/" + file.name;
-    db.updProfPic(userID, "/pictures/" + file.name).then(function(result) {});
-  });
+    form.on("fileBegin", function(name, file) {
+      file.path = __dirname + "/public/pictures/" + file.name;
+      db.updProfPic(userID, "/pictures/" + file.name).then(function(result) {});
+    });
 
-  form.on("file", function(name, file) {
-    console.log("Uploaded " + file.name);
-  });
-  if (req.session.passport) {
-    db.getReports(function(reports) {
-      //get userinfo and send to the web page
-      res.render(__dirname + "/public/views/user.ejs", {
-        userinfo: JSON.stringify(req.session.passport.user),
-        reports
-      });
+    form.on("file", function(name, file) {
+      console.log("Uploaded " + file.name);
+    });
+    return new Promise(function(resolve, reject) {
+      setTimeout(function() {
+        resolve("Done");
+      }, 50);
     });
   }
-  //if not logged in send blank userinfo to web app
-  else {
-    db.getReports(function(reports) {
-      res.render(__dirname + "/public/views/login.ejs", {
-        message: req.flash("loginMessage"),
-        userinfo: false,
-        reports
+  first().then(function() {
+    if (req.session.passport) {
+      db.checkLogin(req.session.passport.user.userName, function(user) {
+        db.getUserInfo(req.session.passport.user.userName, function(userInf) {
+          if (user) {
+            var userinfo = {
+              userName: userInf[0].userName,
+              firstName: userInf[0].firstName,
+              lastName: userInf[0].lastName,
+              email: userInf[0].email,
+              phone: userInf[0].phone,
+              role: userInf[0].roleName,
+              county: userInf[0].countyName,
+              userID: user.userID,
+              profPic: userInf[0].location
+            };
+          }
+          req.login(userinfo, function(err) {
+            if (err) return next(err);
+          });
+          res.redirect("/user");
+        });
       });
-    });
-  }
+    }
+    //if not logged in send blank userinfo to web app
+    else {
+      res.redirect("/");
+    }
+  });
 });
 
 app.get("/header", (req, res) => {
@@ -582,10 +599,9 @@ app.post("/upload", (req, res) => {
   });
 });
 
-
 app.get("/logout", (req, res) => {
   req.session = null;
-    res.redirect("/"); //Inside a callback… bulletproof!
+  res.redirect("/"); //Inside a callback… bulletproof!
 });
 
 function isLoggedIn(req, res, next) {
