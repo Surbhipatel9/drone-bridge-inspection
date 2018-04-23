@@ -212,7 +212,6 @@ app.post("/report", (req, res) => {
   var repId = data["repId"][0];
   var userId = data["userId"][0];
   function first() {
-    console.log("first");
     if (inputValue == "finalize") {
       db.finalizeReport(reportId);
     }
@@ -245,8 +244,6 @@ app.post("/report", (req, res) => {
   }
   //process items further
   function second() {
-    console.log("second");
-
     if (data["numOfItems"] == 1) {
       if (data["id"].replace(/\d+/g, "") == "old") {
         var i = -1;
@@ -270,8 +267,6 @@ app.post("/report", (req, res) => {
   first()
     .then(second())
     .then(function() {
-      console.log("third");
-
       if (inputValue == "buffer") {
         res.redirect("/buffer" + "?reportID=" + reportId);
       } else {
@@ -511,27 +506,31 @@ app.get("/buffer", (req, res) => {
 
 app.post("/buffer", (req, res) => {
   var data = req.body;
-  var reportId = req.body.reportID;
-  db.getLatestOrder(reportId, function(order) {
-    if (data["photoID"]) {
-      if (data["itemNum"] == 1) {
-        var i = -1;
-        db.addReportId(i, reportId, data);
-        db.insertIntoReportItems(i, order, reportId, data);
-      }
-      if (data["itemNum"] == 1) {
-      } else {
-        for (var i = 0; i < data["photoID"].length; i++) {
-          if (data["include"][i] == "1") {
-            db.addReportId(i, reportId, data);
-            db.insertIntoReportItems(i, order, reportId, data);
-            order++;
+  function first() {
+    var reportId = req.body.reportID;
+    db.getLatestOrder(reportId, function(order) {
+      if (data["photoID"]) {
+        if (data["itemNum"] == 1) {
+          var i = -1;
+          db.addReportId(i, reportId, data);
+          db.insertIntoReportItems(i, order, reportId, data);
+        }
+        if (data["itemNum"] == 1) {
+        } else {
+          for (var i = 0; i < data["photoID"].length; i++) {
+            if (data["include"][i] == "1") {
+              db.addReportId(i, reportId, data);
+              db.insertIntoReportItems(i, order, reportId, data);
+              order++;
+            }
           }
         }
       }
-    }
+    });
+  }
+  first().then(function() {
+    res.redirect("/report?reportID=" + reportId);
   });
-  res.redirect("/report?reportID=" + reportId);
 });
 
 app.get("/bridge_links", (req, res) => {
