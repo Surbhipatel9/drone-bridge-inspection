@@ -725,7 +725,6 @@ exports.insertIntoPhotos = function (repId, userId, i, data) {
   for (var item in data) {
     if (item == "id") {
       var id = data[item][i];
-      console.log(id);
     }
     if (item == "header") {
       var header = data[item][i];
@@ -755,14 +754,18 @@ exports.insertIntoPhotos = function (repId, userId, i, data) {
       ]);
     })
     .then(() => {
-      console.log("Inserted sucessfully");
+      console.log("Inserted sucessfully into photos");
     });
 };
 
 exports.insertIntoReportItems = function (i, orderNum, reportId, data) {
-  for (var item in data) {
-    if (item == "photoID") {
-      var photoId = data[item][i];
+  if (i == -1) {
+    var photoId = data['photoID'];
+  } else {
+    for (var item in data) {
+      if (item == "photoID") {
+        var photoId = data[item][i];
+      }
     }
   }
   return knex("reportItems")
@@ -779,9 +782,13 @@ exports.insertIntoReportItems = function (i, orderNum, reportId, data) {
 };
 
 exports.addReportId = function (i, reportId, data) {
-  for (var item in data) {
-    if (item == "photoID") {
-      var id = data[item][i];
+  if (i == -1) {
+    var id = data['photoID'];
+  } else {
+    for (var item in data) {
+      if (item == "photoID") {
+        var id = data[item][i];
+      }
     }
   }
   return knex("photos")
@@ -814,7 +821,6 @@ exports.updatePhotos = function (i, data) {
     for (var item in data) {
       if (item == "id") {
         var id = data[item][i];
-        console.log(id);
       }
       if (item == "header") {
         var header = data[item][i];
@@ -831,12 +837,15 @@ exports.updatePhotos = function (i, data) {
       description: comment
     })
     .then(() => {
-      console.log("Updated sucessfully");
+      console.log("Photos updated sucessfully");
     });
 };
 
 
 exports.updateOrder = function (i, photoId, reportId) {
+  if(i == -1){
+    i = 0;
+  }
   return knex("reportItems")
     .where("photoId", "=", parseInt(photoId.replace(/\D/g, "")))
     .andWhere("reportID", "=", reportId)
@@ -849,9 +858,13 @@ exports.updateOrder = function (i, photoId, reportId) {
 };
 
 exports.removeItem = function (i, reportId, data) {
-  for (var item in data) {
-    if (item == "id") {
-      var id = parseInt(data["id"][i].replace(/\D/g, ""));
+  if (i == -1) {
+    var id = parseInt(data["id"].replace(/\D/g, ""));
+  } else {
+    for (var item in data) {
+      if (item == "id") {
+        var id = parseInt(data["id"][i].replace(/\D/g, ""));
+      }
     }
   }
   return knex("reportItems")
@@ -866,7 +879,7 @@ exports.removeItem = function (i, reportId, data) {
         });
     })
     .then(() => {
-      console.log("deleted row from reportItems");
+      console.log("Successfuly deleted row from reportItems");
     });
 };
 
@@ -878,7 +891,6 @@ exports.getLatestOrder = function (reportId, cb) {
       " ORDER BY orderNum DESC"
     )
     .then(function (result) {
-      console.log(result);
       if (result.length == 0) {
         cb(0);
       } else {
