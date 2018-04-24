@@ -4,15 +4,21 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WV DoT Bridge Inspection - Report</title>
+    <title>final report</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/styles.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora">
+    <link rel="stylesheet" href="assets/css/Article-Clean.css">
+    <link rel="stylesheet" href="assets/css/Article-Dual-Column.css">
+    <link rel="stylesheet" href="assets/css/styles_submitted.css">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles_photos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.10.0/css/lightbox.min.css">
 </head>
 
-<body id="Header_Body" style="background: #e6ecf0">
-    <nav class="navbar navbar-light navbar-expand-md sticky-top">
+<body style="background: #e6ecf0">
+    <nav class="navbar navbar-light navbar-expand-md sticky-top" style="background: white">
         <div id="nav" class="container">
-            <a class="navbar-brand" href="#">WV Bridge Inspection Tool</a>
+            <a class="navbar-brand" href="/">WV Bridge Inspection Tool</a>
             <button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="navbar-toggler-icon"></span>
@@ -21,7 +27,7 @@
                 <ul class="nav navbar-nav ml-auto">
                     <%if (userinfo) { %>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" href="/bridge_links">My Bridges
+                            <a class="nav-link" href="/buffer">Photo Collection
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -32,6 +38,7 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" href="/logout">Log Out</a>
                         </li>
+
                         <% } %>
                             <%if (!userinfo) { %>
                                 <li class="nav-item" role="presentation">
@@ -42,35 +49,339 @@
             </div>
         </div>
     </nav>
-    <div style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); background: white; padding: 50px; padding-bottom: 15px; margin-left: 5%; margin-right: 5%; margin-top: 15px; margin-bottom: 15px; border-radius: 50px">
-        <p id="DoT_Tag">The West Virginia Department of Transportation&nbsp;</p>
-        <p id="DoT_Tag2">Divsion of Highways</p>
-        <p id="Title">Bridge Inspection Report</p>
-        <br>
-       
-        <hr>
-        <hr>
-        <div id="pics" class="image-section">
-            <div class="container site-section">
-                <div class="intro">
+    <div class="article-clean" >
+        <div id="shadow">
+        <div id="row-color">
+            <% for (var i = 0; i < 1; i++) { %>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div>
+                            <p class="text-left">
+                                <span class="by">Bridge No. <span style="color:black"><%- rep[i]["bridgeNo"] %></span> &nbsp; &nbsp;&nbsp;</span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <span>BARS No. <span style="color:black"><%- rep[i]["barsNo"] %></span></span>
+                            </p>
+                            <div>
+                                <p class="text-center" id="para"><span style="color:black;"><%- rep[i]["name"] %></span></p>
+                                <p class="text-center" id="para"><span style="color:black;"><%- rep[i]["bridgeLocation"] %></span></p>
+                            </div>
+                            <br/>
+                            <div>
+                                <h3 class="text-center">
+                                    <strong>
+                                        <span style="text-decoration: underline;">BRIDGE INSPECTION REPORT</span>
+                                    </strong>
+                                </h3>
+                            </div>
+                            <div class="intro">
+                                <p style="text-align: center;">Type of Inspections Performed:&nbsp;
+                                    <span>Fracture Critical, In Depth Inspection and Report</span>
+                                </p>
+                                <br/>
+                                <div id="parent">
+                                    <img class="img-fluid" src="<%- rep[i]["bridgePhoto"] %>" id="img-stuff">
+                                </div>
+                            </div>
+                            <br/>
+                            <div id="dot">
+                                
+                                <p>Field Inspected By: <span id="names"><%- rep[i]["inspectedBy"] %></span></p>
+                                <p>Structural Evaluation By: <span id="names"><%- rep[i]["structuralEvalBy"]%></span></p>
+                                <p>Review and Approve By: <span id="names"><%- rep[i]["reviewApprovedBy"]%></span></p>
+                                
+                                <p class="text-center" id="dot">
+                                    <strong>The West Virginia Department of Transportation Division of Highways</strong>
+                                </p>
+                                <p id="dot">
+                                    Inspection Types
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-        <div id="element"></div>
-        <br>
-        <div style="text-align: center; width: 100%">
-            <form action="/submit" method="POST">
-               
-                <input type="submit" class="btn btn-primary" role="button" style="width: 40%; display: block; margin: auto;" value="Submit Report">
-           </form>
+            </div>
+        </div>
+
+        <div>
+            <div class="container">
+                <div class="row" id="row">
+                    <div class="col"></div>
+                    <div class="col" id="row-color">
+                        <ul id="list">
+                            <li>NBI 90 (Routine) Date: <span style="color:black"><%- rep[i]["NBI90Date"]%></span></li>
+                        </ul>
+                    </div>
+                    <div class="col" id="row-color">
+                        <% if(rep[i]["inspectionTypePeriodic"] === true){ %>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-9" checked>
+                                <label class="form-check-label" for="formCheck-9">Periodic</label>
+                            </div>
+                       <%} else {%>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-9">
+                                <label class="form-check-label" for="formCheck-9">Periodic</label>
+                            </div>
+                            <% } %>
+                        <% if(rep[i]["inspectionTypeInDepth"] === true){ %>
+                            <div class="form-check">
+                               <input class="form-check-input" type="checkbox" id="formCheck-8" checked>
+                               <label class="form-check-label" for="formCheck-8">In-Depth</label>
+                            </div>
+                        <%} else {%>
+                            <div class="form-check">
+                               <input class="form-check-input" type="checkbox" id="formCheck-8">
+                               <label class="form-check-label" for="formCheck-8">In-Depth</label>
+                            </div>
+                             <% } %>
+                        <% if(rep[i]["inspectionTypeInDepth"] === true){ %>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-1" checked>
+                                <label class="form-check-label" for="formCheck-1">Interim-Condition</label>
+                             </div>
+                         <%} else {%>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-1">
+                                <label class="form-check-label" for="formCheck-1">Interim-Condition</label>
+                            </div>
+                             <% } %>
+                    </div>
+                    <div class="col-md-4">
+                        <ul id="list">
+                            <li><span style="color:black">Frequency: <%- rep[i]["NBI90Freq"]%></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr style="background-color:#1603f7;">
+        </div>
+        <div>
+            <div class="container" id="row-color">
+                <div class="row" id="row">
+                    <div class="col">
+                        <div id="yup">
+                        <% if(rep[i]["fractureCritical"] === true){ %>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-1" checked>
+                                <label class="form-check-label" for="formCheck-1">Fracture Critical</label>
+                             </div>
+                         <%} else {%>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-1">
+                                <label class="form-check-label" for="formCheck-1">Fracture-Critical</label>
+                            </div>
+                             <% } %>
+                        <% if(rep[i]["underwater"] === true){ %>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-2" checked>
+                                <label class="form-check-label" for="formCheck-2">Underwater</label>
+                             </div>
+                         <%} else {%>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-2">
+                                <label class="form-check-label" for="formCheck-2">Underwater</label>
+                            </div>
+                             <% } %>
+                             <br/>
+                        <% if(rep[i]["otherSpecial"] === true){ %>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-3" checked>
+                                <label class="form-check-label" for="formCheck-3">otherSpecial</label>
+                             </div>
+                         <%} else {%>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-3">
+                                <label class="form-check-label" for="formCheck-3">otherSpecial</label>
+                            </div>
+                             <% } %>
+                             <br/>
+                        <% if(rep[i]["inventory"] === true){ %>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-4" checked>
+                                <label class="form-check-label" for="formCheck-4">Inventory</label>
+                             </div>
+                         <%} else {%>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-4">
+                                <label class="form-check-label" for="formCheck-4">Inventory</label>
+                            </div>
+                             <% } %>
+                        <% if(rep[i]["interim"] === true){ %>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-5" checked>
+                                <label class="form-check-label" for="formCheck-5">interim</label>
+                             </div>
+                         <%} else {%>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-5">
+                                <label class="form-check-label" for="formCheck-5">interim</label>
+                            </div>
+                             <% } %>
+                        <% if(rep[i]["damageSpecial"] === true){ %>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-6" checked>
+                                <label class="form-check-label" for="formCheck-6">Damage/Special</label>
+                             </div>
+                         <%} else {%>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-6">
+                                <label class="form-check-label" for="formCheck-6">Damage/Special</label>
+                            </div>
+                             <% } %>
+                        <% if(rep[i]["closure"] === true){ %>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-7" checked>
+                                <label class="form-check-label" for="formCheck-7">closure</label>
+                             </div>
+                         <%} else {%>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-7">
+                                <label class="form-check-label" for="formCheck-7">closure</label>
+                            </div>
+                             <% } %>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <ul id="list">
+                            <% if (rep[i]["fractCritReq"] === true) { %>
+                                <li>Required: <span style="color:black">Y</span></li>
+                            <% } else { %>
+                                <li>Required: <span style="color:black">N</span></li>
+                                <% } %>
+                            <% if (rep[i]["underwaterReq"] === true) { %>
+                                <li>Required: <span style="color:black">Y</span></li>
+                            <% } else { %>
+                                <li>Required: <span style="color:black">N</span></li>
+                                <% } %>
+                            <li>Underwater Equipment: <span id="names"><%- rep[i]["underWEq"] %></span></li>
+                            <br/>
+                            <li>Special Code: <span id="names"><%- rep[i]["specialCode"] %></span</li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <ul id="list">
+                            <li>Item 93A Date: <span style="color:black"><%- rep[i]["item93ADate"] %></span></li>
+                            <br/>
+                            <li>Item 93B Date: <span style="color:black"><%- rep[i]["item93BDate"] %></span></li>
+                            <br/>
+                            <li>Item 93C Date: <span style="color:black"><%- rep[i]["item93CDate"] %></span></li>
+                            <li>Inspection Date: <span style="color:black"><%- rep[i]["inspDate1"] %></span></li>
+                            <li>Inspection Date: <span style="color:black"><%- rep[i]["inspDate2"] %></span></li>
+                            <li>Inspection Date: <span style="color:black"><%- rep[i]["inspDate3"] %></span></li>
+                            <li>Inspection Date: <span style="color:black"><%- rep[i]["inspDate4"] %></span></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <ul id="list">
+                            <li>Frequency: <span style="color:black"><%- rep[i]["Freq1"] %></span></li>
+                            <li>Frequency: <span style="color:black"><%- rep[i]["Freq1"] %></span></li>
+                            <br/>
+                            <li>Frequency: <span style="color:black"><%- rep[i]["Freq1"] %></span></li>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <li>Frequency: <span style="color:black"><%- rep[i]["Freq1"] %></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr style="background-color:#1603f7;">
+        </div>
+        <div>
+            <div class="container">
+                <div class="row" id="row">
+                    <div class="col">
+                        <% if(rep[i]["UBReq"] === true){ %>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-1" checked>
+                                <label class="form-check-label" for="formCheck-1">UB Inspection Required</label>
+                             </div>
+                         <%} else {%>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="formCheck-1">
+                                <label class="form-check-label" for="formCheck-1">UB Inspection Required</label>
+                            </div>
+                             <% } %>
+                    </div>
+                    <div class="col">
+                        <ul id="list">
+                            <li>UBInspection Vehicle: <span style="color:black"><% rep[i]["UBinspVehic"] %></span></li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <ul id="list">
+                            <li>Inspection Date:</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <ul id="list">
+                            <li>Frequency:</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr style="background-color:#1603f7;">
         </div>
     </div>
-
-
-
-    <script src="assets/js/jquery.min.js"></script>
+        <% } %>
+        <% var j = 1 %>
+        <% for (var i = 0; i < rep.length; i++) { %>
+            <% if ((i % 2) === 0) { %>
+                <div id="shadow">
+                <header style="page-break-before: always">
+                    <div id="head">
+                        <div class="jumbotron">
+                            <h1 class="text-center text-primary" id="j-text"><img src="assets/img/wvdotlogo_clear.png" id="logo">West Virginia Division of Highways</h1>
+                            <p class="text-truncate text-primary" id="j-text">Photo Section</p>
+                            <p class="text-left"><span>BARS No. : <%- rep[i]["barsNo"] %></span><span id="photo_date">Date : <%- rep[i]["dateSubmitted"] %></span></p>
+                        </div>
+                        <div>
+                            <hr style="background-color:#1603f7;">
+                        </div>
+                    </div>
+                </header>
+                <% } %>
+        <div>
+            <div class="container">
+                <div class="row">
+                    <!--<div class="col-md-12"><img src="<%- rep[i]["location"] %>" id="img_border">-->
+                    <div class="col-md-12">
+                        <div id="parent">
+                            <a href="<%- rep[i]['location'] %>" target="_blank" data-lightbox="bridge">
+                                <img class="img-fluid" src="<%- rep[i]['location'] %>" data-lightbox="bridge" id="img-stuff">
+                            </a>
+                        </div>
+                        <p class="text-center" id="para"><%- rep[i]["title"] %> -&nbsp;<%- rep[i]["description"] %></p>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <% if ((i % 2) === 1) { %>
+                <p style="text-align: center;"><%= j %></p>
+                <% j++ %>
+                 </div>
+            <% } %>
+        <% } %>
+    
+    
+    </div>
+    <script src="assets/js/jquery_submitted.min.js"></script>
+    <script src="assets/js/jquery_photos.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.10.0/js/lightbox-plus-jquery.min.js"></script>
 </body>
 
 </html>
-

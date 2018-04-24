@@ -298,47 +298,7 @@ app.post("/report", (req, res) => {
     });
 });
 
-app.get("/report_buffer", (req, res) => {
-  if (req.session.passport) {
-    var reportID = req.query["reportID"];
-
-    db.getReportBuffer(reportID, function(rep) {
-      //get userinfo and send to the web page
-      res.render(__dirname + "/public/views/report_buffer.ejs", {
-        userinfo: JSON.stringify(req.session.passport.user),
-        rep
-      });
-    });
-  }
-  //if not logged in send blank userinfo to web app
-  else {
-    res.render(__dirname + "/public/views/login.ejs", {
-      message: req.flash("loginMessage"),
-      userinfo: false
-    });
-  }
-});
-
-app.post("/report_buffer", (req, res) => {
-  if (req.session.passport) {
-    var reportID = req.query["reportID"];
-    var id = req.body.reportID;
-    db.updateToSubmitted(function(rep) {
-      //get userinfo and send to the web page
-      //res.render(__dirname + "/public/views/report_buffer.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
-    });
-    res.redirect("/user");
-  }
-  //if not logged in send blank userinfo to web app
-  else {
-    res.render(__dirname + "/public/views/login.ejs", {
-      message: req.flash("loginMessage"),
-      userinfo: false
-    });
-  }
-});
-
-app.get("/submitted_report", (req, res) => {
+app.get("/submit", (req, res) => {
   if (req.session.passport) {
     var reportID = req.query["reportID"];
 
@@ -395,94 +355,6 @@ app.post("/edit_photo", (req, res) => {
 
     db.updatePhotos(id, title, desc, function(photos) {
       res.redirect("/buffer");
-    });
-  }
-  //if not logged in send blank userinfo to web app
-  else {
-    res.render(__dirname + "/public/views/login.ejs", {
-      message: req.flash("loginMessage"),
-      userinfo: false
-    });
-  }
-});
-
-app.get("/edit_report_photo", (req, res) => {
-  if (req.session.passport) {
-    var photoID = req.query["photoID"];
-
-    db.getIndPhotos(photoID, function(photos) {
-      //get userinfo and send to the web page
-      res.render(__dirname + "/public/views/edit_report_photo.ejs", {
-        userinfo: JSON.stringify(req.session.passport.user),
-        photos
-      });
-    });
-  }
-  //if not logged in send blank userinfo to web app
-  else {
-    res.render(__dirname + "/public/views/login.ejs", {
-      message: req.flash("loginMessage"),
-      userinfo: false
-    });
-  }
-});
-
-app.post("/edit_report_photo", (req, res) => {
-  if (req.session.passport) {
-    var id = req.body.photoID;
-    var title = req.body.title;
-    var desc = req.body.description;
-    var check = req.body.check;
-    var photoID = req.query["photoID"];
-    if (check) {
-      db.updateCheckedReportPhotos(id, title, desc, function(photos) {
-        res.redirect("/user");
-      });
-    }
-
-    db.updateReportPhotos(id, title, desc, function(photos) {
-      res.redirect("/user");
-    });
-  }
-  //if not logged in send blank userinfo to web app
-  else {
-    res.render(__dirname + "/public/views/login.ejs", {
-      message: req.flash("loginMessage"),
-      userinfo: false
-    });
-  }
-});
-
-app.get("/submit", (req, res) => {
-  if (req.session.passport) {
-    db.getSubmittedPage(function(report) {
-      //get userinfo and send to the web page
-      res.render(__dirname + "/public/views/submit.ejs", {
-        userinfo: JSON.stringify(req.session.passport.user),
-        report
-      });
-    });
-  }
-  //if not logged in send blank userinfo to web app
-  else {
-    res.render(__dirname + "/public/views/login.ejs", {
-      message: req.flash("loginMessage"),
-      userinfo: false
-    });
-  }
-});
-
-app.post("/submit", (req, res) => {
-  if (req.session.passport) {
-    var reportID = req.query["reportID"];
-    var id = req.body.reportID;
-    db.updateToSubmitted(function(report) {
-      //get userinfo and send to the web page
-      res.render(__dirname + "/public/views/submit.ejs", {
-        userinfo: JSON.stringify(req.session.passport.user),
-        report
-      });
-      res.redirect("/user");
     });
   }
   //if not logged in send blank userinfo to web app
@@ -553,30 +425,6 @@ app.post("/buffer", (req, res) => {
   first().then(function() {
     res.redirect("/report?reportID=" + reportId);
   });
-});
-
-app.get("/bridge_links", (req, res) => {
-  //if logged in
-  if (req.session.passport) {
-    db.getBridgePhotos(function(photos) {
-      //get userinfo and send to the web page
-      res.render(__dirname + "/public/views/bridge_links.ejs", {
-        userinfo: JSON.stringify(req.session.passport.user),
-        photos
-      });
-    });
-  }
-  //if not logged in send blank userinfo to web app
-  else {
-    db.getBridgePhotos(function(photos) {
-      res.render(__dirname + "/public/views/login.ejs", {
-        message: req.flash("loginMessage"),
-        userinfo: false,
-        userinfo: false,
-        photos
-      });
-    });
-  }
 });
 
 app.post("/upload", (req, res) => {
