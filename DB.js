@@ -716,23 +716,22 @@ exports.getIndPhotos = function (photoID, cb) {
     });
 };
 
-exports.insertIntoPhotos = function (repId, userId, i, data) {
+exports.insertIntoPhotos = function (repId, userId, i, data, path) {
   var today = new Date();
   var dd = today.getDate();
   var mm = today.getMonth() + 1;
   var yyyy = today.getFullYear();
   today = yyyy + "-" + mm + "-" + dd;
-  for (var item in data) {
-    if (item == "id") {
-      var id = data[item][i];
-    }
-    if (item == "header") {
-      var header = data[item][i];
-    }
-    if (item == "comment") {
-      var comment = data[item][i];
-    }
+  if(i == -1){
+    var id = data["id"];
+    var header = data["header"];
+    var comment = data["comment"];
+  }else {
+      var id = data["id"][i];
+      var header = data["header"][i];
+      var comment = data["comment"][i];
   }
+
   return knex("photos")
     .insert([
       {
@@ -741,13 +740,13 @@ exports.insertIntoPhotos = function (repId, userId, i, data) {
         date: new Date(today),
         title: header,
         description: comment,
-        location: "https://i.imgur.com/sSp1Wsmg.png"
+        location: path.substring(path.indexOf("\\") + 1),
       }
     ])
     .then(() => {
-      knex("reportItems").insert([
+      return knex("reportItems").insert([
         {
-          order: parseInt(i) + 1,
+          orderNum: 999,
           photoID: parseInt(id.replace(/\D/g, "")),
           reportID: parseInt(repId)
         }
