@@ -26,7 +26,7 @@ app.use(express.static("public"));
 
 // Passport middleware.
 app.use(
-  require("express-session")({
+  require("cookie-session")({
     secret: "dryooisacoolguy",
     resave: false,
     saveUninitialized: false
@@ -117,40 +117,57 @@ app.get("/user", (req, res) => {
 });
 
 app.post("/user", function(req, res) {
-  var form = new formidable.IncomingForm();
+  function first() {
+    var form = new formidable.IncomingForm();
 
-  form.parse(req);
+    form.parse(req);
 
-  var userinfo = JSON.stringify(req.session.passport.user);
-  var userID = JSON.parse(userinfo).userID;
+    var userinfo = JSON.stringify(req.session.passport.user);
+    var userID = JSON.parse(userinfo).userID;
 
-  form.on("fileBegin", function(name, file) {
-    file.path = __dirname + "/public/pictures/" + file.name;
-    db.updProfPic(userID, "/pictures/" + file.name).then(function(result) {});
-  });
+    form.on("fileBegin", function(name, file) {
+      file.path = __dirname + "/public/pictures/" + file.name;
+      db.updProfPic(userID, "/pictures/" + file.name).then(function(result) {});
+    });
 
-  form.on("file", function(name, file) {
-    console.log("Uploaded " + file.name);
-  });
-  if (req.session.passport) {
-    db.getReports(function(reports) {
-      //get userinfo and send to the web page
-      res.render(__dirname + "/public/views/user.ejs", {
-        userinfo: JSON.stringify(req.session.passport.user),
-        reports
-      });
+    form.on("file", function(name, file) {
+      console.log("Uploaded " + file.name);
+    });
+    return new Promise(function(resolve, reject) {
+      setTimeout(function() {
+        resolve("Done");
+      }, 50);
     });
   }
-  //if not logged in send blank userinfo to web app
-  else {
-    db.getReports(function(reports) {
-      res.render(__dirname + "/public/views/login.ejs", {
-        message: req.flash("loginMessage"),
-        userinfo: false,
-        reports
+  first().then(function() {
+    if (req.session.passport) {
+      db.checkLogin(req.session.passport.user.userName, function(user) {
+        db.getUserInfo(req.session.passport.user.userName, function(userInf) {
+          if (user) {
+            var userinfo = {
+              userName: userInf[0].userName,
+              firstName: userInf[0].firstName,
+              lastName: userInf[0].lastName,
+              email: userInf[0].email,
+              phone: userInf[0].phone,
+              role: userInf[0].roleName,
+              county: userInf[0].countyName,
+              userID: user.userID,
+              profPic: userInf[0].location
+            };
+          }
+          req.login(userinfo, function(err) {
+            if (err) return next(err);
+          });
+          res.redirect("/user");
+        });
       });
-    });
-  }
+    }
+    //if not logged in send blank userinfo to web app
+    else {
+      res.redirect("/");
+    }
+  });
 });
 
 app.get("/header", (req, res) => {
@@ -176,19 +193,23 @@ app.get("/header", (req, res) => {
 app.get("/report", (req, res) => {
   if (req.session.passport) {
     var reportID = req.query["reportID"];
-    db.getReport(reportID, function(rep) {
-      db.getPhotos(reportID, function(photos) {
-        db.getLatestPhotoId(function(lastId) {
-          //get userinfo and send to the web page
-          res.render(__dirname + "/public/views/report.ejs", {
-            userinfo: JSON.stringify(req.session.passport.user),
-            rep,
-            photos,
-            lastId
+    if (reportID) {
+      db.getReport(reportID, function(rep) {
+        db.getPhotos(reportID, function(photos) {
+          db.getLatestPhotoId(function(lastId) {
+            //get userinfo and send to the web page
+            res.render(__dirname + "/public/views/report.ejs", {
+              userinfo: JSON.stringify(req.session.passport.user),
+              rep,
+              photos,
+              lastId
+            });
           });
         });
       });
-    });
+    } else {
+      res.redirect("/user");
+    }
   }
   //if not logged in send blank userinfo to web app
   else {
@@ -203,47 +224,78 @@ app.get("/report", (req, res) => {
 app.post("/report", (req, res) => {
   var inputValue = req.body.vote;
   reportId = req.body.repId;
-  if (inputValue == "buffer") {
-    res.redirect("/buffer" + "?reportID=" + reportId);
-  } else {
-    var data = req.body;
-    var repId = data["repId"][0];
-    var userId = data["userId"][0];
-    function first() {
-      if (inputValue == "finalize") {
-        db.finalizeReport(reportId);
+  var data = req.body;
+  console.log("data");
+  var repId = data["repId"][0];
+  var userId = data["userId"][0];
+  function first() {
+    if (inputValue == "finalize") {
+      db.finalizeReport(reportId);
+    }
+    if (data["numOfItems"] == 1) {
+      var i = -1;
+      if (data["id"].replace(/\d+/g, "") == "oldremove") {
+        db.removeItem(i, reportId, data);
       }
+      if (data["id"].replace(/\d+/g, "") == "old") {
+        db.updatePhotos(i, data);
+      }
+    }
+    if (data["numOfItems"] == 0) {
+    } else {
       for (var i = 0; i < data["id"].length; i++) {
-        if (data["id"][i].replace(/\d+/g, "") === "oldremove") {
+        if (data["id"][i].replace(/\d+/g, "") == "oldremove") {
           db.removeItem(i, reportId, data);
-        }if (data["id"][i].replace(/\d+/g, "") === "old") {
+        }
+        if (data["id"][i].replace(/\d+/g, "") == "old") {
           db.updatePhotos(i, data);
         }
       }
-      //wait until items are processed(wow, a promise)
-      return new Promise(function(resolve, reject) {
-        setTimeout(function() {
-          resolve("Done");
-        }, 1000);
-      });
     }
-    //process items further
-    first().then(function() {
-      console.log(data);
+    //wait until items are processed(wow, a promise)
+    return new Promise(function(resolve, reject) {
+      setTimeout(function() {
+        resolve("Done");
+      }, 1000);
+    });
+  }
+  //process items further
+  function second() {
+    if (data["numOfItems"] == 1) {
+      if (data["id"].replace(/\d+/g, "") == "old") {
+        var i = -1;
+        db.updateOrder(i, data["id"], reportId);
+      }
+    }
+    if (data["numOfItems"] == 0) {
+    } else {
       for (var i = 0; i < data["id"].length; i++) {
         if (data["id"][i].replace(/\d+/g, "") == "old") {
           db.updateOrder(i, data["id"][i], reportId);
         }
       }
+    }
+    return new Promise(function(resolve, reject) {
+      setTimeout(function() {
+        resolve("Done");
+      }, 1000);
     });
-    //redirect
-    if (req.session.passport) {
-     res.redirect('/user');
-    } else {
-      //if not logged in send blank userinfo to web app
-      res.redirect('/');
-    } // respond back to request
   }
+  first()
+    .then(second())
+    .then(function() {
+      if (inputValue == "buffer") {
+        res.redirect("/buffer" + "?reportID=" + reportId);
+      } else {
+        //redirect
+        if (req.session.passport) {
+          res.redirect("/user");
+        } else {
+          //if not logged in send blank userinfo to web app
+          res.redirect("/");
+        } // respond back to request
+      }
+    });
 });
 
 app.get("/report_buffer", (req, res) => {
@@ -271,8 +323,6 @@ app.post("/report_buffer", (req, res) => {
   if (req.session.passport) {
     var reportID = req.query["reportID"];
     var id = req.body.reportID;
-    console.log(reportID);
-    console.log(id);
     db.updateToSubmitted(function(rep) {
       //get userinfo and send to the web page
       //res.render(__dirname + "/public/views/report_buffer.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
@@ -337,10 +387,6 @@ app.post("/edit_photo", (req, res) => {
     var desc = req.body.description;
     var check = req.body.check;
     var photoID = req.query["photoID"];
-    console.log(id);
-    console.log(title);
-    console.log(desc);
-    console.log(photoID);
     if (check) {
       db.updateCheckedPhotos(id, title, desc, function(photos) {
         res.redirect("/buffer");
@@ -388,11 +434,6 @@ app.post("/edit_report_photo", (req, res) => {
     var desc = req.body.description;
     var check = req.body.check;
     var photoID = req.query["photoID"];
-    console.log(id);
-    console.log(title);
-    console.log(desc);
-    console.log(photoID);
-
     if (check) {
       db.updateCheckedReportPhotos(id, title, desc, function(photos) {
         res.redirect("/user");
@@ -435,8 +476,6 @@ app.post("/submit", (req, res) => {
   if (req.session.passport) {
     var reportID = req.query["reportID"];
     var id = req.body.reportID;
-    console.log(reportID);
-    console.log(id);
     db.updateToSubmitted(function(report) {
       //get userinfo and send to the web page
       res.render(__dirname + "/public/views/submit.ejs", {
@@ -458,13 +497,18 @@ app.post("/submit", (req, res) => {
 app.get("/buffer", (req, res) => {
   //if logged in
   if (req.session.passport) {
+    var showButton = false;
     var reportID = req.query["reportID"];
+    if (reportID) {
+      showButton = true;
+    }
     db.getPhoto(req.session.passport.user.userID, function(photos) {
       //get userinfo and send to the web page
       res.render(__dirname + "/public/views/buffer.ejs", {
         userinfo: JSON.stringify(req.session.passport.user),
         photos,
-        reportID
+        reportID,
+        showButton
       });
     });
   }
@@ -479,20 +523,36 @@ app.get("/buffer", (req, res) => {
 
 app.post("/buffer", (req, res) => {
   var data = req.body;
-  var reportId = req.body.reportID;
-  db.getLatestOrder(reportId, function(order) {
-    console.log(order);
-    if (data["photoID"]) {
-      for (var i = 0; i < data["photoID"].length; i++) {
-        if (data["include"][i] == "1") {
+  function first() {
+    var reportId = req.body.reportID;
+    db.getLatestOrder(reportId, function(order) {
+      if (data["photoID"]) {
+        if (data["itemNum"] == 1) {
+          var i = -1;
           db.addReportId(i, reportId, data);
           db.insertIntoReportItems(i, order, reportId, data);
-          order++;
+        }
+        if (data["itemNum"] == 1) {
+        } else {
+          for (var i = 0; i < data["photoID"].length; i++) {
+            if (data["include"][i] == "1") {
+              db.addReportId(i, reportId, data);
+              db.insertIntoReportItems(i, order, reportId, data);
+              order++;
+            }
+          }
         }
       }
-    }
+    });
+    return new Promise(function(resolve, reject) {
+      setTimeout(function() {
+        resolve("Done");
+      }, 1000);
+    });
+  }
+  first().then(function() {
+    res.redirect("/report?reportID=" + reportId);
   });
-  res.redirect("/report?reportID=" + reportId);
 });
 
 app.get("/bridge_links", (req, res) => {
@@ -522,7 +582,6 @@ app.get("/bridge_links", (req, res) => {
 app.post("/upload", (req, res) => {
   var form = new formidable.IncomingForm();
   form.parse(req, function(err, fields, files) {
-    console.log(files.reportFile);
     fs.readFile(files.reportFile.path, "ascii", function(err, data) {
       if (err) throw err;
       // data will contain your file contents
@@ -541,9 +600,8 @@ app.post("/upload", (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-  req.session.destroy(function (err) {
-    res.redirect('/'); //Inside a callback… bulletproof!
-  });
+  req.session = null;
+  res.redirect("/"); //Inside a callback… bulletproof!
 });
 
 function isLoggedIn(req, res, next) {
@@ -554,7 +612,7 @@ function isLoggedIn(req, res, next) {
   res.redirect("/");
 }
 
-app.listen(8080);
+app.listen(process.env.PORT || 5000);
 
 /*
 var http = require('http');
