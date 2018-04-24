@@ -28,11 +28,12 @@
 }
 
 #para {
-  /*white-space:nowrap;
-  overflow:hidden;*/
+  white-space:nowrap;
+  overflow:hidden;
   text-align: justify;
   margin: 0 auto;
   font-weight: 600;
+  -moz-text-size-adjust: auto;
 }
 
 #parent {
