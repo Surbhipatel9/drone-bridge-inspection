@@ -4,12 +4,29 @@ var passport = require("passport");
 var flash = require("connect-flash");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
+var multer = require("multer");
 var formidable = require("formidable");
 var fs = require("fs");
 var $ = require("jquery");
 var db = require("./DB.js");
 var fs = require("fs");
 var pdf = require("html-pdf");
+
+var storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/pictures/");
+  },
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      file.fieldname +
+        "." +
+        file.originalname.substring(file.originalname.lastIndexOf(".") + 1)
+    );
+  }
+});
+var upload = multer({ storage: storage });
+
 require("./passport")(passport);
 
 const path = require("path");
@@ -221,13 +238,13 @@ app.get("/report", (req, res) => {
   }
 });
 
-app.post("/report", (req, res) => {
+app.post("/report", upload.any(), (req, res) => {
+  data = req.body;
   var inputValue = req.body.vote;
-  reportId = req.body.repId;
-  var data = req.body;
-  console.log("data");
-  var repId = data["repId"][0];
-  var userId = data["userId"][0];
+  var reportId = req.body.repId;
+  var userId = req.body.userId;
+  var numOfNewItems = 0;
+
   function first() {
     if (inputValue == "finalize") {
       db.finalizeReport(reportId);
@@ -240,6 +257,19 @@ app.post("/report", (req, res) => {
       if (data["id"].replace(/\d+/g, "") == "old") {
         db.updatePhotos(i, data);
       }
+      if (data["id"].replace(/\d+/g, "") == "new") {
+        for (var j = 0; j < req.files.length; j++) {
+          if (req.files[j]["fieldname"] == data["id"][i].replace(/\D/g, "")) {
+            db.insertIntoPhotos(
+              reportId,
+              userId,
+              i,
+              data,
+              req.files[j]["path"]
+            );
+          }
+        }
+      }
     }
     if (data["numOfItems"] == 0) {
     } else {
@@ -250,19 +280,35 @@ app.post("/report", (req, res) => {
         if (data["id"][i].replace(/\d+/g, "") == "old") {
           db.updatePhotos(i, data);
         }
+        if (data["id"][i].replace(/\d+/g, "") == "new") {
+          for (var j = 0; j < req.files.length; j++) {
+            if (req.files[j]["fieldname"] == data["id"][i].replace(/\D/g, "")) {
+              db.insertIntoPhotos(
+                reportId,
+                userId,
+                i,
+                data,
+                req.files[j]["path"]
+              );
+            }
+          }
+        }
       }
     }
     //wait until items are processed(wow, a promise)
     return new Promise(function(resolve, reject) {
       setTimeout(function() {
         resolve("Done");
-      }, 1000);
+      }, 500);
     });
   }
   //process items further
   function second() {
     if (data["numOfItems"] == 1) {
-      if (data["id"].replace(/\d+/g, "") == "old") {
+      if (
+        data["id"].replace(/\d+/g, "") == "old" ||
+        data["id"].replace(/\d+/g, "") == "new"
+      ) {
         var i = -1;
         db.updateOrder(i, data["id"], reportId);
       }
@@ -270,7 +316,10 @@ app.post("/report", (req, res) => {
     if (data["numOfItems"] == 0) {
     } else {
       for (var i = 0; i < data["id"].length; i++) {
-        if (data["id"][i].replace(/\d+/g, "") == "old") {
+        if (
+          data["id"][i].replace(/\d+/g, "") == "old" ||
+          data["id"][i].replace(/\d+/g, "") == "new"
+        ) {
           db.updateOrder(i, data["id"][i], reportId);
         }
       }
@@ -278,24 +327,25 @@ app.post("/report", (req, res) => {
     return new Promise(function(resolve, reject) {
       setTimeout(function() {
         resolve("Done");
-      }, 1000);
+      }, 200);
     });
   }
-  first()
-    .then(second())
-    .then(function() {
-      if (inputValue == "buffer") {
-        res.redirect("/buffer" + "?reportID=" + reportId);
+  async function third() {
+    var x = await first();
+    var y = await second();
+    if (inputValue == "buffer") {
+      res.redirect("/buffer" + "?reportID=" + reportId);
+    } else {
+      //redirect
+      if (req.session.passport) {
+        res.redirect("/user");
       } else {
-        //redirect
-        if (req.session.passport) {
-          res.redirect("/user");
-        } else {
-          //if not logged in send blank userinfo to web app
-          res.redirect("/");
-        } // respond back to request
-      }
-    });
+        //if not logged in send blank userinfo to web app
+        res.redirect("/");
+      } // respond back to request
+    }
+  }
+  third();
 });
 
 app.get("/submit", (req, res) => {
@@ -395,8 +445,8 @@ app.get("/buffer", (req, res) => {
 
 app.post("/buffer", (req, res) => {
   var data = req.body;
+  var reportId = req.body.reportID;
   function first() {
-    var reportId = req.body.reportID;
     db.getLatestOrder(reportId, function(order) {
       if (data["photoID"]) {
         if (data["itemNum"] == 1) {
