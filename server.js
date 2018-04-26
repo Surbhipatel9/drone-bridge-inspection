@@ -11,6 +11,17 @@ var $ = require("jquery");
 var db = require("./DB.js");
 var fs = require("fs");
 var pdf = require("html-pdf");
+var Promise = require('bluebird');
+var GoogleCloudStorage = Promise.promisifyAll(require('@google-cloud/storage'));
+
+var storage = GoogleCloudStorage({
+  projectId: 'drone-bridge-202304',
+  keyFilename: 'drone-bridge-79770f13e171.json'
+});
+
+var BUCKET_NAME = 'drone_bridge_bucket';
+var myBucket = storage.bucket(BUCKET_NAME);
+
 
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -20,8 +31,8 @@ var storage = multer.diskStorage({
     cb(
       null,
       file.fieldname +
-        "." +
-        file.originalname.substring(file.originalname.lastIndexOf(".") + 1)
+      "." +
+      file.originalname.substring(file.originalname.lastIndexOf(".") + 1)
     );
   }
 });
@@ -105,14 +116,14 @@ app.post(
     failureRedirect: "/login",
     failureFlash: true
   }),
-  (res, req) => {}
+  (res, req) => { }
 );
 
 // User route.
 app.get("/user", (req, res) => {
   //if logged in
   if (req.session.passport) {
-    db.getReports(function(reports) {
+    db.getReports(function (reports) {
       //get userinfo and send to the web page
       res.render(__dirname + "/public/views/user.ejs", {
         userinfo: JSON.stringify(req.session.passport.user),
@@ -122,7 +133,7 @@ app.get("/user", (req, res) => {
   }
   //if not logged in send blank userinfo to web app
   else {
-    db.getReports(function(reports) {
+    db.getReports(function (reports) {
       res.render(__dirname + "/public/views/login.ejs", {
         message: req.flash("loginMessage"),
         userinfo: false,
@@ -133,7 +144,7 @@ app.get("/user", (req, res) => {
   }
 });
 
-app.post("/user", function(req, res) {
+app.post("/user", function (req, res) {
   function first() {
     var form = new formidable.IncomingForm();
 
@@ -142,24 +153,24 @@ app.post("/user", function(req, res) {
     var userinfo = JSON.stringify(req.session.passport.user);
     var userID = JSON.parse(userinfo).userID;
 
-    form.on("fileBegin", function(name, file) {
+    form.on("fileBegin", function (name, file) {
       file.path = __dirname + "/public/pictures/" + file.name;
-      db.updProfPic(userID, "/pictures/" + file.name).then(function(result) {});
+      db.updProfPic(userID, "/pictures/" + file.name).then(function (result) { });
     });
 
-    form.on("file", function(name, file) {
+    form.on("file", function (name, file) {
       console.log("Uploaded " + file.name);
     });
-    return new Promise(function(resolve, reject) {
-      setTimeout(function() {
+    return new Promise(function (resolve, reject) {
+      setTimeout(function () {
         resolve("Done");
       }, 50);
     });
   }
-  first().then(function() {
+  first().then(function () {
     if (req.session.passport) {
-      db.checkLogin(req.session.passport.user.userName, function(user) {
-        db.getUserInfo(req.session.passport.user.userName, function(userInf) {
+      db.checkLogin(req.session.passport.user.userName, function (user) {
+        db.getUserInfo(req.session.passport.user.userName, function (userInf) {
           if (user) {
             var userinfo = {
               userName: userInf[0].userName,
@@ -173,7 +184,7 @@ app.post("/user", function(req, res) {
               profPic: userInf[0].location
             };
           }
-          req.login(userinfo, function(err) {
+          req.login(userinfo, function (err) {
             if (err) return next(err);
           });
           res.redirect("/user");
@@ -190,7 +201,7 @@ app.post("/user", function(req, res) {
 app.get("/header", (req, res) => {
   if (req.session.passport) {
     var reportID = req.query["reportID"];
-    db.getReport(parseInt(parseInt(req.query["reportID"])), function(rep) {
+    db.getReport(parseInt(parseInt(req.query["reportID"])), function (rep) {
       //get userinfo and send to the web page
       res.render(__dirname + "/public/views/header.ejs", {
         userinfo: JSON.stringify(req.session.passport.user),
@@ -211,9 +222,9 @@ app.get("/report", (req, res) => {
   if (req.session.passport) {
     var reportID = req.query["reportID"];
     if (reportID) {
-      db.getReport(reportID, function(rep) {
-        db.getPhotos(reportID, function(photos) {
-          db.getLatestPhotoId(function(lastId) {
+      db.getReport(reportID, function (rep) {
+        db.getPhotos(reportID, function (photos) {
+          db.getLatestPhotoId(function (lastId) {
             //get userinfo and send to the web page
             res.render(__dirname + "/public/views/report.ejs", {
               userinfo: JSON.stringify(req.session.passport.user),
@@ -259,14 +270,22 @@ app.post("/report", upload.any(), (req, res) => {
       }
       if (data["id"].replace(/\d+/g, "") == "new") {
         for (var j = 0; j < req.files.length; j++) {
-          if (req.files[j]["fieldname"] == data["id"][i].replace(/\D/g, "")) {
-            db.insertIntoPhotos(
-              reportId,
-              userId,
-              i,
-              data,
-              req.files[j]["path"]
-            );
+          if (req.files[j]["fieldname"] == data["id"].replace(/\D/g, "")) {
+            var file_name = req.files[j]["filename"];
+            myBucket.uploadAsync("./" + req.files[j]["path"], { public: true })
+              .then(file => {
+                console.log('File uploaded')
+                var getPublicThumbnailUrlForItem = file_name;
+                return `https://storage.googleapis.com/${BUCKET_NAME}/${file_name}`
+              }).then((url) => {
+                db.insertIntoPhotos(
+                  reportId,
+                  userId,
+                  index,
+                  data,
+                  url,
+                );
+              });
           }
         }
       }
@@ -281,23 +300,32 @@ app.post("/report", upload.any(), (req, res) => {
           db.updatePhotos(i, data);
         }
         if (data["id"][i].replace(/\d+/g, "") == "new") {
+          var index = i;
           for (var j = 0; j < req.files.length; j++) {
-            if (req.files[j]["fieldname"] == data["id"][i].replace(/\D/g, "")) {
-              db.insertIntoPhotos(
-                reportId,
-                userId,
-                i,
-                data,
-                req.files[j]["path"]
-              );
+            if (req.files[j]["fieldname"] == data["id"][index].replace(/\D/g, "")) {
+              var file_name = req.files[j]["filename"];
+              myBucket.uploadAsync("./" + req.files[j]["path"], { public: true })
+                .then(file => {
+                  console.log('File uploaded')
+                  var getPublicThumbnailUrlForItem = file_name;
+                  return `https://storage.googleapis.com/${BUCKET_NAME}/${file_name}`
+                }).then((url) => {
+                  db.insertIntoPhotos(
+                    reportId,
+                    userId,
+                    index,
+                    data,
+                    url,
+                  );
+                });
             }
           }
         }
       }
     }
     //wait until items are processed(wow, a promise)
-    return new Promise(function(resolve, reject) {
-      setTimeout(function() {
+    return new Promise(function (resolve, reject) {
+      setTimeout(function () {
         resolve("Done");
       }, 500);
     });
@@ -324,8 +352,8 @@ app.post("/report", upload.any(), (req, res) => {
         }
       }
     }
-    return new Promise(function(resolve, reject) {
-      setTimeout(function() {
+    return new Promise(function (resolve, reject) {
+      setTimeout(function () {
         resolve("Done");
       }, 200);
     });
@@ -352,7 +380,7 @@ app.get("/report_buffer", (req, res) => {
   if (req.session.passport) {
     var reportID = req.query["reportID"];
 
-    db.getReportBuffer(reportID, function(rep) {
+    db.getReportBuffer(reportID, function (rep) {
       //get userinfo and send to the web page
       res.render(__dirname + "/public/views/report_buffer.ejs", {
         userinfo: JSON.stringify(req.session.passport.user),
@@ -373,7 +401,7 @@ app.post("/report_buffer", (req, res) => {
   if (req.session.passport) {
     var reportID = req.query["reportID"];
     var id = req.body.reportID;
-    db.updateToSubmitted(function(rep) {
+    db.updateToSubmitted(function (rep) {
       //get userinfo and send to the web page
       //res.render(__dirname + "/public/views/report_buffer.ejs", { userinfo: JSON.stringify(req.session.passport.user), rep });
     });
@@ -392,7 +420,7 @@ app.get("/submitted_report", (req, res) => {
   if (req.session.passport) {
     var reportID = req.query["reportID"];
 
-    db.getFinalReports(reportID, function(rep) {
+    db.getFinalReports(reportID, function (rep) {
       //get userinfo and send to the web page
       res.render(__dirname + "/public/views/submitted_report.ejs", {
         userinfo: JSON.stringify(req.session.passport.user),
@@ -413,7 +441,7 @@ app.get("/edit_photo", (req, res) => {
   if (req.session.passport) {
     var photoID = req.query["photoID"];
 
-    db.getIndPhotos(photoID, function(photos) {
+    db.getIndPhotos(photoID, function (photos) {
       //get userinfo and send to the web page
       res.render(__dirname + "/public/views/edit_photo.ejs", {
         userinfo: JSON.stringify(req.session.passport.user),
@@ -438,12 +466,12 @@ app.post("/edit_photo", (req, res) => {
     var check = req.body.check;
     var photoID = req.query["photoID"];
     if (check) {
-      db.updateCheckedPhotos(id, title, desc, function(photos) {
+      db.updateCheckedPhotos(id, title, desc, function (photos) {
         res.redirect("/buffer");
       });
     }
 
-    db.updatePhotos(id, title, desc, function(photos) {
+    db.updatePhotos(id, title, desc, function (photos) {
       res.redirect("/buffer");
     });
   }
@@ -460,7 +488,7 @@ app.get("/edit_report_photo", (req, res) => {
   if (req.session.passport) {
     var photoID = req.query["photoID"];
 
-    db.getIndPhotos(photoID, function(photos) {
+    db.getIndPhotos(photoID, function (photos) {
       //get userinfo and send to the web page
       res.render(__dirname + "/public/views/edit_report_photo.ejs", {
         userinfo: JSON.stringify(req.session.passport.user),
@@ -485,12 +513,12 @@ app.post("/edit_report_photo", (req, res) => {
     var check = req.body.check;
     var photoID = req.query["photoID"];
     if (check) {
-      db.updateCheckedReportPhotos(id, title, desc, function(photos) {
+      db.updateCheckedReportPhotos(id, title, desc, function (photos) {
         res.redirect("/user");
       });
     }
 
-    db.updateReportPhotos(id, title, desc, function(photos) {
+    db.updateReportPhotos(id, title, desc, function (photos) {
       res.redirect("/user");
     });
   }
@@ -505,7 +533,7 @@ app.post("/edit_report_photo", (req, res) => {
 
 app.get("/submit", (req, res) => {
   if (req.session.passport) {
-    db.getSubmittedPage(function(report) {
+    db.getSubmittedPage(function (report) {
       //get userinfo and send to the web page
       res.render(__dirname + "/public/views/submit.ejs", {
         userinfo: JSON.stringify(req.session.passport.user),
@@ -526,7 +554,7 @@ app.post("/submit", (req, res) => {
   if (req.session.passport) {
     var reportID = req.query["reportID"];
     var id = req.body.reportID;
-    db.updateToSubmitted(function(report) {
+    db.updateToSubmitted(function (report) {
       //get userinfo and send to the web page
       res.render(__dirname + "/public/views/submit.ejs", {
         userinfo: JSON.stringify(req.session.passport.user),
@@ -552,7 +580,7 @@ app.get("/buffer", (req, res) => {
     if (reportID) {
       showButton = true;
     }
-    db.getPhoto(req.session.passport.user.userID, function(photos) {
+    db.getPhoto(req.session.passport.user.userID, function (photos) {
       //get userinfo and send to the web page
       res.render(__dirname + "/public/views/buffer.ejs", {
         userinfo: JSON.stringify(req.session.passport.user),
@@ -575,7 +603,7 @@ app.post("/buffer", (req, res) => {
   var data = req.body;
   var reportId = req.body.reportID;
   function first() {
-    db.getLatestOrder(reportId, function(order) {
+    db.getLatestOrder(reportId, function (order) {
       if (data["photoID"]) {
         if (data["itemNum"] == 1) {
           var i = -1;
@@ -594,13 +622,13 @@ app.post("/buffer", (req, res) => {
         }
       }
     });
-    return new Promise(function(resolve, reject) {
-      setTimeout(function() {
+    return new Promise(function (resolve, reject) {
+      setTimeout(function () {
         resolve("Done");
       }, 1000);
     });
   }
-  first().then(function() {
+  first().then(function () {
     res.redirect("/report?reportID=" + reportId);
   });
 });
@@ -608,7 +636,7 @@ app.post("/buffer", (req, res) => {
 app.get("/bridge_links", (req, res) => {
   //if logged in
   if (req.session.passport) {
-    db.getBridgePhotos(function(photos) {
+    db.getBridgePhotos(function (photos) {
       //get userinfo and send to the web page
       res.render(__dirname + "/public/views/bridge_links.ejs", {
         userinfo: JSON.stringify(req.session.passport.user),
@@ -618,7 +646,7 @@ app.get("/bridge_links", (req, res) => {
   }
   //if not logged in send blank userinfo to web app
   else {
-    db.getBridgePhotos(function(photos) {
+    db.getBridgePhotos(function (photos) {
       res.render(__dirname + "/public/views/login.ejs", {
         message: req.flash("loginMessage"),
         userinfo: false,
@@ -631,8 +659,8 @@ app.get("/bridge_links", (req, res) => {
 
 app.post("/upload", (req, res) => {
   var form = new formidable.IncomingForm();
-  form.parse(req, function(err, fields, files) {
-    fs.readFile(files.reportFile.path, "ascii", function(err, data) {
+  form.parse(req, function (err, fields, files) {
+    fs.readFile(files.reportFile.path, "ascii", function (err, data) {
       if (err) throw err;
       // data will contain your file contents
       var queries = data.split("\r\n");
@@ -641,7 +669,7 @@ app.post("/upload", (req, res) => {
       }
 
       // delete file
-      fs.unlink(files.reportFile.path, function(err) {
+      fs.unlink(files.reportFile.path, function (err) {
         if (err) throw err;
         console.log("successfully deleted " + files.reportFile.path);
       });

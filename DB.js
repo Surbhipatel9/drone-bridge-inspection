@@ -740,14 +740,15 @@ exports.insertIntoPhotos = function (repId, userId, i, data, path) {
         date: new Date(today),
         title: header,
         description: comment,
-        location: path.substring(path.indexOf("\\") + 1),
+        location: path,
       }
-    ])
-    .then(() => {
+    ]).returning('photoID')
+    .into('photos')
+    .then((photoId) => {
       return knex("reportItems").insert([
         {
           orderNum: 999,
-          photoID: parseInt(id.replace(/\D/g, "")),
+          photoID: parseInt(photoId),
           reportID: parseInt(repId)
         }
       ]);

@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "drone-bridge-202304",
+  "private_key_id": "79770f13e171b748b1195c598599306b11cc1894",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCyG4v1OXYZhQFl\nLxHC7Bmkj/NcQqV0r3FrZQ870OgsqPtpTwsZVChD4IHXbtiZPmpN99PS7zrjgJhs\npJMXO2IjJhL25BgwfctI1FuTP6m9SHvZV155zZwn+vp+djKDyhbrwM4pVffOU+ud\n63znnMhzzAXUQuyWiebijBJeEvy/qeJJetnCXhKLQmOfvw8JuQvFjJC0khWXRDE0\nNddUiayUoR+Wwuujtn0/dllJ4u6se9f6BuL2ba77N1J/Fbjg8+zerjxrqmOu/KT/\nphp5SNZmft/N7p04YHNnrfFuEuF9tZW6x2nkqTHw8mE9GlXO4UJPHRDQTDk2hjpt\nqAFKWRdXAgMBAAECggEAS3tWLMa98OHH7hhtKBVEZtQk+Ig8M7/4yuFo+9o001yI\nNCCuHP1oFSAsFt+gxw1HIyTxLjd51xnUP1LeDZ36oNfNeLnBMKfXQ9XPu49jAdea\nuUkIPomvcNgyWe8AyI6YeTBcjvMiktxJAkPfSw9MeprQK51zQ/dMlN11GU5ltFn3\nTGI/4qiyl+6Wx5u4KSJ47SmKNdPRDd1GPmjupKo2c0dDhULHbbOY47qRR5h6CULC\nn+rB4w0Y2L86PyUVlO1A7mDv3nDU2EazYOk604YojmNLf17oP7dP/W38ZrnsSCHv\nRmvEr4DUbethfpA5HPzYgFF3OkdUWbyiqGjQhDvnAQKBgQDhhpoCrHStbpn2y+8b\n0ge5Ta+EbRcCxS0uFokUbn/2tZOvbDLwvqmfAQHSoMkkXAO0ClbEayyQ1AILPWs1\nhM6zAe7Fojr/yDd48h+LFNzwH4/DaPkSfcWkZoYpAgcT7qbT59A82rJV0wU6gIhS\ntlkLt1NMj8rrWxEBql8T34IYVwKBgQDKLKc0CBN6VUWuNPzyBnjheFfTSouRjv23\nAjvkmsXD/x8SgbBUjds7uH1kjRxWbPrI0IRRIQz1kAKk8wqP80xGiNm/tX8odZ7t\n0DxQddP98Qg6gUxHOMpq5m0S6/xKYEiWAxGxSH9bNrCYiTANH0BwnOwgox9vl1f/\n+wVW1S2ZAQKBgCAhZiXFXiYrYMIZkepbxP/wgnYSeLnLT8GGMmd3ysFiYzUV7DgC\nYfYmVZUllSKZ/WkUJAJ95m6H1fa1/GU2k6BLQTJlB5TTeJvBmx7cjRGk3X2QohOx\nWYwvkyOah1meoaQFHdTdr5SsqM0J7OIj2pHhv3tj7RwU8FpVZJBXQpinAoGAfFVZ\nvrX4xJMMd0Y/CNjSHldUK6z8iFfX0GSfUMeeOBr9kPQQ7O8QlHmxI9VkSAJdeIJD\n3WDmB165QZf2NvD5R6eBwlRsDwXG55nYfeL4rIM+/DvoHSTf1z4+dhSK43KzMQ5S\nIyTircXEdQppcqh1iMv4q1mmS4pXpCVL80rG8AECgYEAsoqwpS+RKUYm1yE3ctYT\nPVdnPb8JENfiCtQfHHLj1V+Hp1CbHXiMjtQq5kute9r6+wSaJT1LmAMyWZYbiF/q\nsBNygpnoKsmU7WJEW3N1j0m+XbzlsuFWwrLpV54OGKGGvkj58T8VXJpBhRsQuGaO\nw+LrktXItqzgBpUYMvoqVY4=\n-----END PRIVATE KEY-----\n",
+  "client_email": "aksenov@drone-bridge-202304.iam.gserviceaccount.com",
+  "client_id": "112365367162315475814",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/aksenov%40drone-bridge-202304.iam.gserviceaccount.com"
+}
