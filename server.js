@@ -348,7 +348,7 @@ app.post("/report", upload.any(), (req, res) => {
         if (
           data["id"][i].replace(/\d+/g, "") == "old" ||
           data["id"][i].replace(/\d+/g, "") == "new" ||
-          data["id"].replace(/\d+/g, "") == "newphoto"
+          data["id"][i].replace(/\d+/g, "") == "newphoto"
         ) {
           db.updateOrder(i, data["id"][i], reportId);
         }
