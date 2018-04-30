@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>final report</title>
+    <title>WV DoT Bridge Inspection - Header</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora">
     <link rel="stylesheet" href="assets/css/Article-Clean.css">
@@ -86,8 +86,15 @@
                                     <span>Fracture Critical, In Depth Inspection and Report</span>
                                 </p>
         
-                                <div id="parent-header">
-                                    <img class="img-fluid" style="margin-left: 400px;"src="<%- rep[i]["bridgePhoto"] %>" id="img-stuff">
+                                <div>
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+                                                <a href="<%- rep[i]["bridgePhoto"] %>" target="_blank" data-lightbox="bridge">
+                                                <img class="img-fluid" src="<%- rep[i]["bridgePhoto"] %>" data-lightbox="bridge" id="img-stuff">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             

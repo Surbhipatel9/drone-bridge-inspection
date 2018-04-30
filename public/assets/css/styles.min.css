@@ -183,6 +183,23 @@ html {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+/* Phone/Tablet Screens */
+@media only screen
+and (min-width : 320px)
+and (max-width : 668px) {
+  #login {
+    padding: 30px;
+  }
+  #login .jumbotron {
+    padding: 30px;
+  }
+  #login input {
+    padding: 30px;
+  }
+
+}
+
+
 :root, body {
   height: 100%;
   min-width: 100%;

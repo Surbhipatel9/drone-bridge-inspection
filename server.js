@@ -354,7 +354,7 @@ app.get("/submit", (req, res) => {
 
     db.getFinalReports(reportID, function(rep) {
       //get userinfo and send to the web page
-      res.render(__dirname + "/public/views/submitted_report.ejs", {
+      res.render(__dirname + "/public/views/submit.ejs", {
         userinfo: JSON.stringify(req.session.passport.user),
         rep
       });

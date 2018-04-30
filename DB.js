@@ -678,10 +678,10 @@ exports.getImages = function (userID, cb) {
 exports.getFinalReport = function (reportID, cb) {
   knex
     .raw(
-      "SELECT * from reports INNER JOIN photos ON photos.reportID = reports.reportID INNER JOIN bridge ON reports.bridgeID=bridge.bridgeID WHERE photos.reportID = " +
+      "SELECT * from reports INNER JOIN photos ON photos.reportID = reports.reportID INNER JOIN bridge ON reports.bridgeID=bridge.bridgeID  INNER JOIN reportItems ON reports.reportID=reportItems.reportID WHERE photos.reportID = " +
       "'" +
       reportID +
-      "'"
+      "'" + "ORDER BY reportItems.orderNum ASC"
     )
     .then(function (report) {
       cb(report);
@@ -694,11 +694,11 @@ exports.getFinalReports = function (reportID, cb) {
       "*"
     )
     .from("reports")
-    .where("reports.reportID", "=", reportID)
+    .where("photos.reportID", "=", reportID)
     .innerJoin("photos", "reports.reportID", "=", "photos.reportID")
-    .innerJoin("reportItems", "reports.reportID", "=", "reportItems.reportID")
     .innerJoin("bridge", "reports.bridgeID", "=", "bridge.bridgeID")
-    .orderBy("orderNum", "asc")
+    .innerJoin("reportItems", "reportItems.photoID", "=", "photos.photoID")
+    .orderBy("reportItems.orderNum", "asc")
     .then(function (photos) {
       cb(photos);
     });

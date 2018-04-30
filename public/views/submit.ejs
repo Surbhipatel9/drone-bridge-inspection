@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>final report</title>
+    <title>WV DoT Bridge Inspection - Submitted Report</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora">
     <link rel="stylesheet" href="assets/css/Article-Clean.css">
@@ -67,6 +67,7 @@
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <span>BARS No. <span style="color:black"><%- rep[i]["barsNo"] %></span></span>
                             </p>
+                            <br>
                             <div>
                                 <p class="text-center" id="para"><span style="color:black;"><%- rep[i]["name"] %></span></p>
                                 <p class="text-center" id="para"><span style="color:black;"><%- rep[i]["bridgeLocation"] %></span></p>
@@ -79,22 +80,40 @@
                                     </strong>
                                 </h3>
                             </div>
+                            <br>
                             <div class="intro">
                                 <p style="text-align: center;">Type of Inspections Performed:&nbsp;
                                     <span>Fracture Critical, In Depth Inspection and Report</span>
                                 </p>
                                 <br/>
-                                <div id="parent">
-                                    <img class="img-fluid" src="<%- rep[i]["bridgePhoto"] %>" id="img-stuff">
+                                <div>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+                                                <a href="<%- rep[i]["bridgePhoto"] %>" target="_blank" data-lightbox="bridge">
+                                                <img class="img-fluid" src="<%- rep[i]["bridgePhoto"] %>" data-lightbox="bridge" id="img-top">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <br/>
-                            <div id="dot">
-                                
+                            <br/>
+                            <br/>
+                            <br/>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                            <div id="dot">                               
                                 <p>Field Inspected By: <span id="names"><%- rep[i]["inspectedBy"] %></span></p>
+                                <br>
                                 <p>Structural Evaluation By: <span id="names"><%- rep[i]["structuralEvalBy"]%></span></p>
+                                <br>
                                 <p>Review and Approve By: <span id="names"><%- rep[i]["reviewApprovedBy"]%></span></p>
-                                
+                                <br>
                                 <p class="text-center" id="dot">
                                     <strong>The West Virginia Department of Transportation Division of Highways</strong>
                                 </p>
@@ -117,7 +136,9 @@
                             <li>NBI 90 (Routine) Date: <span style="color:black"><%- rep[i]["NBI90Date"]%></span></li>
                         </ul>
                     </div>
+                    <br>
                     <div class="col" id="row-color">
+                        <br>
                         <% if(rep[i]["inspectionTypePeriodic"] === true){ %>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="formCheck-9" checked>
@@ -335,13 +356,16 @@
         <div>
             <hr style="background-color:#1603f7;">
         </div>
+        <br>
+        <br>
+        <br>
     </div>
         <% } %>
         <% var j = 1 %>
         <% for (var i = 0; i < rep.length; i++) { %>
             <% if ((i % 2) === 0) { %>
-                <div id="shadow">
-                <header style="page-break-before: always">
+                <div class="desktop" id="shadow">
+                <header>
                     <div id="head">
                         <div class="jumbotron">
                             <h1 class="text-center text-primary" id="j-text"><img src="assets/img/wvdotlogo_clear.png" id="logo">West Virginia Division of Highways</h1>
@@ -357,25 +381,51 @@
         <div>
             <div class="container">
                 <div class="row">
-                    <!--<div class="col-md-12"><img src="<%- rep[i]["location"] %>" id="img_border">-->
-                    <div class="col-md-12">
-                        <div id="parent">
+                    <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+                        <div id="parent">                          
                             <a href="<%- rep[i]['location'] %>" target="_blank" data-lightbox="bridge">
                                 <img class="img-fluid" src="<%- rep[i]['location'] %>" data-lightbox="bridge" id="img-stuff">
                             </a>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
                         <p class="text-center" id="para"><%- rep[i]["title"] %> -&nbsp;<%- rep[i]["description"] %></p>
                     </div>
                 </div>
+                <br>
             </div>
             </div>
             <% if ((i % 2) === 1) { %>
-                <p style="text-align: center;"><%= j %></p>
+                <br>
+                <div class="row">
+                    <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+                        <p style="text-align: center;"><strong><%= j %></strong></p>
+                    </div>
+                </div>
                 <% j++ %>
                  </div>
             <% } %>
         <% } %>
-    
+        <div class="mobile">
+            <% for (var i = 0; i < rep.length; i++) { %>
+                <div id="shadow">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+                                <div id="parent">
+                                    <a href="<%- rep[i]['location'] %>" target="_blank" data-lightbox="bridge">
+                                        <img class="img-fluid" src="<%- rep[i]['location'] %>" data-lightbox="bridge" id="img-stuff">
+                                    </a>
+                                </div>
+                                <p class="text-center" id="para"><%- rep[i]["title"] %> -&nbsp;<%- rep[i]["description"] %></p>
+                            </div>
+                        </div>
+                    </div>   
+                </div>            
+            <% } %>
+        </div>
     
     </div>
     <script src="assets/js/jquery_submitted.min.js"></script>

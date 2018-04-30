@@ -151,7 +151,7 @@
                                             <tr class="table-primary">
                                                 <th style="width:23%;">Name </th>
                                                 <th style="width:35%;">Location </th>
-                                                <th style="width:10%;">Date Assigned </th>
+                                                <th style="width:10%;">Date Submitted </th>
                                                 <th> </th>
                                             </tr>
                                         </thead>
@@ -171,13 +171,13 @@
                                                         </td>
                                                         <td>
                                                             <strong>
-                                                                <%-   reports[j]["dateAssigned"] %>
+                                                                <%-   reports[j]["dateSubmitted"] %>
                                                             </strong>
 
                                                         </td>
                                                         <td style="text-align: center;">
                                                             <strong>
-                                                                <a href="/submitted_report?reportID=<%- reports[j]['reportID'] %>" id="viewReport" style="text-decoration: underline" value="View Report">View Report</a>
+                                                                <a href="/submit?reportID=<%- reports[j]['reportID'] %>" id="viewReport" style="text-decoration: underline" value="View Report">View Report</a>
                                                             </strong>
                                                         </td>
                                                     </tr>

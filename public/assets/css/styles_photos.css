@@ -3,6 +3,7 @@
   padding:20px;
   background-size:cover;
   margin-top:20px;
+  page-break-before: always
 }
 
 #head .jumbotron {
@@ -28,17 +29,17 @@
 }
 
 #para {
-  white-space:nowrap;
-  overflow:hidden;
+  /*white-space:nowrap;
+  overflow:hidden;*/
   text-align: justify;
   margin: 0 auto;
   font-weight: 600;
   -moz-text-size-adjust: auto;
 }
 
-#parent {
+/*#parent {
   width: 500px;
-}
+}*/
 
 #parent-header {
   width: 300px;
@@ -46,12 +47,32 @@
 
 #img-stuff {
   display: block;
-  width: 100%;
-  height: auto;
+  /*max-width: 100%;
+  height: auto;*/
   background-size: contain;
   border:10px solid black;
   border-radius: 5px;
-  margin-left: 200px;
+  margin-left: 0px;
+  /*text-align:center;*/
+}
+
+#img-top {
+  display: block;
+  /*max-width: 100%;
+  height: auto;*/
+  background-size: contain;
+  border:10px solid black;
+  border-radius: 5px;
+  margin-left: 0px;
+  /*text-align:center;*/
+  margin-left: 100px;
+  
+}
+
+@media only screen 
+and (min-width : 751)
+and (max-width : 961) {
+
 }
 
 #j-text {
@@ -78,4 +99,83 @@
 #row-color {
   color:rgb(0, 0, 153);
   font-weight: 600;
+}
+
+/* Phone/Tablet Screens */
+@media only screen
+and (min-width : 0px)
+and (max-width : 840px) {
+  .desktop {
+    /*To not display the desktop page */
+    display:none;
+  }
+  #shadow {
+    margin-left: 5%;
+    margin-right: 5%;
+    padding: 20px;
+  }
+  #img-top {
+    margin-left: 0;
+  }
+}
+@media only screen 
+and (min-width: 841)
+and (max-width: 1275) {
+  #head .jumbotron {
+    max-height: 800px;
+  }
+}
+
+@media only screen
+and (min-width : 751px) {
+  .mobile {
+    /*To not display the mobile page */
+    display:none;
+  }
+}
+/*To remove the url and default page numbers when printing from browser */
+@page {
+  size: auto;   /* auto is the initial value */
+  margin: 0;  /* this affects the margin in the printer settings */
+}
+
+/*To format better while printing */
+@media print {
+  #head .jumbotron{
+    max-width:1200px;
+  }
+  #parent {
+    height:600px;
+    width:1000px;
+  }
+  #img-stuff {
+    margin-left: 100px;
+    display: flex;
+  }
+  #para {
+    margin-right: 50px;
+  }
+  #shadow {
+    box-shadow: 0; 
+    background: #f2f2f2; 
+    padding: 20px; 
+    padding-bottom: 20px; 
+    margin-left: 5%; 
+    margin-right: 5%; 
+    margin-top: 20px; 
+    margin-bottom: 20px; 
+    border-radius: 5px
+  }
+  #row {
+    font-size: 15;
+  }
+  #yeah {
+    white-space:pre;
+  }
+  #img-top {
+    margin-left: 250px;
+  }
+  div.mobile {
+    display: none;
+  }
 }
