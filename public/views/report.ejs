@@ -107,7 +107,7 @@
         var wrapper = $("#holder"+name).closest('li')
         wrapper.insertBefore(wrapper.prev()).hide().show('slow');
         var elmnt = document.getElementById("holder"+name);
-        elmnt.scrollIntoView();
+        elmnt.scrollIntoView({block: 'start', behavior: 'smooth' });
 };
 
 
@@ -115,7 +115,7 @@
         var wrapper = $("#holder"+name).closest('li')
         wrapper.insertAfter(wrapper.next()).hide().show('slow')
         var elmnt = document.getElementById("holder"+name);
-        elmnt.scrollIntoView();
+        elmnt.scrollIntoView({block: 'start', behavior: 'smooth' });
         
     };
     function myFunction(id){
@@ -163,7 +163,7 @@
             el.insertAfter(wrapper).hide().show('slow');
             photoId++;
             var elmnt = document.getElementById("holder"+counter);
-            elmnt.scrollIntoView();
+            elmnt.scrollIntoView({ block: 'start',  behavior: 'smooth' });
             //$('html, body').animate({
                //scrollTop: $("#holder"+counter).offset().top
                // }, 2000);
