@@ -51,11 +51,8 @@
         <input type="hidden" value="<%= rep[0]['reportID'] %>" name="repId">
         <input type="hidden" value="<%= photos.length %>" id="numOfItems" name="numOfItems">
         <input type="hidden" value="<%- JSON.parse(userinfo).userID %>" name="userId">
-        <ul class="allElements" style="padding: 0">
-        <% if (photos.length == 0) { %>
-            <p style="color: grey; font-size: 20px; margin: 50px; text-align: center;">No Photos in Photo Collection. </p>
-            <p style="color: grey; font-size: 20px; margin: 50px; text-align: center;">Please, Click Select Photos to Add Photos to this Report&nbsp;</p> 
-            <% } %>
+        <ul class="allElements" id="allElements" style="position: relative; padding: 0">
+   
         <% for(var i = 0; i < photos.length; i++) {%>
         <li class="ui-state-default"  id="holder<%- i+1 %>" style="padding: 15px; list-style-type: none;"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
             <div  style="padding: 15px">
@@ -105,15 +102,21 @@
 <script type="text/javascript">
     var counter = parseInt(<%- photos.length %>);
     var photoId = parseInt(<%- lastId %>) + 1;
+
     function up(name) {
         var wrapper = $("#holder"+name).closest('li')
-        
         wrapper.insertBefore(wrapper.prev()).hide().show('slow');
-    };
+        var elmnt = document.getElementById("holder"+name);
+        elmnt.scrollIntoView();
+};
+
+
     function down(name) {
         var wrapper = $("#holder"+name).closest('li')
-        wrapper.insertAfter(wrapper.next()).hide().show('slow');
-
+        wrapper.insertAfter(wrapper.next()).hide().show('slow')
+        var elmnt = document.getElementById("holder"+name);
+        elmnt.scrollIntoView();
+        
     };
     function myFunction(id){
         var num = id.replace(/\D/g,'');
@@ -157,12 +160,14 @@
             //$("#element").append('<input type="text" placeholder="Header" name="header" style="display: block; width: 100%; margin: auto;" required>') 
             //$(".allElements").append(el);
             var wrapper = $(this).closest('li')
-           
             el.insertAfter(wrapper).hide().show('slow');
-            $('html, body').animate({
-                scrollTop: $("#holder"+counter).offset().top
-                }, 2000);
             photoId++;
+            var elmnt = document.getElementById("holder"+counter);
+            elmnt.scrollIntoView();
+            //$('html, body').animate({
+               // scrollTop: $("#holder"+counter).offset().top
+                //}, 2000);
+  
         });
         /*if(counter == 0){
             removeButton.disabled = true;
