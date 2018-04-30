@@ -158,7 +158,10 @@
             //$(".allElements").append(el);
             var wrapper = $(this).closest('li')
            
-            el.insertAfter(wrapper).hide().show('slow');;
+            el.insertAfter(wrapper).hide().show('slow');
+            $('html, body').animate({
+                scrollTop: $("#holder"+counter).offset().top
+                }, 2000);
             photoId++;
         });
         /*if(counter == 0){
