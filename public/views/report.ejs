@@ -83,8 +83,8 @@
     <hr>
         <div id="buttonHolder" style="display: flex">
                 <button type="submit" class="btn btn-primary" name="vote" value="buffer" style="width: 30%; display: inline-block; margin: auto;">Select Photos</button>
-                <button type="submit" class="btn btn-primary" name="vote" value="save" style="width: 30%; display: inline-block; margin: auto;">Save Report</button>
-                <button type="submit" class="btn btn-primary" name="vote" value="finalize" style="width: 30%; display: inline-block; margin: auto;">Finalize Report</button>
+                <button type="submit" class="btn btn-primary" id="saveBtn" name="vote" value="save" style="width: 30%; display: inline-block; margin: auto;">Save Report</button>
+                <button type="submit" class="btn btn-primary" id="finBtn" name="vote" value="finalize" style="width: 30%; display: inline-block; margin: auto;">Finalize Report</button>
                 </form>
                 </div>
         </div>
@@ -102,7 +102,10 @@
 <script type="text/javascript">
     var counter = parseInt(<%- photos.length %>);
     var photoId = parseInt(<%- lastId %>) + 1;
-
+    if($("#numOfItems").val() <= 0){
+        $("#saveBtn").prop('disabled', true);
+        $("#finBtn").prop('disabled', true);
+    }
     function up(name) {
         var wrapper = $("#holder"+name).closest('li')
         wrapper.insertBefore(wrapper.prev()).hide().show('slow');
@@ -115,6 +118,8 @@
         wrapper.insertAfter(wrapper.next()).hide().show('slow')
         var elmnt = document.getElementById("holder"+name);
         elmnt.scrollIntoView({block: 'start', behavior: 'smooth' });
+        var scrollEl = document.getElementById("allElements")
+        window.scrollBy(0, 10);
     };
 
     function myFunction(id){
@@ -146,6 +151,16 @@
         $("#idHolder"+num).attr('value', val+"remove");
         $('#holder'+num).hide("slow");
         });
+        $("#numOfItems").val(parseInt($("#numOfItems").val())-1);
+
+        if($("#numOfItems").val() <= 0){
+        $("#saveBtn").prop('disabled', true);
+        $("#finBtn").prop('disabled', true);
+        }
+        if($("#numOfItems").val() > 0){
+        $("#saveBtn").prop('disabled', false);
+        $("#finBtn").prop('disabled', false);
+        }
         //document.getElementById('holder'+num).style.display = 'none';
        // $("#holder"+num).hide();
         
@@ -154,6 +169,14 @@
     $(".allElements").on("click", ".adder", function(){
             counter++;
             $("#numOfItems").val(parseInt($("#numOfItems").val())+1);
+            if($("#numOfItems").val() <= 0){
+        $("#saveBtn").prop('disabled', true);
+        $("#finBtn").prop('disabled', true);
+        }
+        if($("#numOfItems").val() > 0){
+        $("#saveBtn").prop('disabled', false);
+        $("#finBtn").prop('disabled', false);
+        }
             var place = counter;
             var el = $('<li class="ui-state-default" id="holder'+counter+'" style="padding: 15px; list-style-type: none;"><input  id="idHolder'+counter+'" type="hidden" value="new'+photoId+'" name="id"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><div  style="padding: 15px"><input type="text" placeholder="Header" name="header" style="display: inline-block; width: 85%; margin: auto;">  <button type="button" name="'+counter+'" class="btn btn-success adder" style="margin-top: 15px; width: auto; min-width:3%; display: inline-block; margin: auto;">+</button> <button type="button" name="'+counter+'" class="btn btn-primary" onclick="up(this.name)" style="margin-top: 15px; width: auto; min-width: 3%; display: inline-block; margin: auto;">↑</button> <button type="button" name="'+counter+'" class="btn btn-primary" onclick="down(this.name)" style="margin-top: 15px; width: auto; min-width: 3%; display: inline-block; margin: auto;">↓</button> <button type="button" id="remove'+counter+'" class="btn btn-danger" onclick="rem(this.id); reduceId();" style="margin-top: 15px; width: auto; min-width: 3%; display: inline-block; margin: auto;">X</button> </div><div class="container" style="padding: 0; margin: 0; margin-bottom: 15px; min-width: 100%;"><div class="row"><div class="col-lg" style="padding: 15px ;margin: 0;"><textarea name="comment" placeholder="Enter your comment here" rows="4" cols="50" style="margin-bottom: 15px;margin-right: 0px;height: 350px;width: 100%;display: inline-block;"></textarea></div><div class="col-lg" style="padding: 15px ;margin: 0;"><div class="uploader" name="'+counter+'" >Click here or drag here your image<img id="image'+counter+'" src="/pictures/Empty.png" /><input class="up"  onclick="myFunction(this.id)" ondrop="myFunction(this.id)" type="file" id="filePhoto'+counter+'" name="'+photoId+'" style="background: transperent"/></div></div></div></div></li>')
             //$("#element").append('<input type="text" placeholder="Header" name="header" style="display: block; width: 100%; margin: auto;" required>') 

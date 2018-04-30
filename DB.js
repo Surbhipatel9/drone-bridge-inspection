@@ -685,6 +685,7 @@ exports.getFinalReport = function (reportID, cb) {
     )
     .then(function (report) {
       cb(report);
+      console.log(report)
     });
 };
 
@@ -694,13 +695,14 @@ exports.getFinalReports = function (reportID, cb) {
       "*"
     )
     .from("reports")
-    .where("photos.reportID", "=", reportID)
-    .innerJoin("photos", "reports.reportID", "=", "photos.reportID")
+    .where("reports.reportID", "=", parseInt(reportID))
     .innerJoin("bridge", "reports.bridgeID", "=", "bridge.bridgeID")
-    .innerJoin("reportItems", "reportItems.photoID", "=", "photos.photoID")
+    .innerJoin("photos", "reports.reportID", "=", "photos.reportID")
+    .innerJoin("reportItems", "reportItems.reportID", "=", "reports.reportID")
     .orderBy("reportItems.orderNum", "asc")
     .then(function (photos) {
       cb(photos);
+      console.log(photos);
     });
 };
 
