@@ -69,6 +69,10 @@
   
 }
 
+#img-head {
+  margin-left: 200px;
+}
+
 @media only screen 
 and (min-width : 751)
 and (max-width : 961) {
@@ -115,6 +119,9 @@ and (max-width : 840px) {
     padding: 20px;
   }
   #img-top {
+    margin-left: 0;
+  }
+  #img-head {
     margin-left: 0;
   }
 }
