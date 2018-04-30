@@ -345,12 +345,13 @@ app.post("/report", upload.any(), (req, res) => {
     if (data["numOfItems"] == 0) {
     } else {
       for (var i = 0; i < data["id"].length; i++) {
+        var index = i;
         if (
           data["id"][i].replace(/\d+/g, "") == "old" ||
           data["id"][i].replace(/\d+/g, "") == "new" ||
           data["id"][i].replace(/\d+/g, "") == "newphoto"
         ) {
-          db.updateOrder(i, data["id"][i], reportId);
+          db.updateOrder(index, data["id"][i], reportId);
         }
       }
     }

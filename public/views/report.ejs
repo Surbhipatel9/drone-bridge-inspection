@@ -49,9 +49,9 @@
         <hr>
         <form action="/report" enctype="multipart/form-data" method="post">
         <input type="hidden" value="<%= rep[0]['reportID'] %>" name="repId">
+        <input type="hidden" value="<%= photos.length %>" id="numOfItems" name="numOfItems">
         <input type="hidden" value="<%- JSON.parse(userinfo).userID %>" name="userId">
         <ul class="allElements" style="padding: 0">
-        <input type="hidden" value="<%= photos.length %>" id="numOfItems" name="numOfItems">
         <% if (photos.length == 0) { %>
             <p style="color: grey; font-size: 20px; margin: 50px; text-align: center;">No Photos in Photo Collection. </p>
             <p style="color: grey; font-size: 20px; margin: 50px; text-align: center;">Please, Click Select Photos to Add Photos to this Report&nbsp;</p> 
@@ -64,7 +64,7 @@
                  <button type="button" name="<%- i+1 %>" class="btn btn-primary adder" style="min-width: 14%; width: auto; display: inline-block; margin: auto;">Add Element Below</button> 
                  <button type="button" name="<%- i+1 %>" class="btn btn-primary" onclick="up(this.name)" style="width: auto; min-width:3%; display: inline-block; margin: auto;">↑</button>
                  <button type="button" name="<%- i+1 %>" class="btn btn-primary" onclick="down(this.name)" style="width: auto; min-width:3%; display: inline-block; margin: auto;">↓</button>
-                 <button type="button" id="remove<%- i+1 %>" class="btn btn-danger" onclick="remove(this.id)" style="width: auto; min-width:3%; display: inline-block; margin: auto;">X</button>
+                 <button type="button" id="remove<%- i+1 %>" class="btn btn-danger" onclick="rem(this.id)" style="width: auto; min-width:3%; display: inline-block; margin: auto;">X</button>
                 </div>
             <div class="container" style="padding: 0; margin: 0; margin-bottom: 15px; min-width: 100%;">
                 <div class="row">
@@ -107,11 +107,13 @@
     var photoId = parseInt(<%- lastId %>) + 1;
     function up(name) {
         var wrapper = $("#holder"+name).closest('li')
-        wrapper.insertBefore(wrapper.prev())
+        
+        wrapper.insertBefore(wrapper.prev()).hide().show('slow');
     };
     function down(name) {
         var wrapper = $("#holder"+name).closest('li')
-        wrapper.insertAfter(wrapper.next())
+        wrapper.insertAfter(wrapper.next()).hide().show('slow');
+
     };
     function myFunction(id){
         var num = id.replace(/\D/g,'');
@@ -134,13 +136,18 @@
     function reduceId(){
         photoId = photoId - 1;
     };
-    function remove(id){
+
+    function rem(id){
+        $(document).ready( function() {
         counter = counter - 1;
         var num = id.replace(/\D/g,'');
-       // $("#holder"+num).hide();
         var val =  $("#idHolder"+num).val();
         $("#idHolder"+num).attr('value', val+"remove");
-        document.getElementById('holder'+num).style.display = "none";
+        $('#holder'+num).hide("slow");
+        });
+        //document.getElementById('holder'+num).style.display = 'none';
+       // $("#holder"+num).hide();
+        
     };
    
     $(".allElements").on("click", ".adder", function(){
@@ -150,6 +157,7 @@
             //$("#element").append('<input type="text" placeholder="Header" name="header" style="display: block; width: 100%; margin: auto;" required>') 
             //$(".allElements").append(el);
             var wrapper = $(this).closest('li')
+           
             el.insertAfter(wrapper);
             photoId++;
         });
