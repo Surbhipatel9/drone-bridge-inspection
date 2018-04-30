@@ -11,6 +11,16 @@ var $ = require("jquery");
 var db = require("./DB.js");
 var fs = require("fs");
 var pdf = require("html-pdf");
+var Promise = require("bluebird");
+var GoogleCloudStorage = Promise.promisifyAll(require("@google-cloud/storage"));
+
+var storage = GoogleCloudStorage({
+  projectId: "drone-bridge-202304",
+  keyFilename: "drone-bridge-79770f13e171.json"
+});
+
+var BUCKET_NAME = "drone_bridge_bucket";
+var myBucket = storage.bucket(BUCKET_NAME);
 
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -257,18 +267,25 @@ app.post("/report", upload.any(), (req, res) => {
       if (data["id"].replace(/\d+/g, "") == "old") {
         db.updatePhotos(i, data);
       }
-      if (data["id"].replace(/\d+/g, "") == "new") {
+      if (data["id"].replace(/\d+/g, "") == "newphoto") {
         for (var j = 0; j < req.files.length; j++) {
-          if (req.files[j]["fieldname"] == data["id"][i].replace(/\D/g, "")) {
-            db.insertIntoPhotos(
-              reportId,
-              userId,
-              i,
-              data,
-              req.files[j]["path"]
-            );
+          if (req.files[j]["fieldname"] == data["id"].replace(/\D/g, "")) {
+            var file_name = req.files[j]["filename"];
+            myBucket
+              .uploadAsync("./" + req.files[j]["path"], { public: true })
+              .then(file => {
+                console.log("File uploaded");
+                var getPublicThumbnailUrlForItem = file_name;
+                return `https://storage.googleapis.com/${BUCKET_NAME}/${file_name}`;
+              })
+              .then(url => {
+                db.insertIntoPhotos(reportId, userId, i, data, url);
+              });
           }
         }
+      }
+      if (data["id"].replace(/\d+/g, "") == "new") {
+        db.insertIntoPhotos(reportId, userId, i, data, "https://storage.googleapis.com/drone_bridge_bucket/placeholder.gif");
       }
     }
     if (data["numOfItems"] == 0) {
@@ -280,18 +297,29 @@ app.post("/report", upload.any(), (req, res) => {
         if (data["id"][i].replace(/\d+/g, "") == "old") {
           db.updatePhotos(i, data);
         }
-        if (data["id"][i].replace(/\d+/g, "") == "new") {
+        if (data["id"][i].replace(/\d+/g, "") == "newphoto") {
+          var index = i;
           for (var j = 0; j < req.files.length; j++) {
-            if (req.files[j]["fieldname"] == data["id"][i].replace(/\D/g, "")) {
-              db.insertIntoPhotos(
-                reportId,
-                userId,
-                i,
-                data,
-                req.files[j]["path"]
-              );
+            if (
+              req.files[j]["fieldname"] == data["id"][index].replace(/\D/g, "")
+            ) {
+              var file_name = req.files[j]["filename"];
+              myBucket
+                .uploadAsync("./" + req.files[j]["path"], { public: true })
+                .then(file => {
+                  console.log("File uploaded");
+                  var getPublicThumbnailUrlForItem = file_name;
+                  return `https://storage.googleapis.com/${BUCKET_NAME}/${file_name}`;
+                })
+                .then(url => {
+                  db.insertIntoPhotos(reportId, userId, index, data, url);
+                });
             }
           }
+        }
+        if (data["id"][i].replace(/\d+/g, "") == "new") {
+          var index = i;
+          db.insertIntoPhotos(reportId, userId, index, data, "https://storage.googleapis.com/drone_bridge_bucket/placeholder.gif");
         }
       }
     }
@@ -307,7 +335,8 @@ app.post("/report", upload.any(), (req, res) => {
     if (data["numOfItems"] == 1) {
       if (
         data["id"].replace(/\d+/g, "") == "old" ||
-        data["id"].replace(/\d+/g, "") == "new"
+        data["id"].replace(/\d+/g, "") == "new" ||
+        data["id"].replace(/\d+/g, "") == "newphoto"
       ) {
         var i = -1;
         db.updateOrder(i, data["id"], reportId);
@@ -318,7 +347,8 @@ app.post("/report", upload.any(), (req, res) => {
       for (var i = 0; i < data["id"].length; i++) {
         if (
           data["id"][i].replace(/\d+/g, "") == "old" ||
-          data["id"][i].replace(/\d+/g, "") == "new"
+          data["id"][i].replace(/\d+/g, "") == "new" ||
+          data["id"][i].replace(/\d+/g, "") == "newphoto"
         ) {
           db.updateOrder(i, data["id"][i], reportId);
         }
