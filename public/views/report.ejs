@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html  >
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/resources/demos/style.css">
 </head>
 
-<body id="Header_Body" style="background: #e6ecf0">
+<body id="Header_Body" style=" background: #e6ecf0">
     <nav class="navbar navbar-light navbar-expand-md sticky-top">
         <div id="nav" class="container">
             <a class="navbar-brand" href="/">WV Bridge Inspection Tool</a>
@@ -108,16 +108,16 @@
         wrapper.insertBefore(wrapper.prev()).hide().show('slow');
         var elmnt = document.getElementById("holder"+name);
         elmnt.scrollIntoView({block: 'start', behavior: 'smooth' });
-};
-
+        };
 
     function down(name) {
         var wrapper = $("#holder"+name).closest('li')
         wrapper.insertAfter(wrapper.next()).hide().show('slow')
         var elmnt = document.getElementById("holder"+name);
         elmnt.scrollIntoView({block: 'start', behavior: 'smooth' });
-        
+        window.scrollBy(0, 10);
     };
+
     function myFunction(id){
         var num = id.replace(/\D/g,'');
         var imageLoader = document.getElementById("filePhoto"+String(num));
