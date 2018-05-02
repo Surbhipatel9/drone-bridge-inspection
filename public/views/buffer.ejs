@@ -105,8 +105,11 @@
                     </div>
                     <hr>
                     <% if(showButton == true){ %>
-                <button type="submit" class="btn btn-primary"  style="width: auto; display: inline-block; margin-left: 40%;">Add Pictures to Report</button>
-           <% } %>
+                        <div id="buttonHolder" style="align-items: center; justify-content: center; display: flex">                        
+                        <button type="button"  class="btn btn-primary" style="width: 30%; display: inline-block; margin: 10px;" onclick="window.location.href='/report?reportID=<%= reportID %>'">Back</button>
+                        <button type="submit" class="btn btn-primary" style="width: 30%; display: inline-block; margin: 10px;">Add Pictures to Report</button>
+                        </div>
+                        <% } %>
             </form>
 
             </div>
