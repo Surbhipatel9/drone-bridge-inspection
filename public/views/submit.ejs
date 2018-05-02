@@ -414,9 +414,12 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
-                                <div id="parent">
+                                <div id="parent" style="text-align: center">
                                     <a href="<%- rep[i]['location'] %>" target="_blank" data-lightbox="bridge">
-                                        <img class="img-fluid" src="<%- rep[i]['location'] %>" data-lightbox="bridge" id="img-stuff">
+                                        <img class="img-fluid" style="margin-left: auto;
+                                        margin-right: auto;
+                                        height: 300px;
+                                        width: 400px;" src="<%- rep[i]['location'] %>" data-lightbox="bridge" id="img-stuff">
                                     </a>
                                 </div>
                                 <p class="text-center" id="para"><%- rep[i]["title"] %> -&nbsp;<%- rep[i]["description"] %></p>
