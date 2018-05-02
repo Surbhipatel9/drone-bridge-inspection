@@ -25,6 +25,8 @@ module.exports = function (passport) {
       db.checkLogin(username, function (user) {
         db.getUserInfo(username, function (userInf) {
           if (user) {
+            console.log(user.userName);
+            console.log(username);
             var userinfo = {
               userName: userInf[0].userName,
               firstName: userInf[0].firstName,
@@ -37,7 +39,7 @@ module.exports = function (passport) {
               profPic: userInf[0].location
             }
           }
-          if (!user) {
+          if (username != user.userName) {
             return done(null, false, req.flash('loginMessage', 'No user found.'))
           }
           if (!bcrypt.compareSync(password, user.passwordHash)) {
