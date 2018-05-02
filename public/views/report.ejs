@@ -107,6 +107,7 @@
 <script type="text/javascript">
     var counter = parseInt(<%- photos.length %>);
     var photoId = parseInt(<%- lastId %>) + 1;
+    
     if($("#numOfItems").val() <= 0){
         $("#saveBtn").prop('disabled', true);
         $("#finBtn").prop('disabled', true);
