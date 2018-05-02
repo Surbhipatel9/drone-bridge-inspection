@@ -691,15 +691,15 @@ exports.getFinalReport = function (reportID, cb) {
 
 exports.getFinalReports = function (reportID, cb) {
   knex
-  .select(
-    "*"
-  )
-  .from("reports")
-  .where("photos.reportID", "=", reportID)
-  .innerJoin("photos", "reports.reportID", "=", "photos.reportID")
-  .innerJoin("bridge", "reports.bridgeID", "=", "bridge.bridgeID")
-  .innerJoin("reportItems", "reportItems.photoID", "=", "photos.photoID")
-  .orderBy("reportItems.orderNum", "asc")
+    .select(
+      "*"
+    )
+    .from("reports")
+    .where("reports.reportID", "=", parseInt(reportID))
+    .innerJoin("bridge", "reports.bridgeID", "=", "bridge.bridgeID")
+    .innerJoin("reportItems", "reportItems.reportID", "=",parseInt(reportID))
+    .innerJoin("photos", "reportItems.photoID", "=", "photos.photoID")
+    .orderBy("reportItems.orderNum", "asc")
     .then(function (photos) {
       cb(photos);
       console.log(photos);
