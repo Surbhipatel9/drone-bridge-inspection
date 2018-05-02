@@ -254,7 +254,7 @@ app.post("/report", upload.any(), (req, res) => {
   var reportId = req.body.repId;
   var userId = req.body.userId;
   var numOfNewItems = 0;
-
+  console.log(data);
   function first() {
     if (inputValue == "finalize") {
       db.finalizeReport(reportId);
@@ -291,14 +291,15 @@ app.post("/report", upload.any(), (req, res) => {
     if (data["numOfItems"] == 0) {
     } else {
       for (var i = 0; i < data["id"].length; i++) {
-        if (data["id"][i].replace(/\d+/g, "") == "oldremove") {
-          db.removeItem(i, reportId, data);
+        var index = i;
+
+        if (data["id"][index].replace(/\d+/g, "") == "oldremove") {
+          db.removeItem(index, reportId, data);
         }
-        if (data["id"][i].replace(/\d+/g, "") == "old") {
-          db.updatePhotos(i, data);
+        if (data["id"][index].replace(/\d+/g, "") == "old") {
+          db.updatePhotos(index, data);
         }
-        if (data["id"][i].replace(/\d+/g, "") == "newphoto") {
-          var index = i;
+        if (data["id"][index].replace(/\d+/g, "") == "newphoto") {
           for (var j = 0; j < req.files.length; j++) {
             if (
               req.files[j]["fieldname"] == data["id"][index].replace(/\D/g, "")
@@ -317,8 +318,7 @@ app.post("/report", upload.any(), (req, res) => {
             }
           }
         }
-        if (data["id"][i].replace(/\d+/g, "") == "new") {
-          var index = i;
+        if (data["id"][index].replace(/\d+/g, "") == "new") {
           db.insertIntoPhotos(reportId, userId, index, data, "https://storage.googleapis.com/drone_bridge_bucket/placeholder.gif");
         }
       }
