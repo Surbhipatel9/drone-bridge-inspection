@@ -105,14 +105,15 @@
 
 </html>
 <script type="text/javascript">
+    var items = parseInt(<%- photos.length %>);
     var counter = parseInt(<%- photos.length %>);
     var photoId = parseInt(<%- lastId %>) + 1;
     
-    if($("#numOfItems").val() <= 0){
+    if(items <= 0){
         $("#saveBtn").prop('disabled', true);
         $("#finBtn").prop('disabled', true);
         $("#saveMessage").show();
-    }if($("#numOfItems").val() > 0){
+    }if(items > 0){
         $("#saveBtn").prop('disabled', false);
         $("#finBtn").prop('disabled', false);
         $("#saveMessage").hide();
@@ -155,6 +156,7 @@
     };
 
     function rem(id){
+        items = items - 1;
         $(document).ready( function() {
         var num = id.replace(/\D/g,'');
         var val =  $("#idHolder"+num).val();
@@ -162,12 +164,12 @@
         $('#holder'+num).hide("slow");
         });
 
-        if($("#numOfItems").val() <= 0){
+        if(items <= 0){
         $("#saveBtn").prop('disabled', true);
         $("#finBtn").prop('disabled', true);
         $("#saveMessage").show();
         }
-        if($("#numOfItems").val() > 0){
+        if(items > 0){
         $("#saveBtn").prop('disabled', false);
         $("#finBtn").prop('disabled', false);
         $("#saveMessage").hide();
@@ -178,15 +180,17 @@
     };
    
     $(".allElements").on("click", ".adder", function(){
-            counter++;
-            $("#numOfItems").val(parseInt($("#numOfItems").val())+1);
-            if($("#numOfItems").val() <= 0){
+        items++;
+        counter++;
+        $("#numOfItems").val(parseInt($("#numOfItems").val())+1);
+
+        if(items <= 0){
         $("#saveBtn").prop('disabled', true);
         $("#finBtn").prop('disabled', true);
         $("#saveMessage").show();
 
         }
-        if($("#numOfItems").val() > 0){
+        if(items > 0){
         $("#saveBtn").prop('disabled', false);
         $("#finBtn").prop('disabled', false);
         $("#saveMessage").hide();
