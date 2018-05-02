@@ -25,8 +25,6 @@ module.exports = function (passport) {
       db.checkLogin(username, function (user) {
         db.getUserInfo(username, function (userInf) {
           if (user) {
-            console.log(user.userName);
-            console.log(username);
             var userinfo = {
               userName: userInf[0].userName,
               firstName: userInf[0].firstName,
